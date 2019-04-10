@@ -3,7 +3,6 @@ package vehicles;
 import graphics.IAnimal;
 import graphics.IClonable;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PackAnimal.
  * 

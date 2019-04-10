@@ -7,7 +7,6 @@ import java.awt.Color;
 import graphics.CityPanel;
 import java.awt.image.BufferedImage;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Vehicle.
  * 
@@ -379,7 +378,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 *
 	 * @return the Color object
 	 */
-	public Color getCol() {
+	public Color getColorObject() {
 		return col;
 	}
 
