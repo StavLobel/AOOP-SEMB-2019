@@ -33,7 +33,7 @@ public class Bike extends Vehicle {
 	 *
 	 * @return the speed of the bike
 	 */
-	public static int getSpeed() {
+	public int getSpeed() {
 		return SPEED;
 	}
 
@@ -46,12 +46,33 @@ public class Bike extends Vehicle {
 		return gears;
 	}
 	
-	/**
-	 * Return the Bike as String
-	 * 
-	 * @return "Speed : Gears : "
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#toString()
 	 */
 	public String toString() {
-		return "Bike " + super.toString()+ " Speed :" + SPEED +" Gears :" + getGears();
+		return super.toString();
+	}
+	
+	//*************HW2***********
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getVehicleName()
+	 */
+	public String getVehicleName() {
+		return "Bike";
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#clone()
+	 */
+	public Object clone() {
+		return new Bike(this.getLicensePlate(),this.getColor(),this.getGears());
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#refuel()
+	 */
+	public boolean refuel() {
+		return true;
 	}
 }

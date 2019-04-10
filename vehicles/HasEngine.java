@@ -106,6 +106,7 @@ public abstract class HasEngine extends Vehicle {
 	public boolean refuel() {
 		if (this.currentFuel == this.engine.getFuelCapacity())
 			return false;
+		this.setFuelConsumption(this.engine.getFuelCapacity()-this.getCurrentFuel());
 		this.currentFuel = this.engine.getFuelCapacity();
 		return true;
 	}
@@ -114,6 +115,13 @@ public abstract class HasEngine extends Vehicle {
 	 * @see vehicles.Vehicle#toString()
 	 */
 	public String toString() {
-		return super.toString()+" Engine Type :" + this.getEngine() + " Current Fuel :" + this.getCurrentFuel() + " Minimum Age to Drive :"+ this.getMinAge();
+		return super.toString();
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#move(vehicles.Point)
+	 */
+	public boolean move(Point p) {
+		return this.drive(p);
 	}
 }

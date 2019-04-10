@@ -16,6 +16,9 @@ public class Car extends HasEngine {
 	/** The Constant FUEL_CAPACITY. */
 	private static final int FUEL_CAPACITY = 40;
 	
+	/** The Constant SPEED. */
+	private static final int SPEED = 4;
+	
 	/**
 	 * Instantiates a new car.
 	 *
@@ -40,9 +43,30 @@ public class Car extends HasEngine {
 	}
 	
 	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getSpeed()
+	 */
+	public int getSpeed() {
+		return SPEED;
+	}
+	
+	/* (non-Javadoc)
 	 * @see vehicles.HasEngine#toString()
 	 */
 	public String toString() {
-		return "Car " + super.toString() + " Number of Passengers :" + numberOfPassengers;
+		return super.toString();
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#clone()
+	 */
+	public Object clone() {
+		return new Car(this.getLicensePlate(),this.getColor(),this.getMinAge(),this.getEngineType(),this.numberOfPassengers);
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getVehicleName()
+	 */
+	public String getVehicleName() {
+		return "Car";
 	}
 }

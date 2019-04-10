@@ -30,6 +30,13 @@ public interface IMoveable {
 	public int getFuelConsumption();
 	
 	/**
+	 * Refuel.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean refuel();
+	
+	/**
 	 * Move.
 	 *
 	 * @param p the new point to move to

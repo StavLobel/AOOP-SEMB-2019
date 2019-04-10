@@ -49,7 +49,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	private int size= 0;
 	
 	/** The total fuel that have been consumed.*/
-	private final int fuelConsumption = 0;
+	private int fuelConsumption = 0;
 	
 	/** The panel.*/
 	private CityPanel pan;
@@ -287,6 +287,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 * Sets the pan.
 	 *
 	 * @param pan the new CityPanel
+	 * @return true, if successful
 	 */
 	public boolean setPan(CityPanel pan) {
 		this.pan = pan;
@@ -306,6 +307,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 * Sets the img 1.
 	 *
 	 * @param img1 the new img 1
+	 * @return true, if successful
 	 */
 	public boolean setImg1(BufferedImage img1) {
 		this.img1 = img1;
@@ -325,6 +327,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 * Sets the img 2.
 	 *
 	 * @param img2 the new img 2
+	 * @return true, if successful
 	 */
 	public boolean setImg2(BufferedImage img2) {
 		this.img2 = img2;
@@ -344,6 +347,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 * Sets the img 3.
 	 *
 	 * @param img3 the new img 3
+	 * @return true, if successful
 	 */
 	public boolean setImg3(BufferedImage img3) {
 		this.img3 = img3;
@@ -363,6 +367,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 * Sets the img 4.
 	 *
 	 * @param img4 the new img 4
+	 * @return true, if successful
 	 */
 	public boolean setImg4(BufferedImage img4) {
 		this.img4 = img4;
@@ -386,14 +391,43 @@ public abstract class Vehicle implements IMoveable,IClonable{
 		return fuelConsumption;
 	}
 	
-	public abstract Object clone();
-	
-	public abstract String getVehicleName();
-	public abstract int getSpeed();
-	public boolean move(Point p) {
-		if (this.fuelConsumption != 0)
-			return this.drive(p);
-		
+	/**
+	 * Sets the fuel consumption.
+	 *
+	 * @param amount the amount of fuel that used.
+	 * @return true, if successful. false ,is amount is negative number.
+	 */
+	public boolean setFuelConsumption(int amount) {
+		if (amount < 0)
+			return false;
+		this.fuelConsumption += amount;
+		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IClonable#clone()
+	 */
+	public abstract Object clone();
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getVehicleName()
+	 */
+	public abstract String getVehicleName();
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getSpeed()
+	 */
+	public abstract int getSpeed();
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#move(vehicles.Point)
+	 */
+	public boolean move(Point p) {
+		return this.drive(p);
+	}
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#refuel()
+	 */
+	public abstract boolean refuel();
 }

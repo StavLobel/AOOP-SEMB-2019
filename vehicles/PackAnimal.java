@@ -3,6 +3,7 @@ package vehicles;
 import graphics.IAnimal;
 import graphics.IClonable;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class PackAnimal.
  * 
@@ -118,5 +119,25 @@ public class PackAnimal implements IAnimal, IClonable {
 	 */
 	public int getSpeed() {
 		return 0;
+	}
+	
+	/**
+	 * Reduce energy.
+	 *
+	 * @param amount the amount of energy to reduce
+	 * @return true, if successful
+	 */
+	public boolean reduceEnergy(int amount) {
+		if (this.getCurrentEnergy() < amount || amount < 0)
+			return false;
+		this.currentEnergy -= amount;
+		return true;
+	}
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#refuel()
+	 */
+	public boolean refuel() {
+		return this.eat();
 	}
 }

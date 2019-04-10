@@ -8,7 +8,7 @@ package vehicles;
 public class SolarEngine extends Engine {
 	
 	/** The Constant FUEL_CONSUMPTION. */
-	private static final int FUEL_CONSUMPTION = 6;
+	private static final int FUEL_CONSUMPTION = 1;
 	
 	/**
 	 * Instantiates a new solar engine.

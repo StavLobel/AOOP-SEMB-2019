@@ -42,15 +42,50 @@ public class Carriage extends Vehicle {
 	 *
 	 * @return the speed
 	 */
-	public static int getSpeed() {
+	public int getSpeed() {
 		return Carriage.SPEED;
 	}
 	
-	/** Return the Carriage as String
-	 * 
-	 * @return "Speed : Animal : "
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#toString()
 	 */
 	public String toString() {
-		return "" + this.getLicensePlate();
+		return super.toString();
 	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#clone()
+	 */
+	public Object clone() {
+		return new Carriage(this.getLicensePlate(),this.getColor(),this.getAnimal().getAnimalName());
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getVehicleName()
+	 */
+	public String getVehicleName() {
+		return "Carriage";
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#move(vehicles.Point)
+	 */
+	public boolean move(Point p) {
+		int energyconsuption = this.animal.getFuelConsumption();
+		int distance = this.getLocation().getLocationPoint().distanceManhattan(p);
+		if(energyconsuption * distance > this.animal.getCurrentEnergy())
+			return false;
+		this.animal.reduceEnergy(energyconsuption*distance);
+		return super.drive(p);
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#refuel()
+	 */
+	public boolean refuel() {
+		this.setFuelConsumption(this.animal.getMaxEnergy()-this.animal.getCurrentEnergy());
+		return this.animal.eat();
+	}
+	
 }
