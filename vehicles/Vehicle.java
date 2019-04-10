@@ -1,16 +1,22 @@
 package vehicles;
 import java.util.ArrayList;
 
+import graphics.IClonable;
+import graphics.IMoveable;
+import java.awt.Color;
+import graphics.CityPanel;
+import java.awt.image.BufferedImage;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Vehicle.
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle {
+public abstract class Vehicle implements IMoveable,IClonable{
 	
 	/** The license plate of the vehicle. */
-	private final int licensePlate;
+	private final int id;
 	
 	/** The Constant LICENSE_RANGE. */
 	private static final int[] LICENSE_RANGE = {1000,1000000};
@@ -21,92 +27,106 @@ public abstract class Vehicle {
 	/** The color of the vehicle. */
 	private final String color;
 	
+	/** The Color object of the vehicle.*/
+	private final Color col;
+	
 	/** The Constant COLORS array. */
 	private static final String[] COLORS = {"Red","Green","White","Silver"};
 	
 	/** The number of wheels of the vehicle. */
-	private final int numberOfWheels;
+	private final int wheels;
 	
-	/** The location of the vehicle. */
-	private Location location;
+	/** The loc of the vehicle. */
+	private Location loc;
 	
 	/** The mileage of the vehicle. */
-	private int mileage;
+	private int mileage = 0;
 	
 	/** The lights status of the vehicle. */
-	private boolean lights;
+	private boolean lights = false;
+	
+	/** The size of the vehicle.*/
+	private int size= 0;
+	
+	/** The total fuel that have been consumed.*/
+	private final int fuelConsumption = 0;
+	
+	/** The panel.*/
+	private CityPanel pan;
+	
+	/** The vehicle images.*/
+	private BufferedImage img1, img2, img3, img4;
 	
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param licensePlate the license plate of the vehicle
+	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
-	 * @param numberOfWheels the number of wheels of the vehicle
+	 * @param wheels the number of wheels of the vehicle
 	 */
-	public Vehicle(int licensePlate,String color,int numberOfWheels) {
-		this.licensePlate = licensePlate;
-		if (!(LICENSES_LIST.contains(licensePlate)))
-			LICENSES_LIST.add(licensePlate);
+	public Vehicle(int id,String color,int wheels) {
+		this.id = id;
+		if (!(LICENSES_LIST.contains(id)))
+			LICENSES_LIST.add(id);
 		this.color = color;
-		this.numberOfWheels = numberOfWheels;
-		this.location = new Location();
-		this.lights = false;
-		this.mileage = 0;
+		this.col = getColorObject(color);
+		this.wheels = wheels;
+		this.loc = new Location();
 	}
 	
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param licensePlate the license plate of the vehicle
+	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
-	 * @param numberOfWheels the number of wheels of the vehicle
+	 * @param wheels the number of wheels of the vehicle
 	 * @param p the current point of the vehicle
 	 */
-	public Vehicle(int licensePlate,String color,int numberOfWheels,Point p) {
-		this(licensePlate,color,numberOfWheels);
-		this.location = new Location(p);
+	public Vehicle(int id,String color,int wheels,Point p) {
+		this(id,color,wheels);
+		this.loc = new Location(p);
 	}
 	
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param licensePlate the license plate of the vehicle
+	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
-	 * @param numberOfWheels the number of wheels of the vehicle
-	 * @param location the location of the vehicle
+	 * @param wheels the number of wheels of the vehicle
+	 * @param loc the loc of the vehicle
 	 */
-	public Vehicle(int licensePlate,String color,int numberOfWheels,Location location) {
-		this(licensePlate,color,numberOfWheels);
-		this.location = new Location(location);
+	public Vehicle(int id,String color,int wheels,Location loc) {
+		this(id,color,wheels);
+		this.loc = new Location(loc);
 	}
 	
 	/**
-	 * Gets the location.
+	 * Gets the loc.
 	 *
-	 * @return a clone of the location of the vehicle
+	 * @return a clone of the loc of the vehicle
 	 */
 	public Location getLocation() {
-		return this.location.replicate();
+		return this.loc.replicate();
 	}
 
 	/**
-	 * Sets the location.
+	 * Sets the loc.
 	 *
-	 * @param p the new point location to set
-	 * @return true, if successful ,false if it's the same location
+	 * @param p the new point loc to set
+	 * @return true, if successful ,false if it's the same loc
 	 */
 	public boolean setLocation(Point p) {
-		return this.location.setLocation(p);
+		return this.loc.setLocation(p);
 	}
 	
 	/**
-	 * Sets the location.
+	 * Sets the loc.
 	 *
 	 * @param other the new Location to set
-	 * @return true, if successful ,false if it's the same location
+	 * @return true, if successful ,false if it's the same loc
 	 */
 	public boolean setLocation(Location other) {
-		return this.location.setLocation(other);
+		return this.loc.setLocation(other);
 	}
 
 	/**
@@ -138,7 +158,7 @@ public abstract class Vehicle {
 	 * @return the license plate of the vehicle
 	 */
 	public int getLicensePlate() {
-		return licensePlate;
+		return id;
 	}
 
 	/**
@@ -156,7 +176,7 @@ public abstract class Vehicle {
 	 * @return the number of wheels of the vehicle
 	 */
 	public int getNumberOfWheels() {
-		return numberOfWheels;
+		return wheels;
 	}
 
 
@@ -204,13 +224,13 @@ public abstract class Vehicle {
 	 * Drive.
 	 *
 	 * @param toGo the point to drive to
-	 * @return true, if successful ,false if the vehicle stay in it's location
+	 * @return true, if successful ,false if the vehicle stay in it's loc
 	 */
 	public boolean drive(Point toGo) {
-		if (toGo.equals(this.location.getLocationPoint()))
+		if (toGo.equals(this.loc.getLocationPoint()))
 			return false;
-		this.mileage += this.location.getLocationPoint().distanceManhattan(toGo);
-		this.location.setLocation(toGo);
+		this.mileage += this.loc.getLocationPoint().distanceManhattan(toGo);
+		this.loc.setLocation(toGo);
 		return true;
 	}
 	
@@ -225,11 +245,155 @@ public abstract class Vehicle {
 	}
 	
 	/**
-	 * Return the vehicle as String
-	 * 
+	 * Return the vehicle as String.
+	 *
 	 * @return "License Plate : Color : Number Of Wheels : Location : Mileage : Lights : "
 	 */
 	public String toString() {
-		return "License Plate :"+ getLicensePlate() + " Color :"+ getColor() + " Number Of Wheels :" + getNumberOfWheels() + " Location :"+ getLocation() + " Mileage :"+ getMileage() + " Lights :" + isLights();
+		return ""+ this.getLicensePlate();
 	}
+
+	
+	//*****************HW2*******************
+	
+	
+	/**
+	 * Gets the color object.
+	 *
+	 * @param color the color
+	 * @return the a Color object
+	 */
+	private static Color getColorObject(String color) {
+		if (color.equals("Red"))
+			return new Color(255,0,0);
+		else if (color.equals("Green"))
+			return new Color(0,128,0);
+		else if (color.equals("Silver"))
+			return new Color(192,192,192);
+		else
+			return new Color(255,255,255);
+	}
+	
+	/**
+	 * Gets the pan.
+	 *
+	 * @return the citypanel
+	 */
+	public CityPanel getPan() {
+		return pan;
+	}
+
+	/**
+	 * Sets the pan.
+	 *
+	 * @param pan the new CityPanel
+	 */
+	public boolean setPan(CityPanel pan) {
+		this.pan = pan;
+		return true;
+	}
+
+	/**
+	 * Gets the img 1.
+	 *
+	 * @return the img 1
+	 */
+	public BufferedImage getImg1() {
+		return img1;
+	}
+
+	/**
+	 * Sets the img 1.
+	 *
+	 * @param img1 the new img 1
+	 */
+	public boolean setImg1(BufferedImage img1) {
+		this.img1 = img1;
+		return true;
+	}
+
+	/**
+	 * Gets the img 2.
+	 *
+	 * @return the img 2
+	 */
+	public BufferedImage getImg2() {
+		return img2;
+	}
+
+	/**
+	 * Sets the img 2.
+	 *
+	 * @param img2 the new img 2
+	 */
+	public boolean setImg2(BufferedImage img2) {
+		this.img2 = img2;
+		return true;
+	}
+
+	/**
+	 * Gets the img 3.
+	 *
+	 * @return the img 3
+	 */
+	public BufferedImage getImg3() {
+		return img3;
+	}
+
+	/**
+	 * Sets the img 3.
+	 *
+	 * @param img3 the new img 3
+	 */
+	public boolean setImg3(BufferedImage img3) {
+		this.img3 = img3;
+		return true;
+	}
+
+	/**
+	 * Gets the img 4.
+	 *
+	 * @return the img 4
+	 */
+	public BufferedImage getImg4() {
+		return img4;
+	}
+
+	/**
+	 * Sets the img 4.
+	 *
+	 * @param img4 the new img 4
+	 */
+	public boolean setImg4(BufferedImage img4) {
+		this.img4 = img4;
+		return true;
+	}
+
+	/**
+	 * Gets the color object.
+	 *
+	 * @return the Color object
+	 */
+	public Color getCol() {
+		return col;
+	}
+
+	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getFuelConsumption()
+	 */
+	public int getFuelConsumption() {
+		return fuelConsumption;
+	}
+	
+	public abstract Object clone();
+	
+	public abstract String getVehicleName();
+	public abstract int getSpeed();
+	public boolean move(Point p) {
+		if (this.fuelConsumption != 0)
+			return this.drive(p);
+		
+	}
+	
 }
