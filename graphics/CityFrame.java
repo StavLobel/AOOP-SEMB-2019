@@ -12,42 +12,32 @@ public class CityFrame extends JFrame{
 	public static final String TITLE = "City";
 	public static final String FILE_TITLE = "File";
 	public static final String HELP_TITLE = "Help";
-	public static String BACKGROUND_PATH = "D:\\HW2\\graphics\\cityBackground.png";
-	public static File backGroundPath;
+	public static BufferedImage backGround = null;
 	
-	public static boolean openBackgroundImage() {
-		try {
-			backGroundPath = new File(BACKGROUND_PATH);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return true;
+	public boolean setBackground() {
+        try {
+            backGround = ImageIO.read(new File("cityBackground.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        Image dimg = backGround.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
+        JLabel backgroundLabel = new JLabel(new ImageIcon(dimg));
+        this.add(backgroundLabel);
+        backgroundLabel.setLayout(new FlowLayout());
+        return true;
 	}
 	
 	public CityFrame(String title) {
 		setTitle(TITLE);
-		setSize(400, 400);
+		setSize(400,400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setLayout(new BorderLayout());
-        openBackgroundImage();
-        BufferedImage background = null;
-        try {
-        background = ImageIO.read(backGroundPath);
-        }
-        catch (Exception e) {
-        	e.printStackTrace();
-        	System.exit(0);
-        }
-        Image dimg = background.getScaledInstance(frame.getWidth(),frame.getHeight(),Image.SCALE_SMOOTH);
-        JLabel backgroundLabel = new JLabel(new ImageIcon(dimg));
-        add(backgroundLabel);
-        backgroundLabel.setLayout(new FlowLayout());
 	}
 	
-	public static JMenuBar createMenu(JFrame frame) {
+	public static JMenuBar createMenu() {
 		JMenuBar menuBar;
 		JMenu menu, secmenu;
 		JMenuItem menuItem;
@@ -79,7 +69,8 @@ public class CityFrame extends JFrame{
 	
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
-		frame.setJMenuBar(createMenu(frame));
+		frame.setJMenuBar(createMenu());
+		frame.setBackground();
 		frame.pack();  
 	}
 }
