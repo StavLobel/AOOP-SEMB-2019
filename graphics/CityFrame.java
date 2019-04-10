@@ -16,7 +16,7 @@ public class CityFrame extends JFrame{
 	
 	public boolean setBackground() {
         try {
-            backGround = ImageIO.read(new File("cityBackground.png"));
+            backGround = ImageIO.read(new File("PNGs//cityBackground.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
