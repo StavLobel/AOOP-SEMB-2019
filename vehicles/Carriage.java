@@ -8,7 +8,7 @@ package vehicles;
 public class Carriage extends Vehicle {
 	
 	/** The animal who carries the Carriage. */
-	private final String animal;
+	private PackAnimal animal;
 	
 	/** The speed of the carriage. */
 	private static final int SPEED = 1;
@@ -25,16 +25,16 @@ public class Carriage extends Vehicle {
 	 */
 	public Carriage(int licensePlate,String color,String animal) {
 		super(licensePlate,color,WHEELS);
-		this.animal = animal;
+		this.animal = new PackAnimal(animal);
 	}
 	
 	/**
 	 * Gets the animal who carries the carriage.
 	 *
-	 * @return the animal
+	 * @return a clone of the animal
 	 */
-	public String getAnimal() {
-		return this.animal;
+	public PackAnimal getAnimal() {
+		return new PackAnimal(this.animal.getAnimalName());
 	}
 	
 	/**
@@ -51,6 +51,6 @@ public class Carriage extends Vehicle {
 	 * @return "Speed : Animal : "
 	 */
 	public String toString() {
-		return "Carriage " + super.toString() + " Speed :" + SPEED + " Animal :" + getAnimal();
+		return "" + this.getLicensePlate();
 	}
 }
