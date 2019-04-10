@@ -19,18 +19,20 @@ public class CityFrame extends JFrame{
 	public static final String INFO_LABEL = "Info";
 	public static final String EXIT_LABEL = "Exit";
 	public static final String[] BOTTTOM_PANEL_LABELS = {ADD_VEHICLE_LABEL,CLEAR_LABEL,FUEL_OR_FOOD_LABEL,LIGHTS_LABEL,INFO_LABEL,EXIT_LABEL};
+	public static JPanel bottomPanel;
+	public static JButton[] buttons;
 	public static BufferedImage backGround = null;
 	
-	public boolean setBackground() {
+	public static boolean setBackground() {
         try {
             backGround = ImageIO.read(new File("PNGs//cityBackground.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         
-        Image dimg = backGround.getScaledInstance(this.getWidth(),this.getHeight(),Image.SCALE_SMOOTH);
+        Image dimg = backGround.getScaledInstance(frame.getWidth(),frame.getHeight(),Image.SCALE_SMOOTH);
         JLabel backgroundLabel = new JLabel(new ImageIcon(dimg));
-        this.add(backgroundLabel);
+        frame.add(backgroundLabel);
         backgroundLabel.setLayout(new FlowLayout());
         return true;
 	}
@@ -44,7 +46,7 @@ public class CityFrame extends JFrame{
         setLayout(new BorderLayout());
 	}
 	
-	public static JMenuBar createMenu() {
+	public static boolean createMenu() {
 		JMenuBar menuBar;
 		JMenu menu;
 		JMenuItem menuItem;
@@ -71,25 +73,38 @@ public class CityFrame extends JFrame{
 		});
 		menu.add(menuItem);
 		
-		return menuBar;
+		frame.setJMenuBar(menuBar);
+		return true;
 	}
 	
-	public Boolean createBottomPanel(){
-		JPanel bottomPanel = new JPanel();
-		JButton[] buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
+	public static Boolean createBottomPanel(){
+		bottomPanel = new JPanel();
+		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
 		for (int i=0 ; i < buttons.length ; ++i ) {
 			buttons[i] = new JButton(BOTTTOM_PANEL_LABELS[i]);
 			bottomPanel.add(buttons[i]);
 		}
-		this.add(bottomPanel,BorderLayout.SOUTH);
+		
+		setActionsForButtons();
+		
+		frame.add(bottomPanel,BorderLayout.SOUTH);
+		return true;
+	}
+	
+	public static boolean setActionsForButtons() {
+		buttons[0].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showOptionDialog(frame,AddVehicleDialog.FIRST_QUESTION,"Creating a vehicle",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,AddVehicleDialog.TYPE_OPTIONS,AddVehicleDialog.TYPE_OPTIONS[3]);
+			}
+		});
 		return true;
 	}
 	
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
-		frame.setJMenuBar(createMenu());
-		frame.setBackground();
-		frame.createBottomPanel();
+		createMenu();
+		setBackground();
+		createBottomPanel();
 		frame.pack();  
 	}
 }
