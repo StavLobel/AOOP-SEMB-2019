@@ -16,15 +16,17 @@ public class Bike extends Vehicle {
 	/** The bike's number of wheels. */
 	private static final int WHEELS = 2;
 	
+	/** The Constant numberOfSeats. */
+	private static final int numberOfSeats = 1;
+	
 	/**
 	 * Instantiates a new bike.
 	 *
-	 * @param licensePlate the license plate of the bike
 	 * @param color the color of the bike
 	 * @param gears the bike's number of gears
 	 */
-	public Bike(int licensePlate,String color,int gears) {
-		super(licensePlate,color,WHEELS);
+	public Bike(String color,int gears) {
+		super(color,WHEELS,Bike.numberOfSeats);
 		this.gears = gears;
 	}
 
@@ -66,7 +68,7 @@ public class Bike extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Bike(this.getLicensePlate(),this.getColor(),this.getGears());
+		return new Bike(this.getColor(),this.getGears());
 	}
 	
 	/* (non-Javadoc)

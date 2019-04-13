@@ -16,15 +16,17 @@ public class Carriage extends Vehicle {
 	/** The carriage's number of wheels. */
 	private static final int WHEELS = 4;
 	
+	/** The Constant numberOfSeats. */
+	private static final int numberOfSeats = 2;
+	
 	/**
 	 * Instantiates a new carriage.
 	 *
-	 * @param licensePlate the license plate of the carriage
 	 * @param color the color of the carriage
 	 * @param animal the animal who will carry the carriage
 	 */
-	public Carriage(int licensePlate,String color,String animal) {
-		super(licensePlate,color,WHEELS);
+	public Carriage(String color,String animal) {
+		super(color,WHEELS,Carriage.numberOfSeats);
 		this.animal = new PackAnimal(animal);
 	}
 	
@@ -58,7 +60,7 @@ public class Carriage extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Carriage(this.getLicensePlate(),this.getColor(),this.getAnimal().getAnimalName());
+		return new Carriage(this.getColor(),this.getAnimal().getAnimalName());
 	}
 	
 	/* (non-Javadoc)

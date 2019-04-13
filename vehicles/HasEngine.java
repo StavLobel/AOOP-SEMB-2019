@@ -13,21 +13,17 @@ public abstract class HasEngine extends Vehicle {
 	/** The current fuel. */
 	private int currentFuel;
 	
-	/** The minimum age to drive the vehicle. */
-	private final int minAge;
-	
 	/**
 	 * Instantiates a new checks for engine.
 	 *
-	 * @param licensePlate the license plate
 	 * @param color the color
 	 * @param wheels the number of wheels
-	 * @param minAge the minimum age do drive the vehicle
+	 * @param numberOfSeats the number of seats
 	 * @param engineType the engine type
 	 * @param fuelCapacity the fuel capacity
 	 */
-	public HasEngine(int licensePlate,String color,int wheels,int minAge,String engineType,int fuelCapacity) {
-		super(licensePlate,color,wheels);
+	public HasEngine(String color,int wheels,int numberOfSeats,String engineType,int fuelCapacity) {
+		super(color,wheels,numberOfSeats);
 		if (engineType == "SolarEngine")
 			this.engine = new SolarEngine(fuelCapacity);
 		else if(engineType == "BenzineEngine")
@@ -35,7 +31,6 @@ public abstract class HasEngine extends Vehicle {
 		else
 			this.engine = null;
 		this.currentFuel = this.engine.getFuelCapacity();
-		this.minAge = minAge;
 	}
 
 	/**
@@ -54,15 +49,6 @@ public abstract class HasEngine extends Vehicle {
 	 */
 	public int getCurrentFuel() {
 		return currentFuel;
-	}
-
-	/**
-	 * Gets the min age.
-	 *
-	 * @return the min age
-	 */
-	public int getMinAge() {
-		return minAge;
 	}
 	
 	/**

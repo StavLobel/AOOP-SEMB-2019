@@ -31,7 +31,7 @@ public class CityFrame extends JFrame{
 	
 	public CityFrame(String title) {
 		setTitle(TITLE);
-		setSize(400,400);
+		setSize(800,600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);

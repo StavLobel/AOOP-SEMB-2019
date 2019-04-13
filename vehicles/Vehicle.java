@@ -17,11 +17,8 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	/** The license plate of the vehicle. */
 	private final int id;
 	
-	/** The Constant LICENSE_RANGE. */
-	private static final int[] LICENSE_RANGE = {1000,1000000};
-	
-	/** The licenses list. */
-	private static ArrayList<Integer> LICENSES_LIST = new ArrayList<Integer>();
+	/** The first id. */
+	private static int NEXT_ID = 1000;
 	
 	/** The color of the vehicle. */
 	private final String color;
@@ -50,8 +47,14 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	/** The total fuel that have been consumed.*/
 	private int fuelConsumption = 0;
 	
+	/** The number of seats. */
+	private final int numberOfSeats;
+	
 	/** The panel.*/
 	private CityPanel pan;
+	
+	/** The min age. */
+	private static int minAge = 18;
 	
 	/** The vehicle images.*/
 	private BufferedImage img1, img2, img3, img4;
@@ -59,43 +62,40 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
 	 */
-	public Vehicle(int id,String color,int wheels) {
-		this.id = id;
-		if (!(LICENSES_LIST.contains(id)))
-			LICENSES_LIST.add(id);
+	public Vehicle(String color,int wheels,int numberOfSeats) {
+		this.id = Vehicle.NEXT_ID;
+		Vehicle.NEXT_ID++;
 		this.color = color;
 		this.col = getColorObject(color);
 		this.wheels = wheels;
 		this.loc = new Location();
+		this.numberOfSeats = numberOfSeats;
 	}
 	
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
 	 * @param p the current point of the vehicle
 	 */
-	public Vehicle(int id,String color,int wheels,Point p) {
-		this(id,color,wheels);
+	public Vehicle(String color,int wheels,int numberOfSeats,Point p) {
+		this(color,wheels,numberOfSeats);
 		this.loc = new Location(p);
 	}
 	
 	/**
 	 * Instantiates a new vehicle.
 	 *
-	 * @param id the license plate of the vehicle
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
 	 * @param loc the loc of the vehicle
 	 */
-	public Vehicle(int id,String color,int wheels,Location loc) {
-		this(id,color,wheels);
+	public Vehicle(int id,String color,int wheels,int numberOfSeats,Location loc) {
+		this(color,wheels,numberOfSeats);
 		this.loc = new Location(loc);
 	}
 	
@@ -203,20 +203,8 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	 *
 	 * @return the license range
 	 */
-	public static int[] getlicenseRange() {
-		return LICENSE_RANGE;
-	}
-	
-	/**
-	 * Gets the license list.
-	 *
-	 * @return the licenses list
-	 */
-	public static int[] getLicensesList() {
-		int[] licenseList = new int[LICENSES_LIST.size()];
-		for (int i=0 ;i < LICENSES_LIST.size();++i)
-			licenseList[i] = LICENSES_LIST.get(i);
-		return licenseList;
+	public static int getNextId() {
+		return Vehicle.NEXT_ID;
 	}
 
 	/**
@@ -251,7 +239,24 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	public String toString() {
 		return ""+ this.getLicensePlate();
 	}
-
+	
+	/**
+	 * Gets the number of seats.
+	 *
+	 * @return the number of seats
+	 */
+	public int getNumberOfSeats() {
+		return this.numberOfSeats;
+	}
+	
+	/**
+	 * Gets the min age.
+	 *
+	 * @return the min age
+	 */
+	public int getMinAge() {
+		return Vehicle.minAge;
+	}
 	
 	//*****************HW2*******************
 	
