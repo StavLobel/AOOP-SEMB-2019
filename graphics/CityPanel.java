@@ -1,5 +1,6 @@
 package graphics;
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -22,4 +23,14 @@ public class CityPanel extends JPanel {
 			this.add(buttons[i]);
 		}
 	}
+	
+	protected void paintComponent(Graphics g)
+	{
+	    super.paintComponent(g);
+	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
+	    if (v!=null){ //if the vehicle object exists
+	        v.drawObject(g);
+	        v.move(v.nextLocation());}
+	}
+
 }

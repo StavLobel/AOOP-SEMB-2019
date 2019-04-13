@@ -13,7 +13,7 @@ public class CityFrame extends JFrame{
 	public static final String FILE_TITLE = "File";
 	public static final String HELP_TITLE = "Help";
 	private static final String EXIT_LABEL = "Exit";
-	public static BufferedImage backGround = null;
+	static BufferedImage backGround = null;
 	
 	public static boolean setBackground() {
         try {

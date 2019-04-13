@@ -1,18 +1,25 @@
 package vehicles;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+
 import graphics.IClonable;
+import graphics.IDrawable;
 import graphics.IMoveable;
 import java.awt.Color;
+import java.awt.Graphics;
+
 import graphics.CityPanel;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * The Class Vehicle.
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IMoveable,IClonable{
+public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	/** The license plate of the vehicle. */
 	private final int id;
@@ -57,7 +64,7 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	private static int minAge = 18;
 	
 	/** The vehicle images.*/
-	private BufferedImage img1, img2, img3, img4;
+	protected BufferedImage img1, img2, img3, img4;
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -426,12 +433,68 @@ public abstract class Vehicle implements IMoveable,IClonable{
 	/* (non-Javadoc)
 	 * @see graphics.IMoveable#move(vehicles.Point)
 	 */
-	public boolean move(Point p) {
-		return this.drive(p);
+	public boolean move(Point p){
+	        try { Thread.sleep(100); }
+	        catch (InterruptedException e) { e.printStackTrace(); }
+	        this.drive(p);
+	    pan.repaint();
+	    return true;
 	}
+
+
+
 	
 	/* (non-Javadoc)
 	 * @see graphics.IMoveable#refuel()
 	 */
 	public abstract boolean refuel();
+	
+	public void drawObject(Graphics g) {
+	    if(loc.getOrientation().equals("North")) //drives to north side
+	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	    else if (loc.getOrientation().equals("South"))//drives to the south side
+	        g.drawImage(img2, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	    else if(loc.getOrientation().equals("East")) //drives to the east side
+	        g.drawImage(img3, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	    else if(loc.getOrientation().equals("West")) //drives to the west side
+	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	}
+
+	public void loadImages(String nm) {
+		String name = this.getColor().toLowerCase()+this.getVehicleName();
+		String nameNorth = name+"North.png";
+		String nameSouth = name+"South.png";
+		String nameEast = name+"East.png";
+		String nameWest = name+"West.png";
+		
+		try {
+			this.img1 = ImageIO.read(new File("PNGs//"+nameNorth));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img2 = ImageIO.read(new File("PNGs//"+nameSouth));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img3 = ImageIO.read(new File("PNGs//"+nameEast));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img4 = ImageIO.read(new File("PNGs//"+nameWest));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+	}
+	
+
 }

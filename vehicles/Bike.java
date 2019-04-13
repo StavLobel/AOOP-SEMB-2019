@@ -1,5 +1,7 @@
 package vehicles;
 
+import javax.imageio.ImageIO;
+
 /**
  * The Class Bike.
  * 
@@ -77,4 +79,5 @@ public class Bike extends Vehicle {
 	public boolean refuel() {
 		return true;
 	}
+	
 }

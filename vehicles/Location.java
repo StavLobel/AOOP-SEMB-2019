@@ -10,15 +10,26 @@ public class Location{
 	/** The location. */
 	private Point location;
 	
+	/** The Constant NORTH. */
+	private static final String NORTH = "North";
+	
+	/** The Constant SOUTH. */
+	private static final String SOUTH = "South";
+	
+	/** The Constant EAST. */
+	private static final String EAST = "East";
+	
+	/** The Constant WEST. */
+	private static final String WEST = "West";
+	
 	/** The orientation. */
-	private String orientation;
+	private String orientation = EAST;
 	
 	/**
 	 * Instantiates a new location with point (0,0) and center orientation
 	 */
 	public Location() {
 		this.location = new Point();
-		this.orientation = getOrientation(this.location);
 	}
 	
 	/**
@@ -28,7 +39,6 @@ public class Location{
 	 */
 	public Location(Point p) {
 		this.location = p;
-		this.orientation = getOrientation(this.location);
 	}
 	
 	/**
@@ -38,36 +48,6 @@ public class Location{
 	 */
 	public Location(Location other) {
 		this.location = other.getLocationPoint();
-		this.orientation = getOrientation(this.location);
-	}
-	
-	/**
-	 * Factory method to get the orientation of a point
-	 * assumes (0,0) is the center
-	 *
-	 * @param p the point to get it's orientation
-	 * @return the orientation as String
-	 */
-	private static String getOrientation(Point p) {
-		String x,y;
-		
-		if (p.getX() == 0 && p.getY() == 0)
-			return "Center";
-		if (p.getX() > 0)
-			x = "East";
-		else if (p.getX() < 0)
-			x = "West";
-		else
-			x = "";
-		
-		if (p.getY() > 0)
-			y = "North";
-		else if (p.getY() < 0)
-			y = "South";
-		else
-			y = "";
-		
-		return y+x;
 	}
 	
 	/**
@@ -98,8 +78,15 @@ public class Location{
 		if (this.location.equals(p))
 			return false;
 		else {
+			if (this.location.getX() < p.getX() && this.location.getY() == p.getY())
+				this.orientation = EAST;
+			else if (this.location.getX() > p.getX() && this.location.getY() == p.getY())
+				this.orientation = WEST;
+			else if (this.location.getX() == p.getX() && this.location.getY() < p.getY())
+				this.orientation = NORTH;
+			else if (this.location.getX() == p.getX() && this.location.getY() > p.getY())
+				this.orientation = SOUTH;
 			this.location = p;
-			this.orientation = getOrientation(p);
 			return true;
 		}
 	}
