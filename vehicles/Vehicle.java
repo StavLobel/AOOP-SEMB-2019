@@ -460,7 +460,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
 	}
 
-	public void loadImages(String nm) {
+	public void loadImages() {
 		String name = this.getColor().toLowerCase()+this.getVehicleName();
 		String nameNorth = name+"North.png";
 		String nameSouth = name+"South.png";
@@ -494,6 +494,40 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		catch (IOException e) {
 			System.out.println("Cannot load image");
 		}
+	}
+	
+	public Point nextLocation() {
+		int x = this.loc.getLocationPoint().getX();
+		int y = this.loc.getLocationPoint().getY();
+		if (this.loc.getOrientation().equals("North")) {
+			y += this.getSpeed();
+			if (y > 600) {
+				x -= y-600;
+				y = 600;
+			}
+		}
+		else if(this.loc.getOrientation().equals("South")) {
+			y -= this.getSpeed();
+			if (y < 0) {
+				x -= y;
+				y = 0;
+			}
+		}
+		else if(this.loc.getOrientation().equals("East")) {
+			x += this.getSpeed();
+			if(x > 800) {
+				y += 800-x;
+				x = 800;
+			}
+		}
+		else if(this.loc.getOrientation().equals("West")) {
+			x -= this.getSpeed();
+			if (x < 0) {
+				y -= x;
+				x = 0;
+			}
+		}
+		return new Point(x,y);
 	}
 	
 

@@ -13,21 +13,7 @@ public class CityFrame extends JFrame{
 	public static final String FILE_TITLE = "File";
 	public static final String HELP_TITLE = "Help";
 	private static final String EXIT_LABEL = "Exit";
-	static BufferedImage backGround = null;
 	
-	public static boolean setBackground() {
-        try {
-            backGround = ImageIO.read(new File("PNGs//cityBackground.png"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        Image dimg = backGround.getScaledInstance(frame.getWidth(),frame.getHeight(),Image.SCALE_SMOOTH);
-        JLabel backgroundLabel = new JLabel(new ImageIcon(dimg));
-        frame.add(backgroundLabel);
-        backgroundLabel.setLayout(new FlowLayout());
-        return true;
-	}
 	
 	public CityFrame(String title) {
 		setTitle(TITLE);
@@ -72,7 +58,6 @@ public class CityFrame extends JFrame{
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
 		createMenu();
-		setBackground();
 		CityPanel bottomPanel = new CityPanel();
 		frame.add(bottomPanel,BorderLayout.SOUTH);
 		frame.pack();  
