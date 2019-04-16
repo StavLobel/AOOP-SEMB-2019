@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
@@ -23,7 +25,7 @@ public class AddVehicleDialog extends JDialog {
 	static final String BIKE_LABEL = "Bike";
 	static final String CAR_BENZINE = "Car with benzine engine";
 	static final String CAR_SOLAR = "Car with solar engine";
-	static final String[] BUTTONS_LABELS = {CARRIAGE_LABEL,BIKE_LABEL,CAR_BENZINE,CAR_SOLAR,"Red","Green","Silver","White"};
+	static final String[] BUTTONS_LABELS = {CAR_BENZINE,CAR_SOLAR,BIKE_LABEL,CARRIAGE_LABEL,"Red","Green","Silver","White"};
 	static final String FIRST_QUESTION = "Please choose a type of vehicle :";
 	static final String SECOND_QUESTION = "Please choose a color for your vehicle :";
 	static ButtonGroup qType,qColor;
@@ -33,22 +35,28 @@ public class AddVehicleDialog extends JDialog {
 	JPanel colorPanel = new JPanel(new GridLayout(2,2));
 	JSlider gears = new JSlider(1, 10, 1);
 	JPanel gearsPanel = new JPanel();
+	JPanel bottomPanel = new JPanel();
+	JButton ok = new JButton("OK");
+	JButton cancel = new JButton("Cancel");
 	
 	public AddVehicleDialog() {
 		setTitle(TITLE);
 		setLayout(new BorderLayout());
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setRadioButtons();
 		setSlider();
+		setBottomPanel();
+		setOKButton();
 		this.add(qPanel);
 		this.pack();
 		
 	}
 	
 	public void setRadioButtons() {
-		for (int i = 0 ; i < 8 ; ++i)
+		for (int i = 0 ; i < 8 ; ++i) {
 			buttons[i] = new JRadioButton(BUTTONS_LABELS[i]);
+			buttons[i].setActionCommand(BUTTONS_LABELS[i]);
+		}
 		qType = new ButtonGroup();
 		qColor = new ButtonGroup();
 		for (int i = 0 ; i < 4 ; ++i) {
@@ -59,16 +67,12 @@ public class AddVehicleDialog extends JDialog {
 			qColor.add(buttons[i]);
 			colorPanel.add(buttons[i]);
 		}
-		buttons[1].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				gearsPanel.setEnabled(true);	
-			}
-		});
 		typePanel.setBorder(new TitledBorder("Choose type :"));
 		colorPanel.setBorder(new TitledBorder("Choose color :"));
-		qPanel.add(typePanel,BorderLayout.WEST);
-		qPanel.add(colorPanel,BorderLayout.EAST);
+		JPanel top = new JPanel();
+		top.add(typePanel,BorderLayout.WEST);
+		top.add(colorPanel,BorderLayout.EAST);
+		qPanel.add(top,BorderLayout.NORTH);
 	}
 	
 	public void setSlider() {
@@ -78,10 +82,55 @@ public class AddVehicleDialog extends JDialog {
 		gears.setSnapToTicks(true);
 		gears.setPaintLabels(true);
 		gearsPanel.add(gears);
-		qPanel.add(gearsPanel,BorderLayout.SOUTH);
+		qPanel.add(gearsPanel,BorderLayout.CENTER);
 		gearsPanel.setVisible(true);
 		gears.setVisible(true);
+		gears.setEnabled(false);
 		gearsPanel.setEnabled(false);
+		setSliderHiding();
+	}
+	
+	public void setBottomPanel() {
+		cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		bottomPanel.add(ok);
+		bottomPanel.add(cancel);
+		qPanel.add(bottomPanel,BorderLayout.SOUTH);
+	}
+	
+	public void setSliderHiding() {
+		buttons[2].addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(((JRadioButton)e.getItem()).isSelected()==true) {
+					gears.setEnabled(true);
+					gearsPanel.setEnabled(true);
+				}
+				else {
+					gears.setEnabled(false);
+					gearsPanel.setEnabled(false);
+				}		
+			}
+		});
+	}
+	
+	public void setOKButton() {
+		ok.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String type = qType.getSelection().getActionCommand();
+				String color = qColor.getSelection().getActionCommand();
+				int numOfGears = gears.getValue();
+				System.out.println(type+color+numOfGears);
+			}
+		});
 	}
 	
 }

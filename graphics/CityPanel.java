@@ -60,7 +60,8 @@ public class CityPanel extends JPanel {
 		buttons[0].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(true);;
+				dialog.setVisible(true);
+				dialog.setLocationRelativeTo(null);
 			}
 		});
 	}
