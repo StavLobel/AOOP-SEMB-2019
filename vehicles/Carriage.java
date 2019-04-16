@@ -23,11 +23,10 @@ public class Carriage extends Vehicle {
 	 * Instantiates a new carriage.
 	 *
 	 * @param color the color of the carriage
-	 * @param animal the animal who will carry the carriage
 	 */
-	public Carriage(String color,String animal) {
+	public Carriage(String color) {
 		super(color,WHEELS,Carriage.numberOfSeats);
-		this.animal = new PackAnimal(animal);
+		this.animal = new PackAnimal("Pack Animal");
 	}
 	
 	/**
@@ -60,7 +59,7 @@ public class Carriage extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Carriage(this.getColor(),this.getAnimal().getAnimalName());
+		return new Carriage(this.getColor());
 	}
 	
 	/* (non-Javadoc)
