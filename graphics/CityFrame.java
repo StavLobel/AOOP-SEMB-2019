@@ -12,16 +12,17 @@ public class CityFrame extends JFrame{
 	public static final String TITLE = "City";
 	public static final String FILE_TITLE = "File";
 	public static final String HELP_TITLE = "Help";
-	private static final String EXIT_LABEL = "Exit";
+	public static final String EXIT_LABEL = "Exit";
+	public CityPanel panel = new CityPanel();
 	
 	
 	public CityFrame(String title) {
-		setTitle(TITLE);
+		super(TITLE);
 		setSize(800,600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
-        setLayout(new BorderLayout());
+        setVisible(true);	
+		this.add(panel);
 	}
 	
 	public static boolean createMenu() {
@@ -56,10 +57,7 @@ public class CityFrame extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		frame = new CityFrame(TITLE);
+		frame = new CityFrame(TITLE);  
 		createMenu();
-		CityPanel bottomPanel = new CityPanel();
-		frame.add(bottomPanel,BorderLayout.SOUTH);
-		frame.pack();  
 	}
 }

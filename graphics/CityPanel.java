@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -32,11 +34,12 @@ public class CityPanel extends JPanel {
 	private static JButton[] buttons;
 	JPanel bottom = new JPanel();
 	static BufferedImage backgroundImage = null;
-	Vehicle v = new Bike("Red",10);
+	AddVehicleDialog dialog = new AddVehicleDialog();
+	private Vehicle v;
 	
 	public static boolean setBackground() {
         try {
-        	backgroundImage = ImageIO.read(new File("PNGs//cityBackground.png"));
+        	backgroundImage = ImageIO.read(new File("PNGs/cityBackground.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,6 +49,7 @@ public class CityPanel extends JPanel {
 	
 	public CityPanel(){
 		super(new BorderLayout());
+		this.setSize(800, 600);
 		this.add(bottom,BorderLayout.SOUTH);
 		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
 		for (int i=0 ; i < buttons.length ; ++i ) {
@@ -53,6 +57,12 @@ public class CityPanel extends JPanel {
 			bottom.add(buttons[i]);
 		}
 		setBackground();
+		buttons[0].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.setVisible(true);;
+			}
+		});
 	}
 	
 	protected void paintComponent(Graphics g)
