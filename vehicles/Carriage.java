@@ -78,7 +78,7 @@ public class Carriage extends Vehicle {
 	}
 	
 	public int getCurrentFuel() {
-		return this.getAnimal().getCurrentEnergy();
+		return this.animal.getCurrentEnergy();
 	}
 	
 	public boolean useFuel(int amount) {

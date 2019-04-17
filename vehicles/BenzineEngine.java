@@ -23,6 +23,6 @@ public class BenzineEngine extends Engine {
 	 * @see vehicles.Engine#toString()
 	 */
 	public String toString() {
-		return "Benzine Engine " + super.toString();
+		return "Benzine " + super.toString();
 	}
 }

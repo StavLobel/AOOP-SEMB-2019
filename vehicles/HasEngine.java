@@ -1,5 +1,10 @@
 package vehicles;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 /**
  * The Class HasEngine.
  * 
@@ -8,7 +13,7 @@ package vehicles;
 public abstract class HasEngine extends Vehicle {
 	
 	/** The engine. */
-	private final Engine engine;
+	private Engine engine = null;
 	
 	/** The current fuel. */
 	private int currentFuel;
@@ -24,12 +29,10 @@ public abstract class HasEngine extends Vehicle {
 	 */
 	public HasEngine(String color,int wheels,int numberOfSeats,String engineType,int fuelCapacity) {
 		super(color,wheels,numberOfSeats);
-		if (engineType == "SolarEngine")
+		if (engineType.equals("SolarEngine"))
 			this.engine = new SolarEngine(fuelCapacity);
-		else if(engineType == "BenzineEngine")
+		else if(engineType.equals("BenzineEngine"))
 			this.engine = new BenzineEngine(fuelCapacity);
-		else
-			this.engine = null;
 		this.currentFuel = this.engine.getFuelCapacity();
 	}
 
@@ -83,5 +86,45 @@ public abstract class HasEngine extends Vehicle {
 	public boolean useFuel(int amount) {
 		this.currentFuel -= amount;
 		return true;
+	}
+	
+	public int getFuelConsumption() {
+		return this.engine.getFuelConsumption();
+	}
+	
+	public void loadImages() {
+		String name = this.getColor().toLowerCase()+"Car";
+		String nameNorth = name+"North.png";
+		String nameSouth = name+"South.png";
+		String nameEast = name+"East.png";
+		String nameWest = name+"West.png";
+		
+		try {
+			this.img1 = ImageIO.read(new File("PNGs//"+nameNorth));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img2 = ImageIO.read(new File("PNGs//"+nameSouth));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img3 = ImageIO.read(new File("PNGs//"+nameEast));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
+		
+		try {
+			this.img4 = ImageIO.read(new File("PNGs//"+nameWest));
+		}
+		catch (IOException e) {
+			System.out.println("Cannot load image");
+		}
 	}
 }

@@ -127,9 +127,8 @@ public class PackAnimal implements IAnimal, IClonable {
 	 * @return true, if successful
 	 */
 	public boolean useFuel(int amount) {
-		if (this.getCurrentEnergy() < amount || amount < 0)
-			return false;
 		this.currentEnergy -= amount;
+		System.out.println(this.currentEnergy);
 		return true;
 	}
 	

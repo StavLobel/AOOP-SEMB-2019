@@ -231,7 +231,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 	
 	private boolean canMove(Point toGo) {
-		return this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption() >= this.getCurrentFuel();
+		return this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption() <= this.getCurrentFuel();
 	}
 	
 	public abstract boolean useFuel(int amount);
@@ -443,7 +443,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/* (non-Javadoc)
 	 */
 	public boolean move(Point p){
-	    if (this.canMove(p) && !this.loc.getLocationPoint().equals(p)) {    
+	    if (this.canMove(p) && this.loc.getLocationPoint().equals(p) == false) {    
 	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        this.drive(p);

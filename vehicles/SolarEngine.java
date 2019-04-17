@@ -23,6 +23,6 @@ public class SolarEngine extends Engine {
 	 * @see vehicles.Engine#toString()
 	 */
 	public String toString() {
-		return "Solar Engine " + super.toString();
+		return "Solar "+super.toString();
 	}
 }

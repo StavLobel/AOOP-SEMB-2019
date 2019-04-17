@@ -49,6 +49,6 @@ public abstract class Engine {
 	 * @return "Fuel Consumption : Fuel Capacity :"
 	 */
 	public String toString() {
-		return "Fuel Consumption : "+ getFuelConsumption() +" Fuel Capacity : "+ getFuelCapacity();
+		return "Engine";
 	}
 }
