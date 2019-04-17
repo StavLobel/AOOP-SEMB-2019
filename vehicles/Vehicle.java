@@ -527,9 +527,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		}
 		else if(this.loc.getOrientation().equals("East")) {
 			x += this.getSpeed();
-			if(x > 800) {
-				y += 800-x;
-				x = 800;
+			if(x > 800-size*2) {
+				y = 600-(800-size*2-x);
+				x = 800-size*2;
 			}
 		}
 		else if(this.loc.getOrientation().equals("West")) {
