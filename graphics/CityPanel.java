@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import vehicles.*;
 
 public class CityPanel extends JPanel {
+	private static final int VEHICLE_ARRAY_SIZE = 1;
 	private static final String ADD_VEHICLE_LABEL = "Add Vehicle";
 	private static final String CLEAR_LABEL = "Clear";
 	private static final String FUEL_OR_FOOD_LABEL = "Fuel/Food";
@@ -34,8 +35,9 @@ public class CityPanel extends JPanel {
 	private static JButton[] buttons;
 	JPanel bottom = new JPanel();
 	static BufferedImage backgroundImage = null;
-	AddVehicleDialog dialog = new AddVehicleDialog();
-	private Vehicle v;
+	AddVehicleDialog dialog = new AddVehicleDialog(this);
+	static Vehicle[] v = new Vehicle[VEHICLE_ARRAY_SIZE];
+	static int numOfVehicles = 0;
 	
 	public static boolean setBackground() {
         try {
@@ -64,16 +66,19 @@ public class CityPanel extends JPanel {
 				dialog.setLocationRelativeTo(null);
 			}
 		});
+		
+		Vehicle.setPanel(this);
 	}
 	
 	protected void paintComponent(Graphics g)
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    if (v!=null){ //if the vehicle object exists
-	        v.drawObject(g);
-	        v.move(v.nextLocation());
+	    if (numOfVehicles > 0){ //if the vehicle object exists
+	        for (int i = 0 ; i < numOfVehicles ; ++i) {
+	        	v[i].drawObject(g);
+	        	v[i].move(v[i].nextLocation());
+	        }
 	    }
 	}
-
 }

@@ -19,6 +19,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
+import vehicles.*;
+
 public class AddVehicleDialog extends JDialog {
 	static final String TITLE = "Add a vehicle to the city";
 	static final String CARRIAGE_LABEL = "Carriage";
@@ -38,8 +40,9 @@ public class AddVehicleDialog extends JDialog {
 	JPanel bottomPanel = new JPanel();
 	JButton ok = new JButton("OK");
 	JButton cancel = new JButton("Cancel");
+	JPanel panel;
 	
-	public AddVehicleDialog() {
+	public AddVehicleDialog(JPanel panel) {
 		setTitle(TITLE);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -49,7 +52,7 @@ public class AddVehicleDialog extends JDialog {
 		setOKButton();
 		this.add(qPanel);
 		this.pack();
-		
+		this.panel = panel;
 	}
 	
 	public void setRadioButtons() {
@@ -125,12 +128,36 @@ public class AddVehicleDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String type = qType.getSelection().getActionCommand();
-				String color = qColor.getSelection().getActionCommand();
-				int numOfGears = gears.getValue();
-				System.out.println(type+color+numOfGears);
+				if (qType.getSelection() == null || qColor.getSelection() == null) {
+					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
+				}
+				else if (CityPanel.numOfVehicles == CityPanel.v.length) {
+					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
+				}
+				else {
+					String type = qType.getSelection().getActionCommand();
+					String color = qColor.getSelection().getActionCommand();
+					int numOfGears = gears.getValue();
+					//System.out.println(type+color+numOfGears);
+					createVehicle(type,color,numOfGears);
+					dispose();
+				}
 			}
 		});
+	}
+	
+	private static boolean createVehicle(String type,String color,int numberOfGears) {
+		if (type.equals(CAR_BENZINE)) 
+			CityPanel.v[CityPanel.numOfVehicles] = new Car(color,"BenzineEngine");
+		else if (type.equals(CAR_SOLAR))
+			CityPanel.v[CityPanel.numOfVehicles] = new Car(color,"SolarEngine");
+		else if (type.equals(BIKE_LABEL))
+			CityPanel.v[CityPanel.numOfVehicles] = new Bike(color,numberOfGears);
+		else if (type.equals(CARRIAGE_LABEL))
+			CityPanel.v[CityPanel.numOfVehicles] = new Carriage(color);
+		
+		CityPanel.numOfVehicles += 1;
+		return true;
 	}
 	
 }

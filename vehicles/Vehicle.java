@@ -2,6 +2,7 @@ package vehicles;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JPanel;
 
 import graphics.IClonable;
 import graphics.IDrawable;
@@ -49,7 +50,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	private boolean lights = false;
 	
 	/** The size of the vehicle.*/
-	private int size= 0;
+	private int size= 65;
 	
 	/** The total fuel that have been consumed.*/
 	private int fuelConsumption = 0;
@@ -58,7 +59,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	private final int numberOfSeats;
 	
 	/** The panel.*/
-	private CityPanel pan;
+	private static CityPanel pan;
 	
 	/** The min age. */
 	private static int minAge = 18;
@@ -80,6 +81,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		this.wheels = wheels;
 		this.loc = new Location();
 		this.numberOfSeats = numberOfSeats;
+		loadImages();
 	}
 	
 	/**
@@ -450,6 +452,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	public abstract boolean refuel();
 	
 	public void drawObject(Graphics g) {
+		g.setColor(col);
 	    if(loc.getOrientation().equals("North")) //drives to north side
 	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
 	    else if (loc.getOrientation().equals("South"))//drives to the south side
@@ -461,7 +464,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 
 	public void loadImages() {
-		String name = this.getColor().toLowerCase()+this.getVehicleName();
+		String name = this.getColor().toLowerCase()+this.getVehicleName().replaceAll(" ","");;
 		String nameNorth = name+"North.png";
 		String nameSouth = name+"South.png";
 		String nameEast = name+"East.png";
@@ -530,5 +533,8 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return new Point(x,y);
 	}
 	
-
+	public static boolean setPanel(CityPanel panel) {
+		Vehicle.pan = panel;
+		return true;
+	}
 }
