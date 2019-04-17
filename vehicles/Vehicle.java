@@ -2,6 +2,7 @@ package vehicles;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import graphics.IClonable;
@@ -59,7 +60,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	private final int numberOfSeats;
 	
 	/** The panel.*/
-	private static CityPanel pan;
+	protected static CityPanel pan;
 	
 	/** The min age. */
 	private static int minAge = 18;
@@ -223,12 +224,19 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * @return true, if successful ,false if the vehicle stay in it's loc
 	 */
 	public boolean drive(Point toGo) {
-		if (toGo.equals(this.loc.getLocationPoint()))
-			return false;
+		this.useFuel(this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption());
 		this.mileage += this.loc.getLocationPoint().distanceManhattan(toGo);
 		this.loc.setLocation(toGo);
 		return true;
 	}
+	
+	private boolean canMove(Point toGo) {
+		return this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption() >= this.getCurrentFuel();
+	}
+	
+	public abstract boolean useFuel(int amount);
+	
+	public abstract int getCurrentFuel();
 	
 	/**
 	 * Equals.
@@ -433,14 +441,16 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	public abstract int getSpeed();
 	
 	/* (non-Javadoc)
-	 * @see graphics.IMoveable#move(vehicles.Point)
 	 */
 	public boolean move(Point p){
-	        try { Thread.sleep(100); }
+	    if (this.canMove(p) && !this.loc.getLocationPoint().equals(p)) {    
+	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        this.drive(p);
-	    pan.repaint();
-	    return true;
+	        pan.repaint();
+		    return true;
+	    }
+	    return false;
 	}
 
 
@@ -452,7 +462,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	public abstract boolean refuel();
 	
 	public void drawObject(Graphics g) {
-		g.setColor(col);
 	    if(loc.getOrientation().equals("North")) //drives to north side
 	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
 	    else if (loc.getOrientation().equals("South"))//drives to the south side
@@ -464,7 +473,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 
 	public void loadImages() {
-		String name = this.getColor().toLowerCase()+this.getVehicleName().replaceAll(" ","");;
+		String name = this.getColor().toLowerCase()+this.getVehicleName();
 		String nameNorth = name+"North.png";
 		String nameSouth = name+"South.png";
 		String nameEast = name+"East.png";

@@ -70,23 +70,23 @@ public class Carriage extends Vehicle {
 	}
 	
 	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#move(vehicles.Point)
-	 */
-	public boolean move(Point p) {
-		int energyconsuption = this.animal.getFuelConsumption();
-		int distance = this.getLocation().getLocationPoint().distanceManhattan(p);
-		if(energyconsuption * distance > this.animal.getCurrentEnergy())
-			return false;
-		this.animal.reduceEnergy(energyconsuption*distance);
-		return super.drive(p);
-	}
-	
-	/* (non-Javadoc)
 	 * @see vehicles.Vehicle#refuel()
 	 */
 	public boolean refuel() {
 		this.setFuelConsumption(this.animal.getMaxEnergy()-this.animal.getCurrentEnergy());
 		return this.animal.eat();
+	}
+	
+	public int getCurrentFuel() {
+		return this.getAnimal().getCurrentEnergy();
+	}
+	
+	public boolean useFuel(int amount) {
+		return this.animal.useFuel(amount);
+	}
+	
+	public int getFuelConsumption() {
+		return this.animal.getEnergyConsumption();
 	}
 	
 }

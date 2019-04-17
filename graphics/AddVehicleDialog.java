@@ -128,17 +128,14 @@ public class AddVehicleDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (qType.getSelection() == null || qColor.getSelection() == null) {
+				if (qType.getSelection() == null || qColor.getSelection() == null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
-				}
-				else if (CityPanel.numOfVehicles == CityPanel.v.length) {
+				else if (CityPanel.numOfVehicles == CityPanel.v.length)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
-				}
 				else {
 					String type = qType.getSelection().getActionCommand();
 					String color = qColor.getSelection().getActionCommand();
 					int numOfGears = gears.getValue();
-					//System.out.println(type+color+numOfGears);
 					createVehicle(type,color,numOfGears);
 					dispose();
 				}
@@ -156,6 +153,7 @@ public class AddVehicleDialog extends JDialog {
 		else if (type.equals(CARRIAGE_LABEL))
 			CityPanel.v[CityPanel.numOfVehicles] = new Carriage(color);
 		
+		CityPanel.v[CityPanel.numOfVehicles].move(CityPanel.v[CityPanel.numOfVehicles].nextLocation());
 		CityPanel.numOfVehicles += 1;
 		return true;
 	}

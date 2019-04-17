@@ -51,6 +51,7 @@ public class CityPanel extends JPanel {
 	
 	public CityPanel(){
 		super(new BorderLayout());
+		Vehicle.setPanel(this);
 		this.setSize(800, 600);
 		this.add(bottom,BorderLayout.SOUTH);
 		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
@@ -67,7 +68,6 @@ public class CityPanel extends JPanel {
 			}
 		});
 		
-		Vehicle.setPanel(this);
 	}
 	
 	protected void paintComponent(Graphics g)

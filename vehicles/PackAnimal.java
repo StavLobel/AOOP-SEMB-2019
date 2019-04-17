@@ -126,7 +126,7 @@ public class PackAnimal implements IAnimal, IClonable {
 	 * @param amount the amount of energy to reduce
 	 * @return true, if successful
 	 */
-	public boolean reduceEnergy(int amount) {
+	public boolean useFuel(int amount) {
 		if (this.getCurrentEnergy() < amount || amount < 0)
 			return false;
 		this.currentEnergy -= amount;
@@ -138,5 +138,9 @@ public class PackAnimal implements IAnimal, IClonable {
 	 */
 	public boolean refuel() {
 		return this.eat();
+	}
+	
+	public int getCurrentFuel() {
+		return getCurrentEnergy();
 	}
 }

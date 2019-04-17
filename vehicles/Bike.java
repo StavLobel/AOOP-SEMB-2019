@@ -80,4 +80,12 @@ public class Bike extends Vehicle {
 		return true;
 	}
 	
+	public int getCurrentFuel() {
+		return 0;
+	}
+	
+	public boolean useFuel(int amount) {
+		return true;
+	}
+	
 }

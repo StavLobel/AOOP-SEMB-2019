@@ -52,30 +52,6 @@ public abstract class HasEngine extends Vehicle {
 	}
 	
 	/**
-	 * Update fuel.
-	 *
-	 * @param distance the distance been driven
-	 * @return true
-	 */
-	public boolean UpdateFuel(int distance) {
-		this.currentFuel -= distance*this.engine.getFuelConsumption();
-		return true;
-	}
-	
-	/** 
-	 * Drive.
-	 * use the drive from class Vehicle and also update the fuel
-	 * @return true,if the drive went successfully ,false if not
-	 * @see vehicles.Vehicle#drive(vehicles.Point)
-	 */
-	public boolean drive(Point toGo) {
-		if (this.getLocation().getLocationPoint().distanceManhattan(toGo)*this.engine.getFuelConsumption() > this.currentFuel)
-			return false;
-		this.UpdateFuel(this.getLocation().getLocationPoint().distanceManhattan(toGo));
-		return super.drive(toGo);
-	}
-	
-	/**
 	 * Gets the engine type.
 	 *
 	 * @return the engine type as String
@@ -104,10 +80,8 @@ public abstract class HasEngine extends Vehicle {
 		return super.toString();
 	}
 	
-	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#move(vehicles.Point)
-	 */
-	public boolean move(Point p) {
-		return this.drive(p);
+	public boolean useFuel(int amount) {
+		this.currentFuel -= amount;
+		return true;
 	}
 }
