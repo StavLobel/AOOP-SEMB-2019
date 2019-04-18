@@ -14,7 +14,7 @@ public class Car extends HasEngine {
 	private static final int FUEL_CAPACITY = 40;
 	
 	/** The Constant SPEED. */
-	private static final int SPEED = 4;
+	private static final int SPEED = 20;
 	
 	/** The Constant numberOfSeats. */
 	private static final int numberOfSeats = 5;

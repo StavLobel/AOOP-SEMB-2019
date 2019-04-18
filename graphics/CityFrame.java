@@ -57,7 +57,7 @@ public class CityFrame extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		frame = new CityFrame(TITLE);  
+		frame = new CityFrame(TITLE);
 		createMenu();
 	}
 }

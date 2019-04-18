@@ -1,5 +1,7 @@
 package vehicles;
 
+import java.util.Arrays;
+
 /**
  * The Class Location.
  * 
@@ -21,6 +23,8 @@ public class Location{
 	
 	/** The Constant WEST. */
 	private static final String WEST = "West";
+	
+	private static final String[] ORIENTATIONS = {NORTH,SOUTH,EAST,WEST};
 	
 	/** The orientation. */
 	private String orientation = EAST;
@@ -138,5 +142,32 @@ public class Location{
 	 */
 	public Location replicate() {
 		return new Location(this);
+	}
+	
+	public static String[] getOrientatios() {
+		return Location.ORIENTATIONS;
+	}
+	
+	public boolean setOrientation(String orientation) {
+		boolean orientationExist = false;
+		for (int i = 0 ; i < ORIENTATIONS.length ; ++i)
+			if (ORIENTATIONS[i].equals(orientation))
+				orientationExist = true;
+		if (orientation.equals(this.getOrientation()) || orientationExist == false)
+			return false;
+		this.orientation = orientation;
+		return true;
+	}
+	
+	public String getOppositeOrientation() {
+		if (orientation.equals(NORTH))
+			return SOUTH;
+		if (orientation.equals(SOUTH))
+			return NORTH;
+		if (orientation.equals(EAST))
+			return WEST;
+		if (orientation.equals(WEST))
+			return EAST;
+		return null;
 	}
 }
