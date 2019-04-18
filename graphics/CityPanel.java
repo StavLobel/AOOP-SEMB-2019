@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import vehicles.*;
 
 public class CityPanel extends JPanel {
-	private static final int VEHICLE_ARRAY_SIZE = 1;
+	private static final int VEHICLE_ARRAY_SIZE = 5;
 	private static final String ADD_VEHICLE_LABEL = "Add Vehicle";
 	private static final String CLEAR_LABEL = "Clear";
 	private static final String FUEL_OR_FOOD_LABEL = "Fuel/Food";

@@ -539,7 +539,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	private static Point nextLocationMaker(Location current,Point next,int gap) {
 		Point intersection = getIntersection(current.getLocationPoint(),next);
-		System.out.println(current.getLocationPoint() + " => " + intersection + " => " + next);
 		if (intersection == null)
 			return next;
 		gap = current.getLocationPoint().distanceManhattan(intersection);
@@ -547,7 +546,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		String nextDirection = directionInIntersection(current,gap);
 		current.setOrientation(nextDirection);
 		next = makeNextPoint(current, gap);
-		System.out.println("Next : " + next);
 		return nextLocationMaker(current, next,gap);
 	}
 	
@@ -587,7 +585,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 			next.setOrientation(nextOrientation);
 			next = new Location(makeNextPoint(next,1));
 		}
-		System.out.println(nextOrientation);
 		return nextOrientation;
 	}
 	
@@ -597,9 +594,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	public static boolean setPanel(CityPanel panel) {
 		Vehicle.pan = panel;
-		panelWidth = pan.getWidth()-vehicleWidthVertical;
-		panelHeight = pan.getHeight()-vehicleHeightHorizon;
-		panelMiddle = pan.getHeight()/2-vehicleHeightHorizon;
+		panelWidth = pan.getWidth()-(vehicleWidthVertical+17);
+		panelHeight = pan.getHeight()-vehicleHeightHorizon*3/2-15;
+		panelMiddle = panelHeight/2;
 		return true;
 	}
 }

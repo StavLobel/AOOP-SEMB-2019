@@ -97,7 +97,7 @@ public class Location{
 				this.orientation = NORTH;
 			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() > p.getX())
 				this.orientation = WEST;
-			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getY() > p.getY())
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() < p.getX())
 				this.orientation = EAST;
 			this.location = p;
 			return true;
