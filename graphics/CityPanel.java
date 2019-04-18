@@ -38,6 +38,7 @@ public class CityPanel extends JPanel {
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
 	static Vehicle[] v = new Vehicle[VEHICLE_ARRAY_SIZE];
 	static int numOfVehicles = 0;
+	}
 	
 	public static boolean setBackground() {
         try {

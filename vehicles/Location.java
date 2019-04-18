@@ -48,6 +48,7 @@ public class Location{
 	 */
 	public Location(Location other) {
 		this.location = other.getLocationPoint();
+		this.orientation = other.getOrientation();
 	}
 	
 	/**

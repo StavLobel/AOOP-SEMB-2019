@@ -51,7 +51,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	private boolean lights = false;
 	
 	/** The size of the vehicle.*/
-	private int size= 65;
+	private static final int size= 65;
 	
 	/** The total fuel that have been consumed.*/
 	private int fuelConsumption = 0;
@@ -67,6 +67,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	/** The vehicle images.*/
 	protected BufferedImage img1, img2, img3, img4;
+	
+	protected static final int vehicleWidth = size*2;
+	protected static final int vehicleHeight = size;
+	protected static final int panelWidth = pan.getWidth()-vehicleWidth;
+	protected static final int panelHeight = pan.getHeight()-vehicleHeight;
+	
+	protected static final Point[] intersections = {new Point(0,0),new Point(panelWidth,0),new Point(panelHeight,0),new Point(panelWidth,panelHeight),new Point(0,panelHeight/2),new Point(panelWidth,panelHeight/2)};
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -509,37 +516,49 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 	
 	public Point nextLocation() {
-		int x = this.loc.getLocationPoint().getX();
-		int y = this.loc.getLocationPoint().getY();
-		if (this.loc.getOrientation().equals("North")) {
-			y += this.getSpeed();
-			if (y > 600) {
-				x -= y-600;
-				y = 600;
-			}
+		Location current = this.getLocation().replicate();
+		Point next = makeNextPoint(current,this.getSpeed());
+		return nextLocationMaker(current,next);
+	}
+	
+	private static Point makeNextPoint(Location current,int distance) {
+		if (current.getOrientation().equals("North")) 
+			return new Point(current.getLocationPoint().getX(),current.getLocationPoint().getY()-distance);
+		if (current.getOrientation().equals("South")) 
+			return new Point(current.getLocationPoint().getX(),current.getLocationPoint().getY()+distance);
+		if (current.getOrientation().equals("East")) 
+			return new Point(current.getLocationPoint().getX()+distance,current.getLocationPoint().getY());
+		if (current.getOrientation().equals("West")) 
+			return new Point(current.getLocationPoint().getX()-distance,current.getLocationPoint().getY());
+		return null;
+	}
+	
+	private static Point nextLocationMaker(Location current,Point next) {
+		Point intersection = getIntersection(current.getLocationPoint(),next);
+		if (intersection == null)
+			return next;
+		int gap = current.getLocationPoint().distanceManhattan(intersection);
+		current.setLocation(intersection);
+		next = makeNextPointFromIntersection(current, gap);
+		return nextLocationMaker(current, next);
+	}
+	
+	private static Point getIntersection(Point current,Point next) {
+		if (current.getY() == next.getY()) {
+			if (next.getX() <= 0)
+				return new Point(0,current.getY());
+			else if (next.getX() >= panelWidth)
+				return new Point(panelWidth,current.getY());
 		}
-		else if(this.loc.getOrientation().equals("South")) {
-			y -= this.getSpeed();
-			if (y < 0) {
-				x -= y;
-				y = 0;
-			}
+		else if (current.getX() == next.getX() && (next.getY() >= panelHeight || next.getY() <= 0)) {
+			if (next.distanceManhattan(new Point(next.getX(),panelHeight/2)) < next.distanceManhattan(current))
+					return new Point(next.getX(),panelHeight/2);
+			else if (next.getY() <= 0)
+				return new Point(current.getX(),0);
+			else if (next.getY() >= panelHeight)
+				return new Point(current.getX(),panelHeight);
 		}
-		else if(this.loc.getOrientation().equals("East")) {
-			x += this.getSpeed();
-			if(x > 800-size*2) {
-				y = 600-(800-size*2-x);
-				x = 800-size*2;
-			}
-		}
-		else if(this.loc.getOrientation().equals("West")) {
-			x -= this.getSpeed();
-			if (x < 0) {
-				y -= x;
-				x = 0;
-			}
-		}
-		return new Point(x,y);
+		return null;
 	}
 	
 	public static boolean setPanel(CityPanel panel) {
