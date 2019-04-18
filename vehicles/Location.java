@@ -87,10 +87,18 @@ public class Location{
 				this.orientation = EAST;
 			else if (this.location.getX() > p.getX() && this.location.getY() == p.getY())
 				this.orientation = WEST;
-			else if (this.location.getX() == p.getX() && this.location.getY() < p.getY())
-				this.orientation = NORTH;
 			else if (this.location.getX() == p.getX() && this.location.getY() > p.getY())
+				this.orientation = NORTH;
+			else if (this.location.getX() == p.getX() && this.location.getY() < p.getY())
 				this.orientation = SOUTH;
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() < p.getY())
+				this.orientation = SOUTH;
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() > p.getY())
+				this.orientation = NORTH;
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() > p.getX())
+				this.orientation = WEST;
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getY() > p.getY())
+				this.orientation = EAST;
 			this.location = p;
 			return true;
 		}
@@ -141,10 +149,12 @@ public class Location{
 	 * @return a clone of the location
 	 */
 	public Location replicate() {
-		return new Location(this);
+		Location toCopy = new Location(this);
+		toCopy.setOrientation(this.getOrientation());
+		return toCopy;
 	}
 	
-	public static String[] getOrientatios() {
+	public static String[] getOrientations() {
 		return Location.ORIENTATIONS;
 	}
 	

@@ -69,10 +69,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/** The vehicle images.*/
 	protected BufferedImage img1, img2, img3, img4;
 	
-	protected static final int vehicleWidth = size*2;
-	protected static final int vehicleHeight = size;
+	protected static final int vehicleWidthHorizon = size*2;
+	protected static final int vehicleHeightHorizon = size;
+	protected static final int vehicleWidthVertical = size;
+	protected static final int vehicleHeightVertical = size*2;
 	protected static int panelWidth;
 	protected static int panelHeight;
+	protected static int panelMiddle;
 	
 	protected static final Point[] intersections = {new Point(0,0),new Point(panelWidth,0),new Point(panelHeight,0),new Point(panelWidth,panelHeight),new Point(0,panelHeight/2),new Point(panelWidth,panelHeight/2)};
 	
@@ -518,7 +521,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	public Point nextLocation() {
 		Location current = this.getLocation().replicate();
-		System.out.println(current);
 		Point next = makeNextPoint(current,this.getSpeed());
 		return nextLocationMaker(current,next,this.getSpeed());
 	}
@@ -537,20 +539,25 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	private static Point nextLocationMaker(Location current,Point next,int gap) {
 		Point intersection = getIntersection(current.getLocationPoint(),next);
-		System.out.println(current.getLocationPoint() + " - " + intersection + " - " + next);
+		System.out.println(current.getLocationPoint() + " => " + intersection + " => " + next);
 		if (intersection == null)
 			return next;
 		gap = current.getLocationPoint().distanceManhattan(intersection);
 		current.setLocation(intersection);
-		next = makeNextPointFromIntersection(current,gap);
+		String nextDirection = directionInIntersection(current,gap);
+		current.setOrientation(nextDirection);
+		next = makeNextPoint(current, gap);
+		System.out.println("Next : " + next);
 		return nextLocationMaker(current, next,gap);
 	}
 	
 	private static Point getIntersection(Point current,Point next) {
+		if (current.equals(next))
+			return null;
 		if (current.getY() == next.getY()) {
-			if (next.getX() < 0)
+			if (next.getX() <= 0)
 				return new Point(0,current.getY());
-			else if (next.getX() > panelWidth)
+			else if (next.getX() >= panelWidth)
 				return new Point(panelWidth,current.getY());
 		}
 		else if (current.getX() == next.getX()) {
@@ -559,29 +566,40 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 					return new Point(current.getX(),0);
 				else if (next.getY() >= panelHeight)
 					return new Point(current.getX(),panelHeight);
-				else if (current.distanceManhattan(new Point(current.getX(),panelHeight/2)) < current.distanceManhattan(next))
-					return new Point(current.getX(),panelHeight/2);
 			}
+			if (current.getY() == panelHeight/2)
+				return null;
+			else if ((current.getY() < panelMiddle && next.getY() > panelMiddle) || (current.getY() > panelMiddle && next.getY() < panelMiddle))
+				return new Point(current.getX(),panelMiddle);
 		}
 		return null;
 	}
 	
-	private static Point makeNextPointFromIntersection(Location current,int gap) {
+	private static String directionInIntersection(Location current,int gap) {
 		String nextOrientation = current.getOppositeOrientation();
 		Random randomInt = new Random();
+		Location next = current.replicate();
 		int index = 0;
-		while (nextOrientation.equals(current.getOppositeOrientation())){
+		while (nextOrientation.equals(current.getOppositeOrientation()) || !inBounds(next.getLocationPoint())) {
+			next = current.replicate();
 			index = randomInt.nextInt(4);
-			nextOrientation = Location.getOrientatios()[index];
+			nextOrientation = Location.getOrientations()[index];
+			next.setOrientation(nextOrientation);
+			next = new Location(makeNextPoint(next,1));
 		}
-		current.setOrientation(nextOrientation);
-		return makeNextPoint(current, gap);
+		System.out.println(nextOrientation);
+		return nextOrientation;
+	}
+	
+	private static boolean inBounds(Point p) {
+		return !(p.getX() < 0 || p.getX() > panelWidth || p.getY() < 0 || p.getY() > panelHeight);
 	}
 	
 	public static boolean setPanel(CityPanel panel) {
 		Vehicle.pan = panel;
-		panelWidth = pan.getWidth()-vehicleWidth;
-		panelHeight = pan.getHeight()-vehicleHeight;
+		panelWidth = pan.getWidth()-vehicleWidthVertical;
+		panelHeight = pan.getHeight()-vehicleHeightHorizon;
+		panelMiddle = pan.getHeight()/2-vehicleHeightHorizon;
 		return true;
 	}
 }
