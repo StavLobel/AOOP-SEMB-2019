@@ -7,7 +7,7 @@ import java.awt.event.*;
 /**
  * The Class CityFrame.
  * 
- * @author Stav Lobel
+ * @author Stav Lobel, ID 308549898 , Campus Ashdod
  */
 public class CityFrame extends JFrame{
 	
