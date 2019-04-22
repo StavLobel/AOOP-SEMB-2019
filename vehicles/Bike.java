@@ -1,7 +1,7 @@
 package vehicles;
 
-import javax.imageio.ImageIO;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Bike.
  * 
@@ -80,18 +80,30 @@ public class Bike extends Vehicle {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getCurrentFuel()
+	 */
 	public int getCurrentFuel() {
 		return 0;
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getFuelConsumption()
+	 */
 	public int getFuelConsumption() {
 		return 0;
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#useFuel(int)
+	 */
 	public boolean useFuel(int amount) {
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getEngineType()
+	 */
 	public String getEngineType() {
 		return null;
 	}

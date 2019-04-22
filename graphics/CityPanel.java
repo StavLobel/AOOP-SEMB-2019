@@ -1,25 +1,13 @@
 package graphics;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
-import java.text.AttributedCharacterIterator;
-
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -27,26 +15,73 @@ import javax.swing.JTable;
 
 import vehicles.*;
 
+
+/**
+ * The Class CityPanel.
+ * 
+ * @author Stav Lobel
+ */
 public class CityPanel extends JPanel {
+	
+	/** The Constant ADD_VEHICLE_LABEL. */
 	private static final String ADD_VEHICLE_LABEL = "Add Vehicle";
+	
+	/** The Constant CLEAR_LABEL. */
 	private static final String CLEAR_LABEL = "Clear";
+	
+	/** The Constant FUEL_OR_FOOD_LABEL. */
 	private static final String FUEL_OR_FOOD_LABEL = "Fuel/Food";
+	
+	/** The Constant LIGHTS_LABEL. */
 	private static final String LIGHTS_LABEL = "Lights";
+	
+	/** The Constant INFO_LABEL. */
 	private static final String INFO_LABEL = "Info";
+	
+	/** The Constant EXIT_LABEL. */
 	private static final String EXIT_LABEL = "Exit";
+	
+	/** The Constant BOTTTOM_PANEL_LABELS. */
 	private static final String[] BOTTTOM_PANEL_LABELS = {ADD_VEHICLE_LABEL,CLEAR_LABEL,FUEL_OR_FOOD_LABEL,LIGHTS_LABEL,INFO_LABEL,EXIT_LABEL};
+	
+	/** The buttons. */
 	private static JButton[] buttons;
+	
+	/** The bottom. */
 	JPanel bottom = new JPanel();
+	
+	/** The background image. */
 	static BufferedImage backgroundImage = null;
+	
+	/** The dialog. */
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
+	
+	/** The v. */
 	static Vehicle v;
+	
+	/** The info. */
 	static JTable info;
+	
+	/** The info dialog. */
 	static JDialog infoDialog = new JDialog();
+	
+	/** The num of vehicles. */
 	static int numOfVehicles = 0;
+	
+	/** The table. */
 	static Object[][] table = new Object[0][9];
+	
+	/** The Constant columnNames. */
 	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights"};
+	
+	/** The info scroll pane. */
 	static JScrollPane infoScrollPane;
 	
+	/**
+	 * Sets the background.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean setBackground() {
         try {
         	backgroundImage = ImageIO.read(new File("PNGs/cityBackground.png"));
@@ -57,6 +92,9 @@ public class CityPanel extends JPanel {
 	}
 	
 	
+	/**
+	 * Instantiates a new city panel.
+	 */
 	public CityPanel(){
 		super(new BorderLayout());
 		this.setSize(800, 600);
@@ -114,6 +152,9 @@ public class CityPanel extends JPanel {
 		});
 	}
 	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	protected void paintComponent(Graphics g)
 	{
 	    super.paintComponent(g);
@@ -124,6 +165,11 @@ public class CityPanel extends JPanel {
 	    }
 	}
 	
+	/**
+	 * Sets the refuel button.
+	 *
+	 * @return true, if successful
+	 */
 	private static boolean setRefuelButton() {
 		buttons[2].addActionListener(new ActionListener(){
 			@Override
@@ -144,6 +190,13 @@ public class CityPanel extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * Fuel.
+	 *
+	 * @param n the fueling choice
+	 * @return true, if successful
+	 * @throws Exception the exception
+	 */
 	private static boolean fuel(int n) throws Exception {
 		String[] engineTypes = {"Benzine Engine","Solar Engine","Pack Animal"};
 		if (v == null)
@@ -157,6 +210,11 @@ public class CityPanel extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * Builds the table.
+	 *
+	 * @return true, if successful
+	 */
 	private static boolean buildTable() {
 		info = new JTable(table,columnNames);
 		infoDialog.setTitle("Vehicle List");
@@ -166,6 +224,11 @@ public class CityPanel extends JPanel {
 	}
 	
 	
+	/**
+	 * Adds the row to table.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean addRowToTable() {
 		Object[][] tempTable = new Object[numOfVehicles][9];
 		for (int i = 0 ; i < numOfVehicles-1 ; ++i) {
@@ -180,6 +243,11 @@ public class CityPanel extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * Save last vehicle in table.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean saveLastVehicleInTable() {
 		table[numOfVehicles-1] = v.getTable();
 		for (int i = 0 ; i < table[numOfVehicles-1].length; ++i) {
@@ -189,6 +257,11 @@ public class CityPanel extends JPanel {
 		return true;
 	}
 	
+	/**
+	 * Table refresh.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean tableRefresh() {
 		infoDialog.remove(infoScrollPane);	
 		for(int i = 0 ; i < table[numOfVehicles-1].length ; ++i)

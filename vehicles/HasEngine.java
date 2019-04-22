@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class HasEngine.
  * 
@@ -83,15 +84,24 @@ public abstract class HasEngine extends Vehicle {
 		return super.toString();
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#useFuel(int)
+	 */
 	public boolean useFuel(int amount) {
 		this.currentFuel -= amount;
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getFuelConsumption()
+	 */
 	public int getFuelConsumption() {
 		return this.engine.getFuelConsumption();
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#loadImages()
+	 */
 	public void loadImages() {
 		String name = this.getColor().toLowerCase()+"Car";
 		String nameNorth = name+"North.png";

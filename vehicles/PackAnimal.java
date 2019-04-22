@@ -3,6 +3,7 @@ package vehicles;
 import graphics.IAnimal;
 import graphics.IClonable;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class PackAnimal.
  * 
@@ -138,10 +139,16 @@ public class PackAnimal implements IAnimal, IClonable {
 		return this.eat();
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getCurrentFuel()
+	 */
 	public int getCurrentFuel() {
 		return getCurrentEnergy();
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getEngineType()
+	 */
 	public String getEngineType() {
 		return getAnimalName();
 	}

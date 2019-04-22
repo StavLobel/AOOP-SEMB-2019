@@ -1,5 +1,6 @@
 package vehicles;
 
+
 /**
  * The Class Carriage.
  * 
@@ -39,7 +40,7 @@ public class Carriage extends Vehicle {
 	}
 	
 	/**
-	 * Gets the speed of the carriage
+	 * Gets the speed of the carriage.
 	 *
 	 * @return the speed
 	 */
@@ -77,18 +78,30 @@ public class Carriage extends Vehicle {
 		return this.animal.eat();
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#getCurrentFuel()
+	 */
 	public int getCurrentFuel() {
 		return this.animal.getCurrentEnergy();
 	}
 	
+	/* (non-Javadoc)
+	 * @see vehicles.Vehicle#useFuel(int)
+	 */
 	public boolean useFuel(int amount) {
 		return this.animal.useFuel(amount);
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getFuelConsumption()
+	 */
 	public int getFuelConsumption() {
 		return this.animal.getEnergyConsumption();
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getEngineType()
+	 */
 	public String getEngineType() {
 		return "Pack Animal";
 	}

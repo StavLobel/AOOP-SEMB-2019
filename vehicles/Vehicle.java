@@ -64,14 +64,28 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/** The vehicle images.*/
 	protected BufferedImage img1, img2, img3, img4;
 	
+	/** The Constant vehicleWidthHorizon. */
 	protected static final int vehicleWidthHorizon = size*2;
+	
+	/** The Constant vehicleHeightHorizon. */
 	protected static final int vehicleHeightHorizon = size;
+	
+	/** The Constant vehicleWidthVertical. */
 	protected static final int vehicleWidthVertical = size;
+	
+	/** The Constant vehicleHeightVertical. */
 	protected static final int vehicleHeightVertical = size*2;
+	
+	/** The panel width. */
 	protected static int panelWidth;
+	
+	/** The panel height. */
 	protected static int panelHeight;
+	
+	/** The panel middle. */
 	protected static int panelMiddle;
 	
+	/** The table of information about the vehicle. */
 	private Object[] table = new Object[9];
 	
 	/**
@@ -79,6 +93,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 *
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
+	 * @param numberOfSeats the number of seats
 	 */
 	public Vehicle(String color,int wheels,int numberOfSeats) {
 		this.id = Vehicle.NEXT_ID;
@@ -91,6 +106,11 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		loadImages();
 	}
 	
+	/**
+	 * Builds the table.
+	 *
+	 * @return true, if successful
+	 */
 	protected boolean buildTable() {
 		table[0] = this.getVehicleName();
 		table[1] = this.getLicensePlate();
@@ -109,6 +129,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 *
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
+	 * @param numberOfSeats the number of seats
 	 * @param p the current point of the vehicle
 	 */
 	public Vehicle(String color,int wheels,int numberOfSeats,Point p) {
@@ -119,8 +140,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/**
 	 * Instantiates a new vehicle.
 	 *
+	 * @param id the id
 	 * @param color the color of the vehicle
 	 * @param wheels the number of wheels of the vehicle
+	 * @param numberOfSeats the number of seats
 	 * @param loc the loc of the vehicle
 	 */
 	public Vehicle(int id,String color,int wheels,int numberOfSeats,Location loc) {
@@ -129,29 +152,29 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 	
 	/**
-	 * Gets the loc.
+	 * Gets the location.
 	 *
-	 * @return a clone of the loc of the vehicle
+	 * @return a clone of the location of the vehicle
 	 */
 	public Location getLocation() {
 		return this.loc.replicate();
 	}
 
 	/**
-	 * Sets the loc.
+	 * Sets the location.
 	 *
-	 * @param p the new point loc to set
-	 * @return true, if successful ,false if it's the same loc
+	 * @param p the new point location to set
+	 * @return true, if successful ,false if it's the same location
 	 */
 	public boolean setLocation(Point p) {
 		return this.loc.setLocation(p);
 	}
 	
 	/**
-	 * Sets the loc.
+	 * Sets the location.
 	 *
 	 * @param other the new Location to set
-	 * @return true, if successful ,false if it's the same loc
+	 * @return true, if successful ,false if it's the same location
 	 */
 	public boolean setLocation(Location other) {
 		return this.loc.setLocation(other);
@@ -240,7 +263,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * Drive.
 	 *
 	 * @param toGo the point to drive to
-	 * @return true, if successful ,false if the vehicle stay in it's loc
+	 * @return true, if successful ,false if the vehicle stay in it's location
 	 */
 	public boolean drive(Point toGo) {
 		this.useFuel(this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption());
@@ -249,12 +272,24 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return true;
 	}
 	
+	/**
+	 * Can move.
+	 *
+	 * @param toGo the to go point
+	 * @return true, if successful
+	 */
 	private boolean canMove(Point toGo) {
 		return this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption() <= this.getCurrentFuel();
 	}
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#useFuel(int)
+	 */
 	public abstract boolean useFuel(int amount);
 	
+	/* (non-Javadoc)
+	 * @see graphics.IMoveable#getCurrentFuel()
+	 */
 	public abstract int getCurrentFuel();
 	
 	/**
@@ -294,8 +329,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return Vehicle.minAge;
 	}
 	
-	//*****************HW2*******************
-	
 	
 	/**
 	 * Gets the color object.
@@ -315,7 +348,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	}
 	
 	/**
-	 * Gets the pan.
+	 * Gets the panel.
 	 *
 	 * @return the citypanel
 	 */
@@ -472,14 +505,14 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	    return false;
 	}
 
-
-
-	
 	/* (non-Javadoc)
 	 * @see graphics.IMoveable#refuel()
 	 */
 	public abstract boolean refuel();
 	
+	/* (non-Javadoc)
+	 * @see graphics.IDrawable#drawObject(java.awt.Graphics)
+	 */
 	public void drawObject(Graphics g) {
 	    if(loc.getOrientation().equals("North")) //drives to north side
 	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthVertical, vehicleHeightVertical, pan);
@@ -491,6 +524,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, pan);
 	}
 
+	/* (non-Javadoc)
+	 * @see graphics.IDrawable#loadImages()
+	 */
 	public void loadImages() {
 		String name = this.getColor().toLowerCase()+this.getVehicleName();
 		String nameNorth = name+"North.png";
@@ -527,12 +563,24 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		}
 	}
 	
+	/**
+	 * Next location.
+	 *
+	 * @return the next point to drive to
+	 */
 	public Point nextLocation() {
 		Location current = this.getLocation().replicate();
 		Point next = makeNextPoint(current,this.getSpeed());
 		return nextLocationMaker(current,next,this.getSpeed());
 	}
 	
+	/**
+	 * Make next point.
+	 *
+	 * @param current the current point
+	 * @param distance the distance that need to drive
+	 * @return the point to go
+	 */
 	private static Point makeNextPoint(Location current,int distance) {
 		if (current.getOrientation().equals("North")) 
 			return new Point(current.getLocationPoint().getX(),current.getLocationPoint().getY()-distance);
@@ -545,6 +593,14 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return null;
 	}
 	
+	/**
+	 * Next location maker.
+	 *
+	 * @param current the current point
+	 * @param next the next point
+	 * @param gap the gap
+	 * @return the point to go to
+	 */
 	private static Point nextLocationMaker(Location current,Point next,int gap) {
 		Point intersection = getIntersection(current.getLocationPoint(),next);
 		while (intersection != null) {
@@ -558,6 +614,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return next;
 	}
 	
+	/**
+	 * Gets the intersection.
+	 *
+	 * @param current the current point
+	 * @param next the next point
+	 * @return the intersection between them,if exist
+	 */
 	private static Point getIntersection(Point current,Point next) {
 		if (current.equals(next))
 			return null;
@@ -582,6 +645,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return null;
 	}
 	
+	/**
+	 * Direction in intersection.
+	 *
+	 * @param current the current point
+	 * @param gap the gap
+	 * @return the new direction
+	 */
 	private static String directionInIntersection(Location current,int gap) {
 		String nextOrientation = current.getOppositeOrientation();
 		Random randomInt = new Random();
@@ -597,10 +667,22 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return nextOrientation;
 	}
 	
+	/**
+	 * In bounds.
+	 *
+	 * @param p the point
+	 * @return true, if the point inside the panel
+	 */
 	private static boolean inBounds(Point p) {
 		return !(p.getX() < 0 || p.getX() > panelWidth || p.getY() < 0 || p.getY() > panelHeight);
 	}
 	
+	/**
+	 * Sets the panel.
+	 *
+	 * @param panel the panel
+	 * @return true, if successful
+	 */
 	public static boolean setPanel(CityPanel panel) {
 		Vehicle.pan = panel;
 		panelWidth = pan.getWidth()-vehicleWidthVertical*5/4;
@@ -609,6 +691,11 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		return true;
 	}
 	
+	/**
+	 * Gets the table.
+	 *
+	 * @return the info table
+	 */
 	public Object[] getTable() {
 		this.buildTable();
 		return this.table;

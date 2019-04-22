@@ -3,6 +3,8 @@ import java.awt.Graphics;
 
 /**
  * The Interface IDrawable.
+ * 
+ * @author Stav Lobel
  */
 public interface IDrawable {
 	

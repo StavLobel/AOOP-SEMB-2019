@@ -1,21 +1,40 @@
 package graphics;
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
 
+/**
+ * The Class CityFrame.
+ * 
+ * @author Stav Lobel
+ */
 public class CityFrame extends JFrame{
+	
+	/** The frame. */
 	public static CityFrame frame;
+	
+	/** The Constant TITLE. */
 	public static final String TITLE = "City";
+	
+	/** The Constant FILE_TITLE. */
 	public static final String FILE_TITLE = "File";
+	
+	/** The Constant HELP_TITLE. */
 	public static final String HELP_TITLE = "Help";
+	
+	/** The Constant EXIT_LABEL. */
 	public static final String EXIT_LABEL = "Exit";
+	
+	/** The panel. */
 	public CityPanel panel = new CityPanel();
 	
 	
+	/**
+	 * Instantiates a new city frame.
+	 *
+	 * @param title the title
+	 */
 	public CityFrame(String title) {
 		super(TITLE);
 		setSize(800,600);
@@ -25,6 +44,11 @@ public class CityFrame extends JFrame{
 		this.add(panel);
 	}
 	
+	/**
+	 * Creates the menu.
+	 *
+	 * @return true, if successful
+	 */
 	public static boolean createMenu() {
 		JMenuBar menuBar;
 		JMenu menu;
@@ -56,6 +80,11 @@ public class CityFrame extends JFrame{
 		return true;
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
 		createMenu();
