@@ -92,4 +92,7 @@ public class Bike extends Vehicle {
 		return true;
 	}
 	
+	public String getEngineType() {
+		return null;
+	}
 }

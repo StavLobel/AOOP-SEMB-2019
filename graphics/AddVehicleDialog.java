@@ -130,7 +130,7 @@ public class AddVehicleDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (qType.getSelection() == null || qColor.getSelection() == null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
-				else if (CityPanel.numOfVehicles == CityPanel.v.length)
+				else if (CityPanel.v != null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
 				else {
 					String type = qType.getSelection().getActionCommand();
@@ -145,16 +145,15 @@ public class AddVehicleDialog extends JDialog {
 	
 	private static boolean createVehicle(String type,String color,int numberOfGears) {
 		if (type.equals(CAR_BENZINE)) 
-			CityPanel.v[CityPanel.numOfVehicles] = new Car(color,"BenzineEngine");
+			CityPanel.v = new Car(color,"BenzineEngine");
 		else if (type.equals(CAR_SOLAR))
-			CityPanel.v[CityPanel.numOfVehicles] = new Car(color,"SolarEngine");
+			CityPanel.v = new Car(color,"SolarEngine");
 		else if (type.equals(BIKE_LABEL))
-			CityPanel.v[CityPanel.numOfVehicles] = new Bike(color,numberOfGears);
+			CityPanel.v = new Bike(color,numberOfGears);
 		else if (type.equals(CARRIAGE_LABEL))
-			CityPanel.v[CityPanel.numOfVehicles] = new Carriage(color);
+			CityPanel.v = new Carriage(color);
 		
-		CityPanel.v[CityPanel.numOfVehicles].move(CityPanel.v[CityPanel.numOfVehicles].nextLocation());
-		CityPanel.numOfVehicles += 1;
+		CityPanel.v.move(CityPanel.v.nextLocation());
 		return true;
 	}
 	

@@ -29,6 +29,8 @@ public interface IMoveable {
 	 */
 	public int getFuelConsumption();
 	
+	public String getEngineType();
+	
 	public int getCurrentFuel();
 	public boolean useFuel(int amount);
 	

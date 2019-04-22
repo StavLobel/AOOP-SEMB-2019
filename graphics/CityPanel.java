@@ -19,12 +19,13 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 
 import vehicles.*;
 
 public class CityPanel extends JPanel {
-	private static final int VEHICLE_ARRAY_SIZE = 5;
 	private static final String ADD_VEHICLE_LABEL = "Add Vehicle";
 	private static final String CLEAR_LABEL = "Clear";
 	private static final String FUEL_OR_FOOD_LABEL = "Fuel/Food";
@@ -36,8 +37,8 @@ public class CityPanel extends JPanel {
 	JPanel bottom = new JPanel();
 	static BufferedImage backgroundImage = null;
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
-	static Vehicle[] v = new Vehicle[VEHICLE_ARRAY_SIZE];
-	static int numOfVehicles = 0;
+	static Vehicle v;
+	static JTable info;
 	
 	
 	public static boolean setBackground() {
@@ -69,17 +70,78 @@ public class CityPanel extends JPanel {
 			}
 		});
 		
+		setRefuelButton();
+		
+		buttons[1].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				v = null;
+				repaint();
+			}
+		});
+		
+		buttons[3].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+					v.setLights(!v.isLights());
+			}
+		});
+		
+		buttons[5].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
+		buildTable();
 	}
 	
 	protected void paintComponent(Graphics g)
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    if (numOfVehicles > 0){ //if the vehicle object exists
-	        for (int i = 0 ; i < numOfVehicles ; ++i) {
-	        	v[i].drawObject(g);
-	        	v[i].move(v[i].nextLocation());
-	        }
+	    if (v != null){ //if the vehicle object exists
+	        	v.drawObject(g);
+	        	v.move(v.nextLocation());
 	    }
+	}
+	
+	private static boolean setRefuelButton() {
+		buttons[2].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String[] options = {"Benzine","Solar","Food"};
+				int n = JOptionPane.showOptionDialog(CityFrame.frame,"Please choose type of refueling","The question",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
+				try{
+					fuel(n);
+				}
+				catch (FuelTypeException error) {
+					JOptionPane.showMessageDialog(CityFrame.frame, error);
+				}
+				catch (Exception error) {
+					JOptionPane.showMessageDialog(CityFrame.frame, error);
+				}
+			}
+		});
+		return true;
+	}
+	
+	private static boolean fuel(int n) throws Exception {
+		String[] engineTypes = {"Benzine Engine","Solar Engine","Pack Animal"};
+		if (v == null)
+			throw new Exception("No vehicle to refuel.");
+		if (v.getEngineType() == null)
+			throw new Exception("Cannot refuel this vehicle.");
+		else if (!v.getEngineType().equals(engineTypes[n]))
+			throw new FuelTypeException(v.getEngineType(),engineTypes[n]);
+		v.refuel();
+		v.move(v.nextLocation());
+		return true;
+	}
+	
+	private static boolean buildTable() {
+		
+		return true;
 	}
 }

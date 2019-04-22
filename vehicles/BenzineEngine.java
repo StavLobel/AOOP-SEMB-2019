@@ -8,7 +8,7 @@ package vehicles;
 public class BenzineEngine extends Engine {
 	
 	/** The Constant FUEL_CONSUMPTION. */
-	private static final int FUEL_CONSUMPTION = 0;
+	private static final int FUEL_CONSUMPTION = 2;
 	
 	/**
 	 * Instantiates a new benzine engine.

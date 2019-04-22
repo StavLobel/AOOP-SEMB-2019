@@ -1,17 +1,12 @@
 package vehicles;
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import graphics.IClonable;
 import graphics.IDrawable;
 import graphics.IMoveable;
 import java.awt.Color;
 import java.awt.Graphics;
-
 import graphics.CityPanel;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -322,7 +317,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * @return true, if successful
 	 */
 	public boolean setPan(CityPanel pan) {
-		this.pan = pan;
+		Vehicle.pan = pan;
 		return true;
 	}
 
@@ -474,13 +469,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	public void drawObject(Graphics g) {
 	    if(loc.getOrientation().equals("North")) //drives to north side
-	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthVertical, vehicleHeightVertical, pan);
 	    else if (loc.getOrientation().equals("South"))//drives to the south side
-	        g.drawImage(img2, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size, size*2, pan);
+	        g.drawImage(img2, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthVertical, vehicleHeightVertical, pan);
 	    else if(loc.getOrientation().equals("East")) //drives to the east side
-	        g.drawImage(img3, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size*2, size, pan);
+	        g.drawImage(img3, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, pan);
 	    else if(loc.getOrientation().equals("West")) //drives to the west side
-	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), size*2, size, pan);
+	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, pan);
 	}
 
 	public void loadImages() {
@@ -539,14 +534,15 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	private static Point nextLocationMaker(Location current,Point next,int gap) {
 		Point intersection = getIntersection(current.getLocationPoint(),next);
-		if (intersection == null)
-			return next;
-		gap = current.getLocationPoint().distanceManhattan(intersection);
-		current.setLocation(intersection);
-		String nextDirection = directionInIntersection(current,gap);
-		current.setOrientation(nextDirection);
-		next = makeNextPoint(current, gap);
-		return nextLocationMaker(current, next,gap);
+		while (intersection != null) {
+			gap = current.getLocationPoint().distanceManhattan(intersection);
+			current.setLocation(intersection);
+			String nextDirection = directionInIntersection(current,gap);
+			current.setOrientation(nextDirection);
+			next = makeNextPoint(current, gap);
+			intersection = getIntersection(current.getLocationPoint(),next);
+		}
+		return next;
 	}
 	
 	private static Point getIntersection(Point current,Point next) {
@@ -594,8 +590,8 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	public static boolean setPanel(CityPanel panel) {
 		Vehicle.pan = panel;
-		panelWidth = pan.getWidth()-(vehicleWidthVertical+17);
-		panelHeight = pan.getHeight()-vehicleHeightHorizon*3/2-15;
+		panelWidth = pan.getWidth()-vehicleWidthVertical*5/4;
+		panelHeight = pan.getHeight()-vehicleHeightHorizon*5/3;
 		panelMiddle = panelHeight/2;
 		return true;
 	}

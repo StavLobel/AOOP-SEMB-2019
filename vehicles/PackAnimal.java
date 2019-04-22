@@ -141,4 +141,8 @@ public class PackAnimal implements IAnimal, IClonable {
 	public int getCurrentFuel() {
 		return getCurrentEnergy();
 	}
+	
+	public String getEngineType() {
+		return getAnimalName();
+	}
 }

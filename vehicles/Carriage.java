@@ -89,4 +89,7 @@ public class Carriage extends Vehicle {
 		return this.animal.getEnergyConsumption();
 	}
 	
+	public String getEngineType() {
+		return "Pack Animal";
+	}
 }
