@@ -152,7 +152,8 @@ public class AddVehicleDialog extends JDialog {
 			CityPanel.v = new Bike(color,numberOfGears);
 		else if (type.equals(CARRIAGE_LABEL))
 			CityPanel.v = new Carriage(color);
-		
+		CityPanel.numOfVehicles += 1;
+		CityPanel.addRowToTable();
 		CityPanel.v.move(CityPanel.v.nextLocation());
 		return true;
 	}

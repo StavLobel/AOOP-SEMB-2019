@@ -18,9 +18,11 @@ import java.text.AttributedCharacterIterator;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import vehicles.*;
@@ -39,7 +41,11 @@ public class CityPanel extends JPanel {
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
 	static Vehicle v;
 	static JTable info;
-	
+	static JDialog infoDialog = new JDialog();
+	static int numOfVehicles = 0;
+	static Object[][] table = new Object[0][9];
+	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights"};
+	static JScrollPane infoScrollPane;
 	
 	public static boolean setBackground() {
         try {
@@ -75,6 +81,8 @@ public class CityPanel extends JPanel {
 		buttons[1].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if (v != null)
+					saveLastVehicleInTable();
 				v = null;
 				repaint();
 			}
@@ -86,6 +94,17 @@ public class CityPanel extends JPanel {
 					v.setLights(!v.isLights());
 			}
 		});
+		buildTable();
+		buttons[4].addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (v != null)
+					tableRefresh();
+				infoDialog.pack();
+				infoDialog.setLocationRelativeTo(null);
+				infoDialog.setVisible(true);
+			}
+		});
 		
 		buttons[5].addActionListener(new ActionListener(){
 			@Override
@@ -93,8 +112,6 @@ public class CityPanel extends JPanel {
 				System.exit(0);
 			}
 		});
-		
-		buildTable();
 	}
 	
 	protected void paintComponent(Graphics g)
@@ -117,10 +134,10 @@ public class CityPanel extends JPanel {
 					fuel(n);
 				}
 				catch (FuelTypeException error) {
-					JOptionPane.showMessageDialog(CityFrame.frame, error);
+					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
 				}
 				catch (Exception error) {
-					JOptionPane.showMessageDialog(CityFrame.frame, error);
+					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -141,7 +158,44 @@ public class CityPanel extends JPanel {
 	}
 	
 	private static boolean buildTable() {
-		
+		info = new JTable(table,columnNames);
+		infoDialog.setTitle("Vehicle List");
+		infoScrollPane = new JScrollPane(info);
+		infoDialog.add(infoScrollPane);
+		return true;
+	}
+	
+	
+	public static boolean addRowToTable() {
+		Object[][] tempTable = new Object[numOfVehicles][9];
+		for (int i = 0 ; i < numOfVehicles-1 ; ++i) {
+			tempTable[i] = new Object[9];
+			for(int j = 0 ; j < 9 ; ++j)
+				tempTable[i][j] = table[i][j];
+		}
+		table = tempTable;
+		table[numOfVehicles-1] = new Object[9];
+		for (int i = 0 ; i < 9 ; ++i)
+			table[numOfVehicles-1][i] = v.getTable()[i];
+		return true;
+	}
+	
+	private boolean saveLastVehicleInTable() {
+		table[numOfVehicles-1] = v.getTable();
+		for (int i = 0 ; i < table[numOfVehicles-1].length; ++i) {
+			String temp = ""+table[numOfVehicles-1][i];
+			table[numOfVehicles-1][i] = temp;
+			}
+		return true;
+	}
+	
+	private boolean tableRefresh() {
+		infoDialog.remove(infoScrollPane);	
+		for(int i = 0 ; i < table[numOfVehicles-1].length ; ++i)
+			table[numOfVehicles-1][i] = v.getTable()[i];
+		info = new JTable(table,columnNames);
+		infoScrollPane = new JScrollPane(info);
+		infoDialog.add(infoScrollPane);
 		return true;
 	}
 }

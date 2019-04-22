@@ -72,7 +72,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	protected static int panelHeight;
 	protected static int panelMiddle;
 	
-	protected static final Point[] intersections = {new Point(0,0),new Point(panelWidth,0),new Point(panelHeight,0),new Point(panelWidth,panelHeight),new Point(0,panelHeight/2),new Point(panelWidth,panelHeight/2)};
+	private Object[] table = new Object[9];
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -89,6 +89,19 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		this.loc = new Location();
 		this.numberOfSeats = numberOfSeats;
 		loadImages();
+	}
+	
+	protected boolean buildTable() {
+		table[0] = this.getVehicleName();
+		table[1] = this.getLicensePlate();
+		table[2] = this.getColor();
+		table[3] = this.getNumberOfWheels();
+		table[4] = this.getSpeed();
+		table[5] = this.getCurrentFuel();
+		table[6] = this.getMileage();
+		table[7] = this.getVehicleFuelConsumption();
+		table[8] = this.isLights();
+		return true;
 	}
 	
 	/**
@@ -414,7 +427,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/* (non-Javadoc)
 	 * @see graphics.IMoveable#getFuelConsumption()
 	 */
-	public int getFuelConsumption() {
+	public int getVehicleFuelConsumption() {
 		return fuelConsumption;
 	}
 	
@@ -594,5 +607,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		panelHeight = pan.getHeight()-vehicleHeightHorizon*5/3;
 		panelMiddle = panelHeight/2;
 		return true;
+	}
+	
+	public Object[] getTable() {
+		this.buildTable();
+		return this.table;
 	}
 }
