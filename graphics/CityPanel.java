@@ -129,6 +129,9 @@ public class CityPanel extends JPanel {
 		buttons[3].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(v == null)
+					JOptionPane.showMessageDialog(CityFrame.frame,"Error !\n"+"No vehicle to change it's lights.","Error !",JOptionPane.ERROR_MESSAGE);
+				else
 					v.setLights(!v.isLights());
 			}
 		});
