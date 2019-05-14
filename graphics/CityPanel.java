@@ -72,7 +72,7 @@ public class CityPanel extends JPanel {
 	static Object[][] table = new Object[0][9];
 	
 	/** The Constant columnNames. */
-	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights"};
+	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights","Hitting Vehicle"};
 	
 	/** The info scroll pane. */
 	static JScrollPane infoScrollPane;

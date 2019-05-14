@@ -64,6 +64,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/** The durability of the vehicle.*/
 	private final int durability;
 	
+	/**The vehicle that took this vehicle off the road*/
+	private String hittingVehcile = null;
+	
 	/** The vehicle images.*/
 	protected BufferedImage img1, img2, img3, img4;
 	
@@ -89,7 +92,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	protected static int panelMiddle;
 	
 	/** The table of information about the vehicle. */
-	private Object[] table = new Object[9];
+	private Object[] table = new Object[10];
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -125,6 +128,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		table[6] = this.getMileage();
 		table[7] = this.getVehicleFuelConsumption();
 		table[8] = this.isLights();
+		table[9] = this.getHittingVehicle();
 		return true;
 	}
 	
@@ -707,5 +711,26 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	public int getDurability() {
 		return this.durability;
+	}
+	
+	/**
+	 * Sets the hitting vehicle.
+	 *
+	 * @param otherVehicle the other vehicle that took this vehicle off the road
+	 * @return true, if successful
+	 */
+	public boolean setHittingVehicle(String otherVehicle) {
+		this.hittingVehcile = otherVehicle;
+		return true;
+	}
+	
+	
+	/**
+	 * Gets the hitting vehicle.
+	 *
+	 * @return the hitting vehicle as String.
+	 */
+	public String getHittingVehicle() {
+		return this.hittingVehcile;
 	}
 }
