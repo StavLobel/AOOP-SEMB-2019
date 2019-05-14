@@ -38,6 +38,8 @@ public class CityFrame extends JFrame{
 	public CityFrame(String title) {
 		super(TITLE);
 		setSize(800,600);
+		createMenu(this);
+		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);	
@@ -49,7 +51,7 @@ public class CityFrame extends JFrame{
 	 *
 	 * @return true, if successful
 	 */
-	public static boolean createMenu() {
+	public static boolean createMenu(CityFrame frame) {
 		JMenuBar menuBar;
 		JMenu menu;
 		JMenuItem menuItem;
@@ -61,7 +63,8 @@ public class CityFrame extends JFrame{
 		
 		menuItem = new JMenuItem(new AbstractAction(EXIT_LABEL){
 		    public void actionPerformed(ActionEvent e) {
-		        System.exit(0);
+		        CityPanel.pool.shutdown();
+		    	System.exit(0);
 		    }
 		});
 		menu.add(menuItem);
@@ -87,6 +90,13 @@ public class CityFrame extends JFrame{
 	 */
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
-		createMenu();
+		/*TEMP*/
+		for(int i=0 ; i < 5 ; ++i) {
+			AddVehicleDialog.createVehicle("Bike", "Green", 5);
+			try {
+				Thread.sleep(1000);
+			}
+			catch (Exception e) {}
+		}
 	}
 }
