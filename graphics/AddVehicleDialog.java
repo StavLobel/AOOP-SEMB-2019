@@ -150,7 +150,7 @@ public class AddVehicleDialog extends JDialog {
 			CityPanel.v = new Carriage(color);
 		CityPanel.numOfVehicles += 1;
 		CityPanel.addRowToTable();
-		CityPanel.v.move(CityPanel.v.nextLocation());
+		new Thread(CityPanel.v).start();
 		return true;
 	}
 	

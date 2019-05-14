@@ -17,7 +17,7 @@ import java.io.IOException;
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
+public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	
 	/** The license plate of the vehicle. */
 	private final int id;
@@ -93,6 +93,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	
 	/** The table of information about the vehicle. */
 	private Object[] table = new Object[10];
+	
+	/**The flag for the run method*/
+	private boolean flag = false;
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -732,5 +735,24 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 */
 	public String getHittingVehicle() {
 		return this.hittingVehcile;
+	}
+	
+	/**
+	 * Run ,The Thread function.
+	 */
+	public void run() {
+		while (this.flag == false) {
+			this.move(this.nextLocation());
+			// NEED TO XXL THIS !!!
+			/*try {
+				Thread.sleep(10000/this.getSpeed());
+			}
+			catch (InterruptedException e) {}*/
+		}
+	}
+	
+	public boolean killVehicle() {
+		this.flag = true;
+		return true;
 	}
 }

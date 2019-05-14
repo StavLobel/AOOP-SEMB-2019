@@ -59,6 +59,8 @@ public class CityPanel extends JPanel {
 	/** The v. */
 	static Vehicle v;
 	
+	static Thread vThread;
+	
 	/** The info. */
 	static JTable info;
 	
@@ -69,7 +71,7 @@ public class CityPanel extends JPanel {
 	static int numOfVehicles = 0;
 	
 	/** The table. */
-	static Object[][] table = new Object[0][9];
+	static Object[][] table = new Object[0][10];
 	
 	/** The Constant columnNames. */
 	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights","Hitting Vehicle"};
@@ -121,6 +123,7 @@ public class CityPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (v != null)
 					saveLastVehicleInTable();
+				v.killVehicle();
 				v = null;
 				repaint();
 			}
@@ -164,7 +167,6 @@ public class CityPanel extends JPanel {
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
 	    if (v != null){ //if the vehicle object exists
 	        	v.drawObject(g);
-	        	v.move(v.nextLocation());
 	    }
 	}
 	
@@ -233,15 +235,15 @@ public class CityPanel extends JPanel {
 	 * @return true, if successful
 	 */
 	public static boolean addRowToTable() {
-		Object[][] tempTable = new Object[numOfVehicles][9];
+		Object[][] tempTable = new Object[numOfVehicles][10];
 		for (int i = 0 ; i < numOfVehicles-1 ; ++i) {
-			tempTable[i] = new Object[9];
-			for(int j = 0 ; j < 9 ; ++j)
+			tempTable[i] = new Object[10];
+			for(int j = 0 ; j < 10 ; ++j)
 				tempTable[i][j] = table[i][j];
 		}
 		table = tempTable;
-		table[numOfVehicles-1] = new Object[9];
-		for (int i = 0 ; i < 9 ; ++i)
+		table[numOfVehicles-1] = new Object[10];
+		for (int i = 0 ; i < 10 ; ++i)
 			table[numOfVehicles-1][i] = v.getTable()[i];
 		return true;
 	}
