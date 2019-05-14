@@ -475,6 +475,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 		return fuelConsumption;
 	}
 	
+	
 	/**
 	 * Sets the fuel consumption.
 	 *
@@ -506,7 +507,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	/* (non-Javadoc)
 	 */
 	public boolean move(Point p){
-	    if (this.canMove(p) && this.loc.getLocationPoint().equals(p) == false) {    
+		if (this.canMove(p) && this.loc.getLocationPoint().equals(p) == false) {    
 	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        this.drive(p);
@@ -524,7 +525,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	/* (non-Javadoc)
 	 * @see graphics.IDrawable#drawObject(java.awt.Graphics)
 	 */
-	public void drawObject(Graphics g) {
+	public synchronized void drawObject(Graphics g) {
 	    if(loc.getOrientation().equals("North")) //drives to north side
 	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthVertical, vehicleHeightVertical, pan);
 	    else if (loc.getOrientation().equals("South"))//drives to the south side
@@ -744,7 +745,14 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 		CityPanel.incNumberOfVehicles();
 		CityPanel.addRowToTable();
 		while (this.flag == false) {
-			this.move(this.nextLocation());
+			while (!canMove(nextLocation())) {
+					try{
+						this.wait();
+					}
+					catch (InterruptedException e) {}
+			}
+			if (canMove(nextLocation()))
+				this.move(this.nextLocation());
 			// NEED TO XXL THIS !!!
 			/*try {
 				Thread.sleep(10000/this.getSpeed());

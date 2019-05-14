@@ -134,13 +134,13 @@ public class CityPanel extends JPanel {
 		buttons[1].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int toKill = pool.getActiveCount();
-				int i = 0;
 				clearVehicles();
-				while(i < toKill) {
-					v.get(0).killVehicle();
-					v.remove(0);
-					++i;
+				for (int i=0 ; i < pool.getPoolSize() ; ++i) {
+					synchronized (v.get(0)) {
+						v.get(0).killVehicle();
+						v.get(0).notify();
+						v.remove();
+					}
 				}
 				repaint();
 			}
@@ -149,7 +149,7 @@ public class CityPanel extends JPanel {
 		buttons[3].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(int i=0 ; i < pool.getActiveCount() ; ++i) {
+				for(int i=0 ; i < pool.getPoolSize() ; ++i) {
 					if(v.get(i) == null)
 						JOptionPane.showMessageDialog(CityFrame.frame,"Error !\n"+"No vehicle to change it's lights.","Error !",JOptionPane.ERROR_MESSAGE);
 					else
@@ -185,9 +185,12 @@ public class CityPanel extends JPanel {
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    if (!v.isEmpty())
-	    	for(int i=0;i<pool.getActiveCount();++i)
-	    		v.get(i).drawObject(g);
+	    if (!v.isEmpty()) {
+	    	for(int i=0 ; i < pool.getPoolSize() ; ++i) {
+	    			v.get(i).drawObject(g);
+	    	}
+	    }
+	    	
 	}
 	
 	/**
@@ -205,7 +208,7 @@ public class CityPanel extends JPanel {
 					fuel(options[n]);
 				}
 				catch (FuelTypeException error) {
-					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(CityFrame.frame, error.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
 				}
 				catch (Exception error) {
 					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
@@ -223,17 +226,27 @@ public class CityPanel extends JPanel {
 	 * @throws Exception the exception
 	 */
 	private static boolean fuel(String fuelType) throws Exception {
+		if (pool.getPoolSize() == 0)
+			throw new Exception("No vehicles to refuel.");
 		String errors = "";
-		for (int i=0 ; i < pool.getActiveCount() ; ++i) {
+		if (fuelType.equals("Benzine") || fuelType.equals("Solar"))
+			fuelType = fuelType + " Engine";
+		else if (fuelType.equals("Food"))
+			fuelType = "Pack Animal";
+		for (int i=0 ; i < pool.getPoolSize() ; ++i) {
 			if (v.get(i).getEngineType() == null)
 				errors = errors + "Cannot refuel the vehicle : " + v.get(i).getLicensePlate()+"\n";
 			else if (!v.get(i).getEngineType().equals(fuelType))
-				errors = errors + "Cannot refuel the vehicle : " + v.get(i).getLicensePlate()+" "+new FuelTypeException(v.get(i).getEngineType(),fuelType).getMessage();
-			else
+				errors = errors + "Cannot refuel the vehicle : " + v.get(i).getLicensePlate()+"\n";
+			else {
 				v.get(i).refuel();
+				synchronized (v.get(i)) {
+					v.get(i).notify();	
+				}
+			}
 		}
 		if (!errors.equals(""))
-			throw new Exception("Cannot refuel this vehicle.");
+			throw new Exception("Not all vehicles have been fueled :\n" + errors);
 		return true;
 	}
 	
@@ -276,7 +289,7 @@ public class CityPanel extends JPanel {
 	 * @return true, if successful
 	 */
 	private static boolean clearVehicles() {
-		for (int i = numOfVehicles-pool.getActiveCount() ; i < table.length; ++i) {
+		for (int i = numOfVehicles-pool.getPoolSize() ; i < table.length; ++i) {
 			for (int j = 0 ; j < table.length ; ++j) {
 					String temp = ""+table[i][j];
 					table[i][j] = temp;
@@ -292,7 +305,7 @@ public class CityPanel extends JPanel {
 	 */
 	private boolean tableRefresh() {
 		infoDialog.remove(infoScrollPane);	
-		for(int i=0 ; i < pool.getActiveCount(); ++i) {
+		for(int i=0 ; i < pool.getPoolSize(); ++i) {
 			for(int j = 0 ; j < table[numOfVehicles-1].length ; ++j)
 				table[i][j] = v.get(i).getTable()[j];
 		}

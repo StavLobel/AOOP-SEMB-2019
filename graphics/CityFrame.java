@@ -90,13 +90,5 @@ public class CityFrame extends JFrame{
 	 */
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
-		/*TEMP*/
-		for(int i=0 ; i < 5 ; ++i) {
-			AddVehicleDialog.createVehicle("Bike", "Green", 5);
-			try {
-				Thread.sleep(1000);
-			}
-			catch (Exception e) {}
-		}
 	}
 }
