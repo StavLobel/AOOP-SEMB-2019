@@ -20,13 +20,16 @@ public class Carriage extends Vehicle {
 	/** The Constant numberOfSeats. */
 	private static final int numberOfSeats = 2;
 	
+	/**The durability of all carriages*/
+	private static final int DURABILITY = 2;
+	
 	/**
 	 * Instantiates a new carriage.
 	 *
 	 * @param color the color of the carriage
 	 */
 	public Carriage(String color) {
-		super(color,WHEELS,Carriage.numberOfSeats);
+		super(color,WHEELS,Carriage.numberOfSeats,Carriage.DURABILITY);
 		this.animal = new PackAnimal("Pack Animal");
 	}
 	

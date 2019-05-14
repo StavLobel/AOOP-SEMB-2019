@@ -19,6 +19,9 @@ public class Car extends HasEngine {
 	/** The Constant numberOfSeats. */
 	private static final int numberOfSeats = 5;
 	
+	/**The durability of all cars*/
+	private static final int DURABILITY = 3;
+	
 	/**
 	 * Instantiates a new car.
 	 *
@@ -26,7 +29,7 @@ public class Car extends HasEngine {
 	 * @param engineType the engine type
 	 */
 	public Car(String color,String engineType) {
-		super(color,WHEELS,Car.numberOfSeats,engineType,FUEL_CAPACITY);
+		super(color,WHEELS,Car.numberOfSeats,engineType,FUEL_CAPACITY,Car.DURABILITY);
 	}
 	
 	/* (non-Javadoc)

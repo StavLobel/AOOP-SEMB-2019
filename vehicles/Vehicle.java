@@ -61,6 +61,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	/** The min age. */
 	private static int minAge = 18;
 	
+	/** The durability of the vehicle.*/
+	private final int durability;
+	
 	/** The vehicle images.*/
 	protected BufferedImage img1, img2, img3, img4;
 	
@@ -95,7 +98,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * @param wheels the number of wheels of the vehicle
 	 * @param numberOfSeats the number of seats
 	 */
-	public Vehicle(String color,int wheels,int numberOfSeats) {
+	public Vehicle(String color,int wheels,int numberOfSeats,int durability) {
 		this.id = Vehicle.NEXT_ID;
 		Vehicle.NEXT_ID++;
 		this.color = color;
@@ -103,6 +106,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 		this.wheels = wheels;
 		this.loc = new Location();
 		this.numberOfSeats = numberOfSeats;
+		this.durability = durability;
 		loadImages();
 	}
 	
@@ -132,8 +136,8 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * @param numberOfSeats the number of seats
 	 * @param p the current point of the vehicle
 	 */
-	public Vehicle(String color,int wheels,int numberOfSeats,Point p) {
-		this(color,wheels,numberOfSeats);
+	public Vehicle(String color,int wheels,int numberOfSeats,Point p,int durability) {
+		this(color,wheels,numberOfSeats,durability);
 		this.loc = new Location(p);
 	}
 	
@@ -146,8 +150,8 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	 * @param numberOfSeats the number of seats
 	 * @param loc the loc of the vehicle
 	 */
-	public Vehicle(int id,String color,int wheels,int numberOfSeats,Location loc) {
-		this(color,wheels,numberOfSeats);
+	public Vehicle(int id,String color,int wheels,int numberOfSeats,Location loc,int durability) {
+		this(color,wheels,numberOfSeats,durability);
 		this.loc = new Location(loc);
 	}
 	
@@ -699,5 +703,9 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable{
 	public Object[] getTable() {
 		this.buildTable();
 		return this.table;
+	}
+	
+	public int getDurability() {
+		return this.durability;
 	}
 }

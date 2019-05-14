@@ -28,8 +28,8 @@ public abstract class HasEngine extends Vehicle {
 	 * @param engineType the engine type
 	 * @param fuelCapacity the fuel capacity
 	 */
-	public HasEngine(String color,int wheels,int numberOfSeats,String engineType,int fuelCapacity) {
-		super(color,wheels,numberOfSeats);
+	public HasEngine(String color,int wheels,int numberOfSeats,String engineType,int fuelCapacity,int durability) {
+		super(color,wheels,numberOfSeats,durability);
 		if (engineType.equals("SolarEngine"))
 			this.engine = new SolarEngine(fuelCapacity);
 		else if(engineType.equals("BenzineEngine"))

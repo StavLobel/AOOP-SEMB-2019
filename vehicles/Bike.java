@@ -21,6 +21,9 @@ public class Bike extends Vehicle {
 	/** The Constant numberOfSeats. */
 	private static final int numberOfSeats = 1;
 	
+	/**The durability of all bikes*/
+	private static final int DURABILITY = 1;
+	
 	/**
 	 * Instantiates a new bike.
 	 *
@@ -28,7 +31,7 @@ public class Bike extends Vehicle {
 	 * @param gears the bike's number of gears
 	 */
 	public Bike(String color,int gears) {
-		super(color,WHEELS,Bike.numberOfSeats);
+		super(color,WHEELS,Bike.numberOfSeats,Bike.DURABILITY);
 		this.gears = gears;
 	}
 

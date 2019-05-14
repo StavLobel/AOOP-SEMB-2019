@@ -23,6 +23,9 @@ public class PackAnimal implements IAnimal, IClonable {
 	/** The Constant ENERGY_CONSUMPTION of all animals. */
 	private static final int ENERGY_CONSUMPTION = 20;
 	
+	/**The durability of all pack animals*/
+	private static final int DURABILITY = 0;
+	
 	/**
 	 * Instantiates a new pack animal.
 	 *
@@ -151,5 +154,9 @@ public class PackAnimal implements IAnimal, IClonable {
 	 */
 	public String getEngineType() {
 		return getAnimalName();
+	}
+	
+	public int getDurability() {
+		return PackAnimal.DURABILITY;
 	}
 }

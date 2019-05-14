@@ -65,5 +65,12 @@ public interface IMoveable {
 	 * @return true, if successful. false if same point.
 	 */
 	public boolean move(Point p);
+	
+	/**
+	 * Get Durability
+	 * 
+	 * @return Integer, The durability of the vehicle.
+	 */
+	public int getDurability();
 
 }
