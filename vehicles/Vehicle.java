@@ -741,6 +741,8 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 * Run ,The Thread function.
 	 */
 	public void run() {
+		CityPanel.incNumberOfVehicles();
+		CityPanel.addRowToTable();
 		while (this.flag == false) {
 			this.move(this.nextLocation());
 			// NEED TO XXL THIS !!!

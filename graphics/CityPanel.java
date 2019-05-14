@@ -136,8 +136,8 @@ public class CityPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int toKill = pool.getActiveCount();
 				int i = 0;
+				clearVehicles();
 				while(i < toKill) {
-					killVehicle(0);
 					v.get(0).killVehicle();
 					v.remove(0);
 					++i;
@@ -275,12 +275,13 @@ public class CityPanel extends JPanel {
 	 *
 	 * @return true, if successful
 	 */
-	private boolean killVehicle(int index) {
-		table[numOfVehicles-1] = v.get(index).getTable();
-		for (int i = 0 ; i < table[numOfVehicles-1].length; ++i) {
-			String temp = ""+table[numOfVehicles-1][i];
-			table[numOfVehicles-1][i] = temp;
+	private static boolean clearVehicles() {
+		for (int i = numOfVehicles-pool.getActiveCount() ; i < table.length; ++i) {
+			for (int j = 0 ; j < table.length ; ++j) {
+					String temp = ""+table[i][j];
+					table[i][j] = temp;
 			}
+		}
 		return true;
 	}
 	
@@ -298,6 +299,11 @@ public class CityPanel extends JPanel {
 		info = new JTable(table,columnNames);
 		infoScrollPane = new JScrollPane(info);
 		infoDialog.add(infoScrollPane);
+		return true;
+	}
+	
+	public static boolean incNumberOfVehicles() {
+		numOfVehicles += 1;
 		return true;
 	}
 }
