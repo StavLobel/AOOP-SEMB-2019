@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -64,16 +65,7 @@ public class CityPanel extends JPanel {
 	
 	/** The dialog. */
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
-	
-	/** The Vehicles Array */
-	static LinkedList<Vehicle> v = new LinkedList<Vehicle>();
-	
-	/**The Threadpool Creation*/
-	static ExecutorService executor = Executors.newFixedThreadPool(numOfThreads);
-	
-	/**The ThreadPool*/
-	static ThreadPoolExecutor pool = (ThreadPoolExecutor) executor;
-	
+
 	/** The info. */
 	static JTable info;
 	
@@ -134,12 +126,14 @@ public class CityPanel extends JPanel {
 		buttons[1].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				clearVehicles();
-				for (int i=0 ; i < pool.getPoolSize() ; ++i) {
-					synchronized (v.get(0)) {
-						v.get(0).killVehicle();
-						v.get(0).notify();
-						v.remove();
+				synchronized (v) {
+					clearVehicles();
+					for (int i=0 ; i < pool.get ; ++i) {
+						synchronized (v.get(0)) {
+							v.get(0).killVehicle();
+							v.get(0).
+							v.remove();
+						}
 					}
 				}
 				repaint();
@@ -181,16 +175,15 @@ public class CityPanel extends JPanel {
 	/* (non-Javadoc)
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
-	protected void paintComponent(Graphics g)
-	{
+	protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    if (!v.isEmpty()) {
-	    	for(int i=0 ; i < pool.getPoolSize() ; ++i) {
+	    synchronized (v) {
+	    	if (!v.isEmpty()) {
+	    		for(int i=0 ; i < pool.getPoolSize() ; ++i)
 	    			v.get(i).drawObject(g);
+	    		}
 	    	}
-	    }
-	    	
 	}
 	
 	/**
