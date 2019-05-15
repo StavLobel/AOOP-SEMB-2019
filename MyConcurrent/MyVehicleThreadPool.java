@@ -3,17 +3,19 @@ package MyConcurrent;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class MyThreadPool {
+import vehicles.Vehicle;
+
+public class MyVehicleThreadPool {
 	private final int MAX_THREADS;
-	private ArrayBlockingQueue<Runnable> missionsQueue;
-	private ArrayList<Thread> nowRunning = new ArrayList<Thread>();
+	private ArrayBlockingQueue<Vehicle> missionsQueue;
+	private ArrayList<Vehicle> nowRunning = new ArrayList<Vehicle>();
 	
-	public MyThreadPool(int maxOfWorkingThreads,int maxSizeOfQueue) {
+	public MyVehicleThreadPool(int maxOfWorkingThreads,int maxSizeOfQueue) {
 		MAX_THREADS = maxOfWorkingThreads;
-		missionsQueue = new ArrayBlockingQueue<Runnable>(maxSizeOfQueue);
+		missionsQueue = new ArrayBlockingQueue<Vehicle>(maxSizeOfQueue);
 	}
 	
-	public boolean insertMission(Runnable mission) {
+	public boolean insertMission(Vehicle mission) {
 		boolean result = missionsQueue.add(mission);
 		notifyThreads();
 		return result;
@@ -21,7 +23,7 @@ public class MyThreadPool {
 	
 	private boolean notifyThreads() {
 		while (nowRunning.size() < MAX_THREADS && !missionsQueue.isEmpty()) {
-			nowRunning.add(new Thread(missionsQueue.remove()));
+			nowRunning.add(missionsQueue.remove());
 		}
 		startThreads();
 		return true;
@@ -32,8 +34,8 @@ public class MyThreadPool {
 		return true;
 	}
 	
-	private static boolean startThread(Thread toStart) {
-		if (!toStart.isAlive()) {
+	private static boolean startThread(Vehicle toStart) {
+		if (!toStart.getFlag()) {
 			toStart.start();
 			return true;
 		}
@@ -42,6 +44,7 @@ public class MyThreadPool {
 	
 	public boolean clearAll() {
 		missionsQueue.clear();
-		nowRunning.forEach(n -> n.);
+		nowRunning.forEach(n -> n.kill());
+		return true;
 	}
 }

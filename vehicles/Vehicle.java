@@ -742,9 +742,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 * Run ,The Thread function.
 	 */
 	public void run() {
+		this.flag = true;
 		CityPanel.incNumberOfVehicles();
 		CityPanel.addRowToTable();
-		while (this.flag == false) {
+		while (this.flag) {
 			while (!canMove(nextLocation())) {
 					try{
 						this.wait();
@@ -759,6 +760,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 			}
 			catch (InterruptedException e) {}*/
 		}
+	}
+	
+	public boolean startVehicle() {
+		return this.flag;
 	}
 	
 	public boolean killVehicle() {
