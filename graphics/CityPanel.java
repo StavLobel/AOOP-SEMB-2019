@@ -5,19 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 import vehicles.*;
 
@@ -66,23 +59,11 @@ public class CityPanel extends JPanel {
 	/** The dialog. */
 	AddVehicleDialog dialog = new AddVehicleDialog(this);
 
-	/** The info. */
-	static JTable info;
+	static CityInfoTable infoTable = new CityInfoTable();
 	
-	/** The info dialog. */
-	static JDialog infoDialog = new JDialog();
+	static VehicleThreadPool pool = new VehicleThreadPool(numOfThreads, numOfThreadInQueue);
 	
-	/** The num of vehicles. */
-	static int numOfVehicles = 0;
-	
-	/** The table. */
-	static Object[][] table = new Object[0][10];
-	
-	/** The Constant columnNames. */
-	static final String[] columnNames = {"Vehicle","ID","Color","Wheels","Speed","FuelAmount","Distance","Fuel consuption","Lights","Hitting Vehicle"};
-	
-	/** The info scroll pane. */
-	static JScrollPane infoScrollPane;
+	static int numberOfCreatedVehicles = 0;
 	
 	/**
 	 * Sets the background.
@@ -126,16 +107,7 @@ public class CityPanel extends JPanel {
 		buttons[1].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				synchronized (v) {
-					clearVehicles();
-					for (int i=0 ; i < pool.get ; ++i) {
-						synchronized (v.get(0)) {
-							v.get(0).killVehicle();
-							v.get(0).
-							v.remove();
-						}
-					}
-				}
+				pool.killAllVehicles();
 				repaint();
 			}
 		});
@@ -143,23 +115,20 @@ public class CityPanel extends JPanel {
 		buttons[3].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				for(int i=0 ; i < pool.getPoolSize() ; ++i) {
-					if(v.get(i) == null)
-						JOptionPane.showMessageDialog(CityFrame.frame,"Error !\n"+"No vehicle to change it's lights.","Error !",JOptionPane.ERROR_MESSAGE);
-					else
-						v.get(i).setLights(!v.get(i).isLights());
+				if (pool.isEmpty())
+					JOptionPane.showMessageDialog(CityFrame.frame,"Error !\n"+"No vehicle to change it's lights.","Error !",JOptionPane.ERROR_MESSAGE);
+				else {
+					for(int i=0 ; i < pool.getNumberOfActiveVehicles() ; ++i)
+						pool.getActiveVehicle(i).setLights(!pool.getActiveVehicle(i).isLights());
 				}
 			}
 		});
-		buildTable();
 		buttons[4].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!v.isEmpty())
-					tableRefresh();
-				infoDialog.pack();
-				infoDialog.setLocationRelativeTo(null);
-				infoDialog.setVisible(true);
+				infoTable.pack();
+				infoTable.setLocationRelativeTo(null);
+				infoTable.setVisible(true);
 			}
 		});
 		
@@ -167,9 +136,12 @@ public class CityPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				pool.shutdown();
+				infoTable.shutdown();
 				System.exit(0);
 			}
 		});
+		
+		new Thread(infoTable).start();
 	}
 	
 	/* (non-Javadoc)
@@ -178,12 +150,10 @@ public class CityPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    synchronized (v) {
-	    	if (!v.isEmpty()) {
-	    		for(int i=0 ; i < pool.getPoolSize() ; ++i)
-	    			v.get(i).drawObject(g);
-	    		}
-	    	}
+	    if (!pool.isEmpty()) {
+	    	LinkedList<Vehicle> vehicles = pool.getActiveVehicles();
+	    	vehicles.forEach(n -> n.drawObject(g));
+	    }
 	}
 	
 	/**
@@ -219,22 +189,23 @@ public class CityPanel extends JPanel {
 	 * @throws Exception the exception
 	 */
 	private static boolean fuel(String fuelType) throws Exception {
-		if (pool.getPoolSize() == 0)
+		if (pool.isEmpty())
 			throw new Exception("No vehicles to refuel.");
 		String errors = "";
 		if (fuelType.equals("Benzine") || fuelType.equals("Solar"))
 			fuelType = fuelType + " Engine";
 		else if (fuelType.equals("Food"))
 			fuelType = "Pack Animal";
-		for (int i=0 ; i < pool.getPoolSize() ; ++i) {
-			if (v.get(i).getEngineType() == null)
-				errors = errors + "Cannot refuel the vehicle : " + v.get(i).getLicensePlate()+"\n";
-			else if (!v.get(i).getEngineType().equals(fuelType))
-				errors = errors + "Cannot refuel the vehicle : " + v.get(i).getLicensePlate()+"\n";
+		LinkedList<Vehicle> vehicles = pool.getActiveVehicles();
+		for (int i=0 ; i < vehicles.size() ; ++i) {
+			if (vehicles.get(i).getEngineType() == null)
+				errors = errors + "Cannot refuel the vehicle : " + vehicles.get(i).getLicensePlate()+"\n";
+			else if (!vehicles.get(i).getEngineType().equals(fuelType))
+				errors = errors + "Cannot refuel the vehicle : " + vehicles.get(i).getLicensePlate()+"\n";
 			else {
-				v.get(i).refuel();
-				synchronized (v.get(i)) {
-					v.get(i).notify();	
+				vehicles.get(i).refuel();
+				synchronized (vehicles.get(i)) {
+					vehicles.get(i).notify();	
 				}
 			}
 		}
@@ -243,73 +214,8 @@ public class CityPanel extends JPanel {
 		return true;
 	}
 	
-	/**
-	 * Builds the table.
-	 *
-	 * @return true, if successful
-	 */
-	private static boolean buildTable() {
-		info = new JTable(table,columnNames);
-		infoDialog.setTitle("Vehicle List");
-		infoScrollPane = new JScrollPane(info);
-		infoDialog.add(infoScrollPane);
-		return true;
-	}
-	
-	
-	/**
-	 * Adds the row to table.
-	 *
-	 * @return true, if successful
-	 */
-	public static boolean addRowToTable() {
-		Object[][] tempTable = new Object[numOfVehicles][10];
-		for (int i = 0 ; i < numOfVehicles-1 ; ++i) {
-			tempTable[i] = new Object[10];
-			for(int j = 0 ; j < 10 ; ++j)
-				tempTable[i][j] = table[i][j];
-		}
-		table = tempTable;
-		table[numOfVehicles-1] = new Object[10];
-		for (int i = 0 ; i < 10 ; ++i)
-			table[numOfVehicles-1][i] = v.getLast().getTable()[i];
-		return true;
-	}
-	
-	/**
-	 * Save last vehicle in table.
-	 *
-	 * @return true, if successful
-	 */
-	private static boolean clearVehicles() {
-		for (int i = numOfVehicles-pool.getPoolSize() ; i < table.length; ++i) {
-			for (int j = 0 ; j < table.length ; ++j) {
-					String temp = ""+table[i][j];
-					table[i][j] = temp;
-			}
-		}
-		return true;
-	}
-	
-	/**
-	 * Table refresh.
-	 *
-	 * @return true, if successful
-	 */
-	private boolean tableRefresh() {
-		infoDialog.remove(infoScrollPane);	
-		for(int i=0 ; i < pool.getPoolSize(); ++i) {
-			for(int j = 0 ; j < table[numOfVehicles-1].length ; ++j)
-				table[i][j] = v.get(i).getTable()[j];
-		}
-		info = new JTable(table,columnNames);
-		infoScrollPane = new JScrollPane(info);
-		infoDialog.add(infoScrollPane);
-		return true;
-	}
-	
 	public static boolean incNumberOfVehicles() {
-		numOfVehicles += 1;
+		numberOfCreatedVehicles += 1;
 		return true;
 	}
 }
