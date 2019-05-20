@@ -756,11 +756,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 			}
 			if (canMove(nextLocation()))
 				this.move(this.nextLocation());
-			// NEED TO XXL THIS !!!
-			/*try {
-				Thread.sleep(10000/this.getSpeed());
+			try {
+				Thread.sleep(100/this.getSpeed());
 			}
-			catch (InterruptedException e) {}*/
+			catch (InterruptedException e) {}
 		}
 	}
 	
