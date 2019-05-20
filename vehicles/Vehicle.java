@@ -6,6 +6,7 @@ import graphics.IClonable;
 import graphics.IDrawable;
 import graphics.IMoveable;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import graphics.CityPanel;
 import java.awt.image.BufferedImage;
@@ -110,7 +111,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 		this.color = color;
 		this.col = getColorObject(color);
 		this.wheels = wheels;
-		this.loc = new Location();
+		this.loc = new Location(new Dimension(vehicleWidthHorizon,vehicleHeightHorizon));
 		this.numberOfSeats = numberOfSeats;
 		this.durability = durability;
 		loadImages();
@@ -145,7 +146,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 */
 	public Vehicle(String color,int wheels,int numberOfSeats,Point p,int durability) {
 		this(color,wheels,numberOfSeats,durability);
-		this.loc = new Location(p);
+		this.loc = new Location(p,getDimension());
 	}
 	
 	/**
@@ -159,7 +160,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 */
 	public Vehicle(int id,String color,int wheels,int numberOfSeats,Location loc,int durability) {
 		this(color,wheels,numberOfSeats,durability);
-		this.loc = new Location(loc);
+		this.loc = new Location(loc,getDimension());
 	}
 	
 	/**
@@ -613,7 +614,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 * @param gap the gap
 	 * @return the point to go to
 	 */
-	private static Point nextLocationMaker(Location current,Point next,int gap) {
+	private Point nextLocationMaker(Location current,Point next,int gap) {
 		Point intersection = getIntersection(current.getLocationPoint(),next);
 		while (intersection != null) {
 			gap = current.getLocationPoint().distanceManhattan(intersection);
@@ -664,7 +665,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	 * @param gap the gap
 	 * @return the new direction
 	 */
-	private static String directionInIntersection(Location current,int gap) {
+	private String directionInIntersection(Location current,int gap) {
 		String nextOrientation = current.getOppositeOrientation();
 		Random randomInt = new Random();
 		Location next = current.replicate();
@@ -674,7 +675,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 			index = randomInt.nextInt(4);
 			nextOrientation = Location.getOrientations()[index];
 			next.setOrientation(nextOrientation);
-			next = new Location(makeNextPoint(next,1));
+			next = new Location(makeNextPoint(next,1),getDimension());
 		}
 		return nextOrientation;
 	}
@@ -776,5 +777,12 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	
 	public boolean killVehicle() {
 		return setFlag(false);
+	}
+	
+	private Dimension getDimension() {
+		if (getLocation().getOrientation().equals("East") || getLocation().getOrientation().equals("West"))
+			return new Dimension(vehicleWidthHorizon,vehicleHeightHorizon);
+		else
+			return new Dimension(vehicleWidthVertical,vehicleHeightVertical);
 	}
 }

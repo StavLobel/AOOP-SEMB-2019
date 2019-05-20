@@ -1,5 +1,7 @@
 package vehicles;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.Arrays;
 
 /**
@@ -29,11 +31,17 @@ public class Location{
 	/** The orientation. */
 	private String orientation = EAST;
 	
+	private final Dimension dimension;
+	
+	private Rectangle area;
+	
 	/**
 	 * Instantiates a new location with point (0,0) and center orientation
 	 */
-	public Location() {
+	public Location(Dimension dimension) {
 		this.location = new Point();
+		this.dimension = dimension;
+		
 	}
 	
 	/**
@@ -41,8 +49,9 @@ public class Location{
 	 *
 	 * @param p the point to set the new location
 	 */
-	public Location(Point p) {
+	public Location(Point p,Dimension dimension) {
 		this.location = p;
+		this.dimension = dimension;
 	}
 	
 	/**
@@ -50,9 +59,10 @@ public class Location{
 	 *
 	 * @param other other location to copy from
 	 */
-	public Location(Location other) {
+	public Location(Location other,Dimension dimension) {
 		this.location = other.getLocationPoint();
 		this.orientation = other.getOrientation();
+		this.dimension = dimension;
 	}
 	
 	/**
@@ -149,7 +159,7 @@ public class Location{
 	 * @return a clone of the location
 	 */
 	public Location replicate() {
-		Location toCopy = new Location(this);
+		Location toCopy = new Location(this,this.dimension);
 		toCopy.setOrientation(this.getOrientation());
 		return toCopy;
 	}
