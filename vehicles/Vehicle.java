@@ -774,14 +774,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	public void run() {
 		this.flag = true;
 		CityPanel.incNumberOfVehicles();
+		CityPanel.addRowToTable();
 		while (this.flag) {
 			while (!canMove(nextLocation())) {
-				synchronized (this) {
-				try{
-					wait();
+					try{
+						this.wait();
 					}
 					catch (InterruptedException e) {}
-				}
 			}
 			if (canMove(nextLocation()))
 				this.move(this.nextLocation());
@@ -793,19 +792,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 		}
 	}
 	
-	public boolean getFlag() {
+	public boolean startVehicle() {
 		return this.flag;
 	}
 	
-	public boolean setFlag(boolean flag) {
-		if (this.flag == flag)
-			return false;
-		this.flag = flag;
-		return true;
-	}
-	
 	public boolean killVehicle() {
-		return setFlag(false);
+		this.flag = true;
+		return true;
 	}
 	
 	public boolean setKiller(String id) {

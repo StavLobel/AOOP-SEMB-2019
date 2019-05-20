@@ -126,22 +126,20 @@ public class AddVehicleDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (qType.getSelection() == null || qColor.getSelection() == null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
+				else if (CityPanel.v.size() == CityPanel.numOfThreads+CityPanel.numOfThreadInQueue)
+					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
 				else {
 					String type = qType.getSelection().getActionCommand();
 					String color = qColor.getSelection().getActionCommand();
 					int numOfGears = gears.getValue();
-					try{
-						createVehicle(type,color,numOfGears);
-					}
-					catch (Exception exception) {
-						JOptionPane.showMessageDialog(panel,"Error !\n" + exception.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
-					}
+					createVehicle(type,color,numOfGears);
 					dispose();
 				}
 			}
 		});
 	}
 	
+<<<<<<< HEAD
 	static boolean createVehicle(String type,String color,int numberOfGears) throws Exception{
 		synchronized (CityPanel.pool) {
 			if (type.equals(CAR_BENZINE)) 
@@ -154,6 +152,19 @@ public class AddVehicleDialog extends JDialog {
 				CityPanel.pool.addVehicle(new Carriage(color));
 			return true;
 		}
+=======
+	static boolean createVehicle(String type,String color,int numberOfGears) {
+		if (type.equals(CAR_BENZINE)) 
+			CityPanel.v.add(new Car(color,"BenzineEngine"));
+		else if (type.equals(CAR_SOLAR))
+			CityPanel.v.add(new Car(color,"SolarEngine"));
+		else if (type.equals(BIKE_LABEL))
+			CityPanel.v.add(new Bike(color,numberOfGears));
+		else if (type.equals(CARRIAGE_LABEL))
+			CityPanel.v.add(new Carriage(color));
+		CityPanel.pool.execute(CityPanel.v.getLast());
+		return true;
+>>>>>>> parent of c98a3c5... HW3
 	}
 	
 }
