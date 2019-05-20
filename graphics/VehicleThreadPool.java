@@ -18,7 +18,7 @@ public class VehicleThreadPool {
 		pool = new ThreadPoolExecutor(maxRunning, maxRunning, 1 , TimeUnit.SECONDS, queue);
 	}
 	
-	public synchronized boolean addVehicle(Vehicle v) throws Exception{
+	public boolean addVehicle(Vehicle v) throws Exception{
 		if (!(queue.remainingCapacity() > 0))
 			throw new Exception("Cannot create more vehicles.");
 		activeVehicles.add(v);
@@ -26,7 +26,7 @@ public class VehicleThreadPool {
 		return true;
 	}
 	
-	public synchronized boolean killAllVehicles() {
+	public boolean killAllVehicles() {
 		int toRemove = getNumberOfActiveVehicles();
 		while (toRemove > 0) {
 			activeVehicles.remove().killVehicle();
@@ -35,20 +35,20 @@ public class VehicleThreadPool {
 		return true;
 	}
 	
-	public synchronized Vehicle getActiveVehicle(int index) {
+	public Vehicle getActiveVehicle(int index) {
 		if (index >= getNumberOfActiveVehicles())
 			return null;
 		return activeVehicles.get(index);
 	}
 	
-	public synchronized LinkedList<Vehicle> getActiveVehicles() {
+	public LinkedList<Vehicle> getActiveVehicles() {
 		LinkedList<Vehicle> temp = new LinkedList<Vehicle>();
 		for (int i = 0 ; i < getNumberOfActiveVehicles() ; ++i)
 			temp.add(activeVehicles.get(i));
 		return temp;
 	}
 	
-	public synchronized int getNumberOfActiveVehicles() {
+	public int getNumberOfActiveVehicles() {
 		int count = 0;
 		for (int i = 0 ; i < activeVehicles.size() && i < pool.getMaximumPoolSize() ; ++i)
 			if (activeVehicles.get(i).getFlag() == true)
@@ -56,11 +56,11 @@ public class VehicleThreadPool {
 		return count;
 	}
 	
-	public synchronized boolean isEmpty() {
+	public boolean isEmpty() {
 		return getNumberOfActiveVehicles() == 0;
 	}
 	
-	public synchronized boolean shutdown() {
+	public boolean shutdown() {
 		pool.shutdown();
 		return true;
 	}

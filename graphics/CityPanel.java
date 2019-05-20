@@ -176,14 +176,12 @@ public class CityPanel extends JPanel {
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
 <<<<<<< HEAD
 	    if (!pool.isEmpty()) {
-	    	synchronized (pool) {
-	    		LinkedList<Vehicle> vehicles = pool.getActiveVehicles();
-	    		vehicles.forEach(n -> n.drawObject(g));
-	    	}
+	    	LinkedList<Vehicle> vehicles = pool.getActiveVehicles();
+	    	vehicles.forEach(n -> n.drawObject(g));
 	    }
 =======
 	    synchronized (v) {
@@ -320,9 +318,5 @@ public class CityPanel extends JPanel {
 	public static boolean incNumberOfVehicles() {
 		numOfVehicles += 1;
 		return true;
-	}
-	
-	public static VehicleThreadPool getPool() {
-		return pool;
 	}
 }

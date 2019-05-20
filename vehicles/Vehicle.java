@@ -5,8 +5,6 @@ import javax.imageio.ImageIO;
 import graphics.IClonable;
 import graphics.IDrawable;
 import graphics.IMoveable;
-import graphics.VehicleThreadPool;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -283,34 +281,7 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 		this.useFuel(this.loc.getLocationPoint().distanceManhattan(toGo)*this.getFuelConsumption());
 		this.mileage += this.loc.getLocationPoint().distanceManhattan(toGo);
 		this.loc.setLocation(toGo);
-		checkForCrash();
 		return true;
-	}
-	
-	private boolean checkForCrash() {
-		synchronized (CityPanel.getPool()) {
-		VehicleThreadPool pool = CityPanel.getPool();
-		for (int i = 0 ; i < pool.getNumberOfActiveVehicles() ; ++i) {
-			if (this.loc.getArea().intersects(pool.getActiveVehicle(i).getLocation().getArea()) && this.getLicensePlate() != pool.getActiveVehicle(i).getLicensePlate()) {
-				if (this.getDurability() > pool.getActiveVehicle(i).getDurability()) {
-					pool.getActiveVehicle(i).killVehicle();
-					pool.getActiveVehicle(i).setKiller(""+this.getLicensePlate());
-				}
-				else if (this.getDurability() <pool.getActiveVehicle(i).getDurability()) {
-					this.killVehicle();
-					this.setKiller(""+pool.getActiveVehicle(i).getLicensePlate());
-				}
-				else {
-					this.killVehicle();
-					pool.getActiveVehicle(i).killVehicle();
-					this.setKiller(""+pool.getActiveVehicle(i).getLicensePlate());
-					pool.getActiveVehicle(i).setKiller(""+this.getLicensePlate());
-				}
-				return true;
-			}
-		}
-		return false;
-		}
 	}
 	
 	/**
@@ -798,11 +769,6 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	
 	public boolean killVehicle() {
 		this.flag = true;
-		return true;
-	}
-	
-	public boolean setKiller(String id) {
-		this.hittingVehcile = id;
 		return true;
 	}
 	
