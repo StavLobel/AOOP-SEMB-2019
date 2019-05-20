@@ -126,50 +126,23 @@ public class AddVehicleDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (qType.getSelection() == null || qColor.getSelection() == null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
-				else if (CityPanel.v.size() == CityPanel.numOfThreads+CityPanel.numOfThreadInQueue)
-					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
 				else {
 					String type = qType.getSelection().getActionCommand();
 					String color = qColor.getSelection().getActionCommand();
 					int numOfGears = gears.getValue();
-					createVehicle(type,color,numOfGears);
+					try{
+						createVehicle(type,color,numOfGears);
+					}
+					catch (Exception exception) {
+						JOptionPane.showMessageDialog(panel,"Error !\n" + exception.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
+					}
 					dispose();
 				}
 			}
 		});
 	}
 	
-<<<<<<< HEAD
 	static boolean createVehicle(String type,String color,int numberOfGears) throws Exception{
-<<<<<<< HEAD
-<<<<<<< HEAD
-		synchronized (CityPanel.pool) {
-			if (type.equals(CAR_BENZINE)) 
-				CityPanel.pool.addVehicle(new Car(color,"BenzineEngine"));
-			else if (type.equals(CAR_SOLAR))
-				CityPanel.pool.addVehicle(new Car(color,"SolarEngine"));
-			else if (type.equals(BIKE_LABEL))
-				CityPanel.pool.addVehicle(new Bike(color,numberOfGears));
-			else if (type.equals(CARRIAGE_LABEL))
-				CityPanel.pool.addVehicle(new Carriage(color));
-			return true;
-		}
-=======
-	static boolean createVehicle(String type,String color,int numberOfGears) {
-		if (type.equals(CAR_BENZINE)) 
-			CityPanel.v.add(new Car(color,"BenzineEngine"));
-		else if (type.equals(CAR_SOLAR))
-			CityPanel.v.add(new Car(color,"SolarEngine"));
-		else if (type.equals(BIKE_LABEL))
-			CityPanel.v.add(new Bike(color,numberOfGears));
-		else if (type.equals(CARRIAGE_LABEL))
-			CityPanel.v.add(new Carriage(color));
-		CityPanel.pool.execute(CityPanel.v.getLast());
-		return true;
->>>>>>> parent of c98a3c5... HW3
-=======
-=======
->>>>>>> parent of c11cb9c... HW3
 		if (type.equals(CAR_BENZINE)) 
 			CityPanel.pool.addVehicle(new Car(color,"BenzineEngine"));
 		else if (type.equals(CAR_SOLAR))
@@ -179,10 +152,6 @@ public class AddVehicleDialog extends JDialog {
 		else if (type.equals(CARRIAGE_LABEL))
 			CityPanel.pool.addVehicle(new Carriage(color));
 		return true;
-<<<<<<< HEAD
->>>>>>> parent of c11cb9c... HW3
-=======
->>>>>>> parent of c11cb9c... HW3
 	}
 	
 }

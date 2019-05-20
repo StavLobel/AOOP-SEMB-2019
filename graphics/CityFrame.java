@@ -63,7 +63,8 @@ public class CityFrame extends JFrame{
 		
 		menuItem = new JMenuItem(new AbstractAction(EXIT_LABEL){
 		    public void actionPerformed(ActionEvent e) {
-		        CityPanel.pool.shutdown();
+		        CityPanel.infoTable.shutdown();
+		    	CityPanel.pool.shutdown();
 		    	System.exit(0);
 		    }
 		});
@@ -90,5 +91,11 @@ public class CityFrame extends JFrame{
 	 */
 	public static void main(String[] args) {
 		frame = new CityFrame(TITLE);
+		for (int i = 0 ; i < 5 ; ++i)
+			try {
+				AddVehicleDialog.createVehicle("Bike", "Green", 5);
+				Thread.sleep(1000);
+			}
+		catch (Exception e) {}
 	}
 }
