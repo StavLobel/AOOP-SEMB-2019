@@ -143,15 +143,17 @@ public class AddVehicleDialog extends JDialog {
 	}
 	
 	static boolean createVehicle(String type,String color,int numberOfGears) throws Exception{
-		if (type.equals(CAR_BENZINE)) 
-			CityPanel.pool.addVehicle(new Car(color,"BenzineEngine"));
-		else if (type.equals(CAR_SOLAR))
-			CityPanel.pool.addVehicle(new Car(color,"SolarEngine"));
-		else if (type.equals(BIKE_LABEL))
-			CityPanel.pool.addVehicle(new Bike(color,numberOfGears));
-		else if (type.equals(CARRIAGE_LABEL))
-			CityPanel.pool.addVehicle(new Carriage(color));
-		return true;
+		synchronized (CityPanel.pool) {
+			if (type.equals(CAR_BENZINE)) 
+				CityPanel.pool.addVehicle(new Car(color,"BenzineEngine"));
+			else if (type.equals(CAR_SOLAR))
+				CityPanel.pool.addVehicle(new Car(color,"SolarEngine"));
+			else if (type.equals(BIKE_LABEL))
+				CityPanel.pool.addVehicle(new Bike(color,numberOfGears));
+			else if (type.equals(CARRIAGE_LABEL))
+				CityPanel.pool.addVehicle(new Carriage(color));
+			return true;
+		}
 	}
 	
 }

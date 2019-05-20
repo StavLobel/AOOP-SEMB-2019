@@ -41,6 +41,8 @@ public class Location{
 	public Location(Dimension dimension) {
 		this.location = new Point();
 		this.dimension = dimension;
+		this.area = new Rectangle(dimension);
+		this.area.setLocation(0,0);
 		
 	}
 	
@@ -52,6 +54,8 @@ public class Location{
 	public Location(Point p,Dimension dimension) {
 		this.location = p;
 		this.dimension = dimension;
+		this.area = new Rectangle(dimension);
+		this.area.setLocation(this.location.getX(),this.location.getY());
 	}
 	
 	/**
@@ -101,17 +105,33 @@ public class Location{
 				this.orientation = NORTH;
 			else if (this.location.getX() == p.getX() && this.location.getY() < p.getY())
 				this.orientation = SOUTH;
-			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() < p.getY())
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() < p.getY()) {
 				this.orientation = SOUTH;
-			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() > p.getY())
+				this.flipArea();
+			}
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() > p.getY()) {
 				this.orientation = NORTH;
-			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() > p.getX())
+				this.flipArea();
+			}
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() > p.getX()) {
 				this.orientation = WEST;
-			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() < p.getX())
+				this.flipArea();
+			}
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() < p.getX()) {
 				this.orientation = EAST;
+				this.flipArea();
+			}
 			this.location = p;
+			this.area.setLocation(this.location.getX(), this.location.getY());
 			return true;
 		}
+	}
+	
+	private boolean flipArea() {
+		int x = (int)this.area.getY();
+		int y = (int)this.area.getX();
+		this.area = new Rectangle(x,y);
+		return true;
 	}
 	
 	/**
@@ -189,5 +209,9 @@ public class Location{
 		if (orientation.equals(WEST))
 			return EAST;
 		return null;
+	}
+	
+	public Rectangle getArea() {
+		return this.area;
 	}
 }
