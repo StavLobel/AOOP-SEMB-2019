@@ -768,8 +768,12 @@ public abstract class Vehicle implements IMoveable,IClonable,IDrawable,Runnable{
 	}
 	
 	public boolean killVehicle() {
+<<<<<<< HEAD
 		this.flag = true;
 		return true;
+=======
+		return setFlag(false);
+>>>>>>> parent of c11cb9c... HW3
 	}
 	
 	private Dimension getDimension() {

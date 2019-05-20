@@ -297,6 +297,7 @@ public class CityPanel extends JPanel {
 		}
 		return true;
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * Table refresh.
@@ -319,4 +320,6 @@ public class CityPanel extends JPanel {
 		numOfVehicles += 1;
 		return true;
 	}
+=======
+>>>>>>> parent of c11cb9c... HW3
 }
