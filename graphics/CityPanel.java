@@ -108,7 +108,7 @@ public class CityPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (v != null)
-					saveLastVehicleInTable();
+					infoMenu.saveLastVehicleInTable();
 				v = null;
 				repaint();
 			}
@@ -123,15 +123,12 @@ public class CityPanel extends JPanel {
 					v.setLights(!v.isLights());
 			}
 		});
-		buildTable();
 		buttons[4].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (v != null)
-					tableRefresh();
-				infoDialog.pack();
-				infoDialog.setLocationRelativeTo(null);
-				infoDialog.setVisible(true);
+					infoMenu.tableRefresh();
+				infoMenu.setVisible(true);
 			}
 		});
 		

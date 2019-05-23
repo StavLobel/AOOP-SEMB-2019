@@ -4,13 +4,10 @@ import javax.swing.JDialog;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class CityPanelInfoMenu {
+public class CityPanelInfoMenu extends JDialog{
 
 	/** The info. */
 	static JTable info;
-	
-	/** The info dialog. */
-	static JDialog infoDialog = new JDialog();
 	
 	/** The table. */
 	static Object[][] table = new Object[0][9];
@@ -28,12 +25,12 @@ public class CityPanelInfoMenu {
 	 *
 	 * @return true, if successful
 	 */
-	private CityPanelInfoMenu(CityPanel panel) {
+	public CityPanelInfoMenu(CityPanel panel) {
 		info = new JTable(table,columnNames);
 		infoDialog.setTitle("Vehicle List");
 		infoScrollPane = new JScrollPane(info);
 		infoDialog.add(infoScrollPane);
-		return true;
+		this.panel = panel;
 	}
 	
 	/**
@@ -60,7 +57,7 @@ public class CityPanelInfoMenu {
 	 *
 	 * @return true, if successful
 	 */
-	private boolean saveLastVehicleInTable() {
+	public boolean saveLastVehicleInTable() {
 		table[numOfVehicles-1] = v.getTable();
 		for (int i = 0 ; i < table[numOfVehicles-1].length; ++i) {
 			String temp = ""+table[numOfVehicles-1][i];
@@ -74,7 +71,7 @@ public class CityPanelInfoMenu {
 	 *
 	 * @return true, if successful
 	 */
-	private boolean tableRefresh() {
+	public boolean tableRefresh() {
 		infoDialog.remove(infoScrollPane);	
 		for(int i = 0 ; i < table[numOfVehicles-1].length ; ++i)
 			table[numOfVehicles-1][i] = v.getTable()[i];
