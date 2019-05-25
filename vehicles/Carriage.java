@@ -1,12 +1,14 @@
 package vehicles;
 
+import DesignPatterns.IRefueler;
+import graphics.IUsingFuel;
 
 /**
  * The Class Carriage.
  * 
  * @author Stav Lobel ID 308549898
  */
-public class Carriage extends Vehicle {
+public class Carriage extends Vehicle implements IUsingFuel {
 	
 	/** The animal who carries the Carriage. */
 	private PackAnimal animal;
@@ -18,16 +20,24 @@ public class Carriage extends Vehicle {
 	private static final int WHEELS = 4;
 	
 	/** The Constant numberOfSeats. */
-	private static final int numberOfSeats = 2;
+	private static final int NUM_OF_SEATS = 2;
+	
+	/**
+	 * Instantiates a new carriage.
+	 */
+	public Carriage() {
+		super(WHEELS,NUM_OF_SEATS);
+		this.animal = new PackAnimal("Pack Animal");
+	}
 	
 	/**
 	 * Instantiates a new carriage.
 	 *
-	 * @param color the color of the carriage
+	 * @param other the other
 	 */
-	public Carriage(String color) {
-		super(color,WHEELS,Carriage.numberOfSeats);
-		this.animal = new PackAnimal("Pack Animal");
+	private Carriage(Carriage other) {
+		super(other);
+		this.animal = (PackAnimal) other.animal.clone();
 	}
 	
 	/**
@@ -36,7 +46,7 @@ public class Carriage extends Vehicle {
 	 * @return a clone of the animal
 	 */
 	public PackAnimal getAnimal() {
-		return new PackAnimal(this.animal.getAnimalName());
+		return (PackAnimal) animal.clone();
 	}
 	
 	/**
@@ -60,7 +70,7 @@ public class Carriage extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Carriage(this.getColor());
+		return new Carriage(this);
 	}
 	
 	/* (non-Javadoc)
@@ -68,14 +78,6 @@ public class Carriage extends Vehicle {
 	 */
 	public String getVehicleName() {
 		return "Carriage";
-	}
-	
-	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#refuel()
-	 */
-	public boolean refuel() {
-		this.setFuelConsumption(this.animal.getMaxEnergy()-this.animal.getCurrentEnergy());
-		return this.animal.eat();
 	}
 	
 	/* (non-Javadoc)
@@ -104,5 +106,26 @@ public class Carriage extends Vehicle {
 	 */
 	public String getEngineType() {
 		return "Pack Animal";
+	}
+	
+	/* (non-Javadoc)
+	 * @see graphics.IUsingFuel#canMove(vehicles.Point)
+	 */
+	public boolean canMove(Point toGo) {
+		return getLocation().getLocationPoint().manhattanDistance(toGo)*getFuelConsumption() > this.getCurrentFuel();
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IBeenRefueled#setCurrentFuel(int)
+	 */
+	public boolean setCurrentFuel(int amount) {
+		return animal.setCurrentFuel(amount);
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
+	 */
+	public void letRefuel(IRefueler refueler) {
+		refueler.refuel(this);
 	}
 }

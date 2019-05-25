@@ -85,12 +85,10 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	 * @see graphics.IAnimal#eat()
 	 */
 	public boolean eat(int amount) {
-		synchronized (this) {
-			if (currentEnergy == MAX_ENERGY || currentEnergy + amount > MAX_ENERGY)
-				return false;
-			currentEnergy = currentEnergy + amount;
-			return true;
-		}
+		if (currentEnergy == MAX_ENERGY || currentEnergy + amount > MAX_ENERGY)
+			return false;
+		currentEnergy = currentEnergy + amount;
+		return true;
 	}
 	
 	/* (non-Javadoc)
