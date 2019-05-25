@@ -5,3 +5,14 @@
 /IBeenRefueld.class
 /IRefueler.class
 /IBeenRefueled.class
+/temp.class
+/IVehicle.class
+/LightsDecorator.class
+/ColorDecorator.class
+/RedDecorator.class
+/LightsOnDecorator.class
+/LightsOfDecorator.class
+/RedColorDecorator.class
+/GreenColorDecorator.class
+/SilverColorDecorator.class
+/WhiteColorDecorator.class
