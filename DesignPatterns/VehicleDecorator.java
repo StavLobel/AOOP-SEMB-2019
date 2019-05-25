@@ -440,4 +440,44 @@ public class VehicleDecorator {
 	
 	//FROM MOVE IN VEHICLE
 	if (/*this.canMove(p)*/ && this.location.getLocationPoint().equals(p) == false)
+		
+	//FROM HAS ENGINE
+		/* (non-Javadoc)
+		 * @see vehicles.Vehicle#loadImages()
+		 */
+		public void loadImages() {
+			String name = this.getColor().toLowerCase()+"Car";
+			String nameNorth = name+"North.png";
+			String nameSouth = name+"South.png";
+			String nameEast = name+"East.png";
+			String nameWest = name+"West.png";
+			
+			try {
+				this.img1 = ImageIO.read(new File("PNGs//"+nameNorth));
+			}
+			catch (IOException e) {
+				System.out.println("Cannot load image");
+			}
+			
+			try {
+				this.img2 = ImageIO.read(new File("PNGs//"+nameSouth));
+			}
+			catch (IOException e) {
+				System.out.println("Cannot load image");
+			}
+			
+			try {
+				this.img3 = ImageIO.read(new File("PNGs//"+nameEast));
+			}
+			catch (IOException e) {
+				System.out.println("Cannot load image");
+			}
+			
+			try {
+				this.img4 = ImageIO.read(new File("PNGs//"+nameWest));
+			}
+			catch (IOException e) {
+				System.out.println("Cannot load image");
+			}
+		}
 }

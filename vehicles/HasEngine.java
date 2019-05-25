@@ -1,31 +1,42 @@
 package vehicles;
 
+import graphics.IUsingFuel;
+
 /**
  * The Class HasEngine.
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class HasEngine extends Vehicle {
+public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	
 	/** The engine. */
-	private Engine engine = null;
+	private final Engine engine;
 	
 	/** The current fuel. */
 	private int currentFuel;
 	
 	/**
-	 * Instantiates a new checks for engine.
+	 * Instantiates a new HasEngine.
 	 *
-	 * @param color the color
 	 * @param wheels the number of wheels
 	 * @param numberOfSeats the number of seats
-	 * @param engineType the engine type
-	 * @param fuelCapacity the fuel capacity
+	 * @param engine the engine
 	 */
 	public HasEngine(int wheels,int numberOfSeats,Engine engine) {
 		super(wheels,numberOfSeats);
 		this.engine = engine;
 		this.currentFuel = this.engine.getFuelCapacity();
+	}
+	
+	/**
+	 * Instantiates a new checks for engine.
+	 *
+	 * @param other the other
+	 */
+	protected HasEngine(HasEngine other) {
+		super(other);
+		this.engine = (Engine) other.getEngine().clone();
+		this.currentFuel = other.getCurrentFuel();
 	}
 
 	/**
@@ -34,7 +45,7 @@ public abstract class HasEngine extends Vehicle {
 	 * @return the engine
 	 */
 	public Engine getEngine() {
-		return engine;
+		return (Engine) engine.clone();
 	}
 
 	/**
@@ -53,19 +64,6 @@ public abstract class HasEngine extends Vehicle {
 	 */
 	public String getEngineType() {
 		return ""+ this.getEngine();
-	}
-	
-	/**
-	 * Refuel.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean refuel() {
-		if (this.currentFuel == this.engine.getFuelCapacity())
-			return false;
-		this.setFuelConsumption(this.engine.getFuelCapacity()-this.getCurrentFuel());
-		this.currentFuel = this.engine.getFuelCapacity();
-		return true;
 	}
 	
 	/* (non-Javadoc)
@@ -91,41 +89,9 @@ public abstract class HasEngine extends Vehicle {
 	}
 	
 	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#loadImages()
+	 * @see graphics.IUsingFuel#canMove(vehicles.Point)
 	 */
-	public void loadImages() {
-		String name = this.getColor().toLowerCase()+"Car";
-		String nameNorth = name+"North.png";
-		String nameSouth = name+"South.png";
-		String nameEast = name+"East.png";
-		String nameWest = name+"West.png";
-		
-		try {
-			this.img1 = ImageIO.read(new File("PNGs//"+nameNorth));
-		}
-		catch (IOException e) {
-			System.out.println("Cannot load image");
-		}
-		
-		try {
-			this.img2 = ImageIO.read(new File("PNGs//"+nameSouth));
-		}
-		catch (IOException e) {
-			System.out.println("Cannot load image");
-		}
-		
-		try {
-			this.img3 = ImageIO.read(new File("PNGs//"+nameEast));
-		}
-		catch (IOException e) {
-			System.out.println("Cannot load image");
-		}
-		
-		try {
-			this.img4 = ImageIO.read(new File("PNGs//"+nameWest));
-		}
-		catch (IOException e) {
-			System.out.println("Cannot load image");
-		}
+	public boolean canMove(Point toGo) {
+		return this.getLocation().getLocationPoint().manhattanDistance(toGo)*getFuelConsumption() > this.getCurrentFuel();
 	}
 }
