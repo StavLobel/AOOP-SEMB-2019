@@ -1,6 +1,6 @@
 package DesignPatterns;
 
-import java.awt.Graphics;
+import vehicles.Location;
 
 /**
  * The Class VehicleDecorator.
@@ -19,10 +19,11 @@ public abstract class VehicleDecorator implements IVehicle {
 		this.vehicle = vehicle;
 	}
 	
-	/* (non-Javadoc)
-	 * @see DesignPatterns.IVehicle#drawObject(java.awt.Graphics)
-	 */
-	public void drawObject(Graphics g) {
-		vehicle.drawObject(g);
+	public Location getLocation() {
+		return vehicle.getLocation();
+	}
+	
+	public void run() {
+		vehicle.run();
 	}
 }

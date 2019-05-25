@@ -48,4 +48,5 @@ public interface IUsingFuel extends IMoveable,IBeenRefueled {
 	 */
 	public boolean canMove(Point toGo);
 	
+	public boolean drive(Point toGo);
 }

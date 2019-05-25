@@ -178,4 +178,12 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	public boolean setCurrentFuel(int amount) {
 		return eat(amount);
 	}
+	
+	public boolean canMove() {
+		return !(currentEnergy == 0);
+	}
+	
+	public boolean drive(Point toGo) {
+		return true;
+	}
 }

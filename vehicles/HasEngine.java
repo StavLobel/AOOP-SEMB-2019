@@ -1,6 +1,7 @@
 package vehicles;
 
 import graphics.IUsingFuel;
+import vehicleMovingBridge.VehicleMover;
 
 /**
  * The Class HasEngine.
@@ -22,8 +23,8 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	 * @param numberOfSeats the number of seats
 	 * @param engine the engine
 	 */
-	public HasEngine(int wheels,int numberOfSeats,Engine engine) {
-		super(wheels,numberOfSeats);
+	public HasEngine(int wheels,int numberOfSeats,Engine engine,VehicleMover mover) {
+		super(wheels,numberOfSeats,mover);
 		this.engine = engine;
 		this.currentFuel = this.engine.getFuelCapacity();
 	}
@@ -101,5 +102,10 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	public boolean setCurrentFuel(int amount) {
 		this.currentFuel += amount;
 		return true;
+	}
+	
+	public boolean drive(Point toGo) {
+		this.useFuel(this.getLocation().getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
+		return super.drive(toGo);
 	}
 }

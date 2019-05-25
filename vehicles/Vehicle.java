@@ -1,8 +1,11 @@
 package vehicles;
 
+import java.awt.Graphics;
+
 import DesignPatterns.IVehicle;
 import graphics.IClonable;
 import graphics.IMoveable;
+import vehicleMovingBridge.VehicleMover;
 
 /**
  * The Class Vehicle.
@@ -35,13 +38,15 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	/** The minimum age. */
 	private static int minAge = 18;
 	
+	private VehicleMover mover;
+	
 	/**
 	 * Instantiates a new vehicle.
 	 *
 	 * @param wheels the number of wheels of the vehicle
 	 * @param numberOfSeats the number of seats
 	 */
-	public Vehicle(int wheels,int numberOfSeats) {
+	public Vehicle(int wheels,int numberOfSeats,VehicleMover mover) {
 		synchronized (Vehicle.class) {
 			this.licensePlate = Vehicle.NEXT_ID;
 			Vehicle.NEXT_ID++;
@@ -49,6 +54,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 		this.numberOfWheels = wheels;
 		this.location = new Location();
 		this.numberOfSeats = numberOfSeats;
+		this.mover = mover;
 	}
 
 	/**
@@ -58,8 +64,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * @param numberOfSeats the number of seats
 	 * @param p the current point of the vehicle
 	 */
-	public Vehicle(int wheels,int numberOfSeats,Point p) {
-		this(wheels,numberOfSeats);
+	public Vehicle(int wheels,int numberOfSeats,Point p,VehicleMover mover) {
+		this(wheels,numberOfSeats,mover);
 		this.location = new Location(p);
 	}
 	
@@ -71,8 +77,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * @param numberOfSeats the number of seats
 	 * @param location the location of the vehicle
 	 */
-	public Vehicle(int id,int wheels,int numberOfSeats,Location location) {
-		this(wheels,numberOfSeats);
+	public Vehicle(int id,int wheels,int numberOfSeats,Location location,VehicleMover mover) {
+		this(wheels,numberOfSeats,mover);
 		this.location = new Location(location);
 	}
 	
@@ -88,6 +94,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 		this.consumedFuelAmount = other.getConsumedFuelAmount();
 		this.numberOfSeats = other.getNumberOfSeats();
 		this.numberOfWheels = other.getNumberOfWheels();
+		this.mover = other.getMover();
 	}
 	
 	/**
@@ -144,6 +151,10 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	public static int getNextId() {
 		return Vehicle.NEXT_ID;
 	}
+	
+	public VehicleMover getMover() {
+		return this.mover;
+	}
 
 	/**
 	 * Drive.
@@ -153,7 +164,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * @param toGo the point to drive to
 	 * @return true, if successful ,false if the vehicle stay in it's location
 	 */
-	private boolean drive(Point toGo) {
+	public boolean drive(Point toGo) {
 		this.mileage += this.location.getLocationPoint().manhattanDistance(toGo);
 		this.setLocation(toGo);
 		return true;
@@ -241,37 +252,17 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 */
 	public abstract int getSpeed();
 	
-	/* (non-Javadoc)
-	 */
-	public boolean move(Point p){
-	    if (this.location.getLocationPoint().equals(p) == false) {    
-	    	try {Thread.sleep(100);}
-	        catch (InterruptedException e) { e.printStackTrace(); }
-	        this.drive(p);
-		    return true;
-	    }
-	    return false;
+	public boolean canMove() {
+		return true;
 	}
 	
-	/**
-	 * Make next point.
-	 *
-	 * @param current the current point
-	 * @param distance the distance that need to drive
-	 * @return the point to go
-	 */
-	public Point makeNextPoint() {
-		if (location.getOrientation().equals("North")) 
-			return Point.getPointInstance(location.getLocationPoint().getX(),location.getLocationPoint().getY() - getSpeed());
-		else if (location.getOrientation().equals("South")) 
-			return Point.getPointInstance(location.getLocationPoint().getX(),location.getLocationPoint().getY() + getSpeed());
-		else if (location.getOrientation().equals("East")) 
-			return Point.getPointInstance(location.getLocationPoint().getX() + getSpeed(),location.getLocationPoint().getY());
-		else if (location.getOrientation().equals("West")) 
-			return Point.getPointInstance(location.getLocationPoint().getX() - getSpeed(),location.getLocationPoint().getY());
-		else
-			return null;
+	public boolean move(Point toGo) {
+		return mover.move(this, toGo);
 	}
 	
-	public void run() {}
+	public void run() {
+		Point toGo = mover.makeNextPoint(this.location,getSpeed());
+		move(toGo);
+	}
+	
 }

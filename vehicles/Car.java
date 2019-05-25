@@ -1,6 +1,7 @@
 package vehicles;
 
 import DesignPatterns.IRefueler;
+import vehicleMovingBridge.VehicleMover;
 
 /**
  * The Class Car.
@@ -26,8 +27,8 @@ public class Car extends HasEngine {
 	 *
 	 * @param engine the engine
 	 */
-	public Car(Engine engine) {
-		super(WHEELS,NUM_OF_SEATS,engine);
+	public Car(Engine engine,VehicleMover mover) {
+		super(WHEELS,NUM_OF_SEATS,engine,mover);
 	}
 	
 	/**

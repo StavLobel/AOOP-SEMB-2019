@@ -1,5 +1,7 @@
 package vehicles;
 
+import vehicleMovingBridge.VehicleMover;
+
 /**
  * The Class Bike.
  * 
@@ -23,9 +25,10 @@ public class Bike extends Vehicle {
 	 * Instantiates a new bike.
 	 * 
 	 * @param gears the bike's number of gears
+	 * @param mover the vehicle mover
 	 */
-	public Bike(int gears) {
-		super(NUM_OF_WHEELS,NUM_OF_SEATS);
+	public Bike(int gears,VehicleMover mover) {
+		super(NUM_OF_WHEELS,NUM_OF_SEATS,mover);
 		this.gears = gears;
 	}
 	

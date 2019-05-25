@@ -29,5 +29,7 @@ public interface IMoveable {
 	 * @return true, if successful. false if same point.
 	 */
 	public boolean move(Point p);
+	
+	public boolean canMove();
 
 }

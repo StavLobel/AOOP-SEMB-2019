@@ -16,7 +16,7 @@ public interface IDrawable {
 	 *
 	 * @param nm the nm
 	 */
-	public void loadImages();
+	public boolean loadImages(String name);
 	
 	/**
 	 * Draw object.

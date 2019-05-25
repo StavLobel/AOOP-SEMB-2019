@@ -2,6 +2,7 @@ package vehicles;
 
 import DesignPatterns.IRefueler;
 import graphics.IUsingFuel;
+import vehicleMovingBridge.VehicleMover;
 
 /**
  * The Class Carriage.
@@ -25,8 +26,8 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	/**
 	 * Instantiates a new carriage.
 	 */
-	public Carriage() {
-		super(WHEELS,NUM_OF_SEATS);
+	public Carriage(VehicleMover mover) {
+		super(WHEELS,NUM_OF_SEATS,mover);
 		this.animal = new PackAnimal("Pack Animal");
 	}
 	
@@ -127,5 +128,10 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	 */
 	public void letRefuel(IRefueler refueler) {
 		refueler.refuel(this);
+	}
+	
+	public boolean drive(Point toGo) {
+		this.useFuel(this.getLocation().getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
+		return super.drive(toGo);
 	}
 }

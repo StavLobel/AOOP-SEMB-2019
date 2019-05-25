@@ -2,17 +2,16 @@ package DesignPatterns;
 
 import java.awt.Graphics;
 
+import vehicles.Location;
+
 /**
  * The Interface IVehicle.
  * 
  * @author Stav Lobel
  */
-public interface IVehicle {
+public interface IVehicle extends Runnable{
 	
-	/**
-	 * Draw object.
-	 *
-	 * @param g the g
-	 */
-	public void drawObject(Graphics g);
+	public void run();
+	
+	public Location getLocation();
 }
