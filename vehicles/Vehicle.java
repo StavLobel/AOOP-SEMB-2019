@@ -1,5 +1,6 @@
 package vehicles;
 
+import DesignPatterns.IVehicle;
 import graphics.IClonable;
 import graphics.IMoveable;
 
@@ -8,7 +9,7 @@ import graphics.IMoveable;
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IMoveable,IClonable {
+public abstract class Vehicle implements IVehicle,IMoveable,IClonable {
 	
 	/** The license plate of the vehicle. */
 	private final int licensePlate;
@@ -271,4 +272,6 @@ public abstract class Vehicle implements IMoveable,IClonable {
 		else
 			return null;
 	}
+	
+	public void run() {}
 }
