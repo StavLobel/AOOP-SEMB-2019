@@ -10,7 +10,7 @@ import graphics.IMoveable;
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IMoveable,IClonable,IBeenRefueled{
+public abstract class Vehicle implements IMoveable,IClonable {
 	
 	/** The license plate of the vehicle. */
 	private final int LicensePlate;
@@ -141,31 +141,10 @@ public abstract class Vehicle implements IMoveable,IClonable,IBeenRefueled{
 	 * @return true, if successful ,false if the vehicle stay in it's location
 	 */
 	private boolean drive(Point toGo) {
-		this.useFuel(this.location.getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
 		this.mileage += this.location.getLocationPoint().manhattanDistance(toGo);
 		this.setLocation(toGo);
 		return true;
 	}
-	
-	/**
-	 * Can move.
-	 *
-	 * @param toGo the toGo point
-	 * @return true, if the vehicle can move to the toGo point
-	 */
-	private boolean canMove(Point toGo) {
-		return this.location.getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption() <= this.getCurrentFuel();
-	}
-	
-	/* (non-Javadoc)
-	 * @see graphics.IMoveable#useFuel(int)
-	 */
-	public abstract boolean useFuel(int amount);
-	
-	/* (non-Javadoc)
-	 * @see graphics.IMoveable#getCurrentFuel()
-	 */
-	public abstract int getCurrentFuel();
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
@@ -252,17 +231,13 @@ public abstract class Vehicle implements IMoveable,IClonable,IBeenRefueled{
 	/* (non-Javadoc)
 	 */
 	public boolean move(Point p){
-	    if (this.canMove(p) && this.location.getLocationPoint().equals(p) == false) {    
+	    if (this.location.getLocationPoint().equals(p) == false) {    
 	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        this.drive(p);
 		    return true;
 	    }
 	    return false;
-	}
-	
-	public void letRefuel(IRefueler refueler) {
-		refueler.refuel(this);
 	}
 	
 	/**
