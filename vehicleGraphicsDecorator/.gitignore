@@ -18,3 +18,10 @@
 /SilverCar.class
 /SilverCarDecorator.class
 /WhiteCarDecorator.class
+/BikeImagesDecoratorFacory.class
+/VehicleImagesDecoratorFactory.class
+/CarriageImagesDecoratorFactory.class
+/CarriageImagesDecoratorFacory.class
+/CarImagesDecoratorFactory.class
+/CarImagesDecoratorFacory.class
+/VehicleImagesFactory.class
