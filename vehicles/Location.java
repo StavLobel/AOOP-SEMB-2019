@@ -1,6 +1,7 @@
 package vehicles;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The Class Location.
@@ -9,40 +10,58 @@ import java.util.Arrays;
  */
 public class Location{
 	
-	/** The location. */
-	private Point location;
+	/** The point. */
+	private Point point;
 	
 	/** The Constant NORTH. */
-	private static final String NORTH = "North";
+	private static final String NORTH = "north";
 	
 	/** The Constant SOUTH. */
-	private static final String SOUTH = "South";
+	private static final String SOUTH = "south";
 	
 	/** The Constant EAST. */
-	private static final String EAST = "East";
+	private static final String EAST = "east";
 	
 	/** The Constant WEST. */
-	private static final String WEST = "West";
+	private static final String WEST = "west";
 	
-	private static final String[] ORIENTATIONS = {NORTH,SOUTH,EAST,WEST};
+	/** The Constant ORIENTATIONS. */
+	private static ArrayList<String> ORIENTATIONS = new ArrayList<String>() {
+		{
+			add(NORTH);
+			add(SOUTH);
+			add(EAST);
+			add(WEST);
+		}
+	};
+	
+	/** The opposites orientations. */
+	private static HashMap<String, String> OPPOSITES = new HashMap<String, String>() {
+		{
+			put(NORTH, SOUTH);
+			put(SOUTH, NORTH);
+			put(EAST, WEST);
+			put(WEST, EAST);
+		}
+	};
 	
 	/** The orientation. */
 	private String orientation = EAST;
 	
 	/**
-	 * Instantiates a new location with point (0,0) and center orientation
-	 */
-	public Location() {
-		this.location = new Point();
-	}
-	
-	/**
-	 * Instantiates a new location.
+	 * Instantiates a new location in a specific point.
 	 *
 	 * @param p the point to set the new location
 	 */
-	public Location(Point p) {
-		this.location = p;
+	private Location(Point p) {
+		this.point = p;
+	}
+	
+	/**
+	 * Instantiates a new location with point (0,0) and east orientation
+	 */
+	private Location() {
+		this(Point.getPointInstance(0,0));
 	}
 	
 	/**
@@ -50,56 +69,47 @@ public class Location{
 	 *
 	 * @param other other location to copy from
 	 */
-	public Location(Location other) {
-		this.location = other.getLocationPoint();
+	private Location(Location other) {
+		this.point = other.getLocationPoint();
 		this.orientation = other.getOrientation();
 	}
 	
 	/**
 	 * Gets the location's point.
 	 *
-	 * @return the location point
+	 * @return the location's point
 	 */
 	public Point getLocationPoint() {
-		return this.location;
+		return this.point;
 	}
 	
 	/**
-	 * Gets the orientation.
-	 *
-	 * @return the orientation
-	 */
-	public String getOrientation() {
-		return this.orientation;
-	}
-	
-	/**
-	 * Sets the location.
+	 * Sets the location's point.
 	 *
 	 * @param p new point to set
-	 * @return true, if successful ,false if it's the new point equals the current point
+	 * @return true, if successful ,false if it's the new point equals the current location's point
 	 */
 	public boolean setLocation(Point p) {
-		if (this.location.equals(p))
+		if (this.point.equals(p))
 			return false;
 		else {
-			if (this.location.getX() < p.getX() && this.location.getY() == p.getY())
+			if (this.point.getX() < p.getX() && this.point.getY() == p.getY())
 				this.orientation = EAST;
-			else if (this.location.getX() > p.getX() && this.location.getY() == p.getY())
+			else if (this.point.getX() > p.getX() && this.point.getY() == p.getY())
 				this.orientation = WEST;
-			else if (this.location.getX() == p.getX() && this.location.getY() > p.getY())
+			else if (this.point.getX() == p.getX() && this.point.getY() > p.getY())
 				this.orientation = NORTH;
-			else if (this.location.getX() == p.getX() && this.location.getY() < p.getY())
+			else if (this.point.getX() == p.getX() && this.point.getY() < p.getY())
 				this.orientation = SOUTH;
-			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() < p.getY())
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.point.getY() < p.getY())
 				this.orientation = SOUTH;
-			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.location.getY() > p.getY())
+			else if ((this.getOrientation().equals(EAST) || this.getOrientation().equals(WEST)) && this.point.getY() > p.getY())
 				this.orientation = NORTH;
-			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() > p.getX())
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.point.getX() > p.getX())
 				this.orientation = WEST;
-			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.location.getX() < p.getX())
+			else if ((this.getOrientation().equals(NORTH) || this.getOrientation().equals(SOUTH)) && this.point.getX() < p.getX())
 				this.orientation = EAST;
-			this.location = p;
+			this.point = p;
 			return true;
 		}
 	}
@@ -112,26 +122,49 @@ public class Location{
 	 * @return true, if successful ,false if it's the new location equals the current location
 	 */
 	public boolean setLocation(Location other) {
+		if (this.equals(other))
+			return false;
 		return setLocation(other.getLocationPoint());
 	}
 	
 	/**
 	 * Equals.
 	 *
-	 * @param other other Location
-	 * @return true, if has same location point
+	 * @param other the other location
+	 * @return true, if has same point location
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof Location))
+			return false;
+		return this.equals((Location) other);
+	}
+	
+	/**
+	 * Equals.
+	 *
+	 * @param other the other location
+	 * @return true, if has same point location
 	 */
 	public boolean equals(Location other) {
-		return this.location.equals(other.getLocationPoint());
+		return this.point.equals(other.getLocationPoint());
+	}
+	
+	/**
+	 * Gets the orientation.
+	 *
+	 * @return the orientation
+	 */
+	public String getOrientation() {
+		return this.orientation.substring(0, 1).toUpperCase() + this.orientation.substring(1);
 	}
 	
 	/**
 	 * Return the Location as String
 	 * 
-	 * @return "(X,Y),orientation"
+	 * @return "(X,Y),Orientation"
 	 */
 	public String toString() {
-		return locationPointToString() + ","+ getOrientation();
+		return pointPointToString() + ","+ getOrientation();
 	}
 	
 	/**
@@ -139,45 +172,39 @@ public class Location{
 	 *
 	 * @return "(X,Y)"
 	 */
-	public String locationPointToString() {
-		return ""+getLocationPoint();
+	public String pointPointToString() {
+		return getLocationPoint().toString();
 	}
 	
 	/**
-	 * Replicate the Location
+	 * Gets the all orientations.
 	 *
-	 * @return a clone of the location
+	 * @return all of the orientations in an array
 	 */
-	public Location replicate() {
-		Location toCopy = new Location(this);
-		toCopy.setOrientation(this.getOrientation());
-		return toCopy;
+	public static String[] getAllOrientations() {
+		return (String[]) ORIENTATIONS.toArray();
 	}
 	
-	public static String[] getOrientations() {
-		return Location.ORIENTATIONS;
-	}
-	
+	/**
+	 * Sets the orientation of the location.
+	 *
+	 * @param orientation the new orientation
+	 * @return true, if successful
+	 */
 	public boolean setOrientation(String orientation) {
-		boolean orientationExist = false;
-		for (int i = 0 ; i < ORIENTATIONS.length ; ++i)
-			if (ORIENTATIONS[i].equals(orientation))
-				orientationExist = true;
-		if (orientation.equals(this.getOrientation()) || orientationExist == false)
+		orientation = orientation.toLowerCase();
+		if (ORIENTATIONS.contains(orientation) == false || orientation.equals(this.orientation))
 			return false;
 		this.orientation = orientation;
 		return true;
 	}
 	
+	/**
+	 * Gets the opposite orientation.
+	 *
+	 * @return the opposite orientation
+	 */
 	public String getOppositeOrientation() {
-		if (orientation.equals(NORTH))
-			return SOUTH;
-		if (orientation.equals(SOUTH))
-			return NORTH;
-		if (orientation.equals(EAST))
-			return WEST;
-		if (orientation.equals(WEST))
-			return EAST;
-		return null;
+		return OPPOSITES.get(this.orientation);
 	}
 }

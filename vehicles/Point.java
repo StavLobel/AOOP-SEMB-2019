@@ -48,7 +48,7 @@ public class Point {
 	 * @param y the y
 	 * @return an instance of the point.
 	 */
-	public Point getPointInstance(int x,int y) {
+	public static Point getPointInstance(int x,int y) {
 		synchronized (pointsInstances) {
 			if (!(pointsInstances.containsKey("("+x+","+y+")")))
 				pointsInstances.put("("+x+","+y+")", new Point(x,y));	
@@ -60,13 +60,23 @@ public class Point {
 	 * Equals.
 	 *
 	 * @param other Other Point to compare
-	 * @return true, if the x and y values of both points are equals
+	 * @return true, if the two points have same x and y values.
 	 */
 	public boolean equals(Object other) {
 		if (!(other instanceof Point))
 			return false;
 		else
-			return other == this;
+			return equals((Point) other);
+	}
+	
+	/**
+	 * Equals.
+	 *
+	 * @param other the other point
+	 * @return true, if the two points have same x and y values.
+	 */
+	public boolean equals(Point other) {
+		return this == other;
 	}
 	
 	/**
