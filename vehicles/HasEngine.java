@@ -94,4 +94,12 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	public boolean canMove(Point toGo) {
 		return this.getLocation().getLocationPoint().manhattanDistance(toGo)*getFuelConsumption() > this.getCurrentFuel();
 	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IBeenRefueled#setCurrentFuel(int)
+	 */
+	public boolean setCurrentFuel(int amount) {
+		this.currentFuel += amount;
+		return true;
+	}
 }

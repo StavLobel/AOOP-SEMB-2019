@@ -1,5 +1,7 @@
 package vehicles;
 
+import DesignPatterns.IRefueler;
+
 /**
  * The Class Car.
  * 
@@ -17,16 +19,24 @@ public class Car extends HasEngine {
 	private static final int SPEED = 4;
 	
 	/** The Constant numberOfSeats. */
-	private static final int numberOfSeats = 5;
+	private static final int NUM_OF_SEATS = 5;
 	
 	/**
 	 * Instantiates a new car.
 	 *
-	 * @param color the color
-	 * @param engineType the engine type
+	 * @param engine the engine
 	 */
-	public Car(String color,String engineType) {
-		super(color,WHEELS,Car.numberOfSeats,engineType,FUEL_CAPACITY);
+	public Car(Engine engine) {
+		super(WHEELS,NUM_OF_SEATS,engine);
+	}
+	
+	/**
+	 * Instantiates a new car.
+	 *
+	 * @param other the other
+	 */
+	private Car(Car other) {
+		super(other);
 	}
 	
 	/* (non-Javadoc)
@@ -47,7 +57,7 @@ public class Car extends HasEngine {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Car(this.getColor(),this.getEngineType());
+		return new Car(this);
 	}
 	
 	/* (non-Javadoc)
@@ -55,5 +65,21 @@ public class Car extends HasEngine {
 	 */
 	public String getVehicleName() {
 		return this.getEngineType()+" Car";
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.HasEngine#setCurrentFuel(int)
+	 */
+	public boolean setCurrentFuel(int amount) {
+		if (this.getCurrentFuel() + amount > FUEL_CAPACITY)
+			return false;
+		return super.setCurrentFuel(amount);
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
+	 */
+	public void letRefuel(IRefueler refueler) {
+		refueler.refuel(this);
 	}
 }
