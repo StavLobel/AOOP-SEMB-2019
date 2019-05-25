@@ -431,4 +431,13 @@ public class VehicleDecorator {
 		return nextLocationMaker(current,next,this.getSpeed());
 	}
 	
+	// FROM DRIVE IN VEHICLE
+	this.useFuel(this.location.getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
+	//FROM VEHICLE
+	private boolean canMove(Point toGo) {
+		return this.location.getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption() <= this.getCurrentFuel();
+	}
+	
+	//FROM MOVE IN VEHICLE
+	if (/*this.canMove(p)*/ && this.location.getLocationPoint().equals(p) == false)
 }

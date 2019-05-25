@@ -1,7 +1,5 @@
 package vehicles;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class Bike.
  * 
@@ -16,19 +14,18 @@ public class Bike extends Vehicle {
 	private static final int SPEED = 2;
 	
 	/** The bike's number of wheels. */
-	private static final int WHEELS = 2;
+	private static final int NUM_OF_WHEELS = 2;
 	
 	/** The Constant numberOfSeats. */
-	private static final int numberOfSeats = 1;
+	private static final int NUM_OF_SEATS = 1;
 	
 	/**
 	 * Instantiates a new bike.
-	 *
-	 * @param color the color of the bike
+	 * 
 	 * @param gears the bike's number of gears
 	 */
-	public Bike(String color,int gears) {
-		super(color,WHEELS,Bike.numberOfSeats);
+	public Bike(int gears) {
+		super(NUM_OF_WHEELS,NUM_OF_SEATS);
 		this.gears = gears;
 	}
 
@@ -57,8 +54,6 @@ public class Bike extends Vehicle {
 		return super.toString();
 	}
 	
-	//*************HW2***********
-	
 	/* (non-Javadoc)
 	 * @see vehicles.Vehicle#getVehicleName()
 	 */
@@ -70,41 +65,6 @@ public class Bike extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Bike(this.getColor(),this.getGears());
-	}
-	
-	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#refuel()
-	 */
-	public boolean refuel() {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#getCurrentFuel()
-	 */
-	public int getCurrentFuel() {
-		return 0;
-	}
-	
-	/* (non-Javadoc)
-	 * @see graphics.IMoveable#getFuelConsumption()
-	 */
-	public int getFuelConsumption() {
-		return 0;
-	}
-	
-	/* (non-Javadoc)
-	 * @see vehicles.Vehicle#useFuel(int)
-	 */
-	public boolean useFuel(int amount) {
-		return true;
-	}
-	
-	/* (non-Javadoc)
-	 * @see graphics.IMoveable#getEngineType()
-	 */
-	public String getEngineType() {
-		return null;
+		return new Bike(this.getGears());
 	}
 }
