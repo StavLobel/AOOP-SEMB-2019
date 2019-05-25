@@ -28,6 +28,7 @@ public class Location implements IClonable{
 	private static final String WEST = "west";
 	
 	/** The Constant ORIENTATIONS. */
+	@SuppressWarnings("serial")
 	private static ArrayList<String> ORIENTATIONS = new ArrayList<String>() {
 		{
 			add(NORTH);
@@ -38,6 +39,7 @@ public class Location implements IClonable{
 	};
 	
 	/** The opposites orientations. */
+	@SuppressWarnings("serial")
 	private static HashMap<String, String> OPPOSITES = new HashMap<String, String>() {
 		{
 			put(NORTH, SOUTH);
