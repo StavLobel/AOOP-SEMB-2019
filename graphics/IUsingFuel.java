@@ -1,5 +1,6 @@
 package graphics;
 
+import DesignPatterns.IBeenRefueled;
 import DesignPatterns.IRefueler;
 import vehicles.Point;
 
@@ -8,7 +9,7 @@ import vehicles.Point;
  * 
  * @author Stav Lobel
  */
-public interface IUsingFuel extends IMoveable {
+public interface IUsingFuel extends IMoveable,IBeenRefueled {
 	
 	/**
 	 * Gets the fuel consumption.
@@ -40,25 +41,11 @@ public interface IUsingFuel extends IMoveable {
 	public boolean useFuel(int amount);
 	
 	/**
-	 * Refuel.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean refuel();
-	
-	/**
 	 * Can move.
 	 *
 	 * @param toGo the point toGo
 	 * @return true, if successful
 	 */
 	public boolean canMove(Point toGo);
-	
-	/**
-	 * Let refuel.
-	 *
-	 * @param refueler the refueler
-	 */
-	public void letRefuel(IRefueler refueler);
 	
 }

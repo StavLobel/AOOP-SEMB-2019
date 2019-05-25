@@ -1,7 +1,10 @@
 package vehicles;
 
+import DesignPatterns.IRefueler;
 import graphics.IAnimal;
 import graphics.IClonable;
+import graphics.IUsingFuel;
+
 
 // TODO: Auto-generated Javadoc
 /**
@@ -9,7 +12,7 @@ import graphics.IClonable;
  * 
  * @author Stav Lobel
  */
-public class PackAnimal implements IAnimal, IClonable {
+public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	
 	/** The name of the animal. */
 	private final String name;
@@ -18,7 +21,7 @@ public class PackAnimal implements IAnimal, IClonable {
 	private static final int MAX_ENERGY = 1000;
 	
 	/** The current energy of the animal. */
-	private int currentEnergy = 0;
+	private int currentEnergy = MAX_ENERGY;
 	
 	/** The Constant ENERGY_CONSUMPTION of all animals. */
 	private static final int ENERGY_CONSUMPTION = 20;
@@ -30,7 +33,16 @@ public class PackAnimal implements IAnimal, IClonable {
 	 */
 	public PackAnimal(String name) {
 		this.name = name;
-		this.eat();
+	}
+	
+	/**
+	 * Instantiates a new pack animal.
+	 *
+	 * @param other the other
+	 */
+	private PackAnimal(PackAnimal other) {
+		this.name = other.getAnimalName();
+		this.currentEnergy = other.getCurrentEnergy();
 	}
 
 	/**
@@ -70,19 +82,12 @@ public class PackAnimal implements IAnimal, IClonable {
 	}
 	
 	/* (non-Javadoc)
-	 * @see graphics.IClonable#clone()
-	 */
-	public Object clone() {
-		return new PackAnimal(this.name);
-	}
-	
-	/* (non-Javadoc)
 	 * @see graphics.IAnimal#eat()
 	 */
-	public boolean eat() {
-		if (this.getCurrentEnergy() == this.getMaxEnergy())
+	public boolean eat(int amount) {
+		if (currentEnergy == MAX_ENERGY || currentEnergy + amount > MAX_ENERGY)
 			return false;
-		this.currentEnergy = this.getMaxEnergy();
+		currentEnergy = currentEnergy + amount;
 		return true;
 	}
 	
@@ -133,10 +138,10 @@ public class PackAnimal implements IAnimal, IClonable {
 	}
 	
 	/* (non-Javadoc)
-	 * @see graphics.IMoveable#refuel()
+	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public boolean refuel() {
-		return this.eat();
+	public void letRefuel(IRefueler refueler) {
+		refueler.refuel(this);
 	}
 	
 	/* (non-Javadoc)
@@ -151,5 +156,26 @@ public class PackAnimal implements IAnimal, IClonable {
 	 */
 	public String getEngineType() {
 		return getAnimalName();
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone() {
+		return new PackAnimal(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see graphics.IUsingFuel#canMove(vehicles.Point)
+	 */
+	public boolean canMove(Point toGo) {
+		return currentEnergy == 0;
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IBeenRefueled#setCurrentFuel(DesignPatterns.IRefueler, int)
+	 */
+	public boolean setCurrentFuel(int amount) {
+		return eat(amount);
 	}
 }

@@ -5,7 +5,7 @@ package graphics;
  * 
  * @author Stav Lobel
  */
-public interface IAnimal extends IMoveable {
+public interface IAnimal extends IUsingFuel {
 	
 	/**
 	 * Gets the animal name.
@@ -19,6 +19,6 @@ public interface IAnimal extends IMoveable {
 	 *
 	 * @return true, if successful. false if already full.
 	 */
-	public boolean eat();
+	public boolean eat(int amount);
 
 }
