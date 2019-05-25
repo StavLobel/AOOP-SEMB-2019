@@ -28,6 +28,11 @@ public class Bike extends Vehicle {
 		super(NUM_OF_WHEELS,NUM_OF_SEATS);
 		this.gears = gears;
 	}
+	
+	private Bike(Bike other) {
+		super(other);
+		this.gears = other.getGears();
+	}
 
 	/**
 	 * Gets the speed of the bike.
@@ -65,6 +70,6 @@ public class Bike extends Vehicle {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Bike(this.getGears());
+		return new Bike(this);
 	}
 }

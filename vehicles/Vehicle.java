@@ -1,7 +1,5 @@
 package vehicles;
 
-import DesignPatterns.IBeenRefueled;
-import DesignPatterns.IRefueler;
 import graphics.IClonable;
 import graphics.IMoveable;
 
@@ -13,7 +11,7 @@ import graphics.IMoveable;
 public abstract class Vehicle implements IMoveable,IClonable {
 	
 	/** The license plate of the vehicle. */
-	private final int LicensePlate;
+	private final int licensePlate;
 	
 	/** The first id. */
 	private static int NEXT_ID = 1000;
@@ -44,7 +42,7 @@ public abstract class Vehicle implements IMoveable,IClonable {
 	 */
 	public Vehicle(int wheels,int numberOfSeats) {
 		synchronized (Vehicle.class) {
-			this.LicensePlate = Vehicle.NEXT_ID;
+			this.licensePlate = Vehicle.NEXT_ID;
 			Vehicle.NEXT_ID++;
 		}
 		this.numberOfWheels = wheels;
@@ -78,6 +76,20 @@ public abstract class Vehicle implements IMoveable,IClonable {
 	}
 	
 	/**
+	 * Instantiates a new vehicle only for cloning
+	 *
+	 * @param other the other vehicle to clone from
+	 */
+	protected Vehicle(Vehicle other) {
+		this.licensePlate = other.getLicensePlate();
+		this.location = (Location) other.getLocation().clone();
+		this.mileage = other.getMileage();
+		this.consumedFuelAmount = other.getConsumedFuelAmount();
+		this.numberOfSeats = other.getNumberOfSeats();
+		this.numberOfWheels = other.getNumberOfWheels();
+	}
+	
+	/**
 	 * Gets the location.
 	 *
 	 * @return a clone of the location of the vehicle
@@ -102,7 +114,7 @@ public abstract class Vehicle implements IMoveable,IClonable {
 	 * @return the license plate of the vehicle
 	 */
 	public int getLicensePlate() {
-		return LicensePlate;
+		return licensePlate;
 	}
 
 	/**
