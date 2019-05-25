@@ -1,8 +1,13 @@
 package vehicles;
 import java.lang.Math;
+import java.util.HashMap;
+
 
 /**
- * The Class Point 
+ * The Class Point
+ * 
+ * A lazy initialization class that not creating a new point if other point's with the same
+ * values has been already created. 
  * 
  * @author Stav Lobel ID 308549898
  * 
@@ -14,13 +19,8 @@ public class Point {
 	/** the X value*/
 	private int y;
 	
-	/**
-	 * Instantiates a new point with default values x=y=0
-	 */
-	public Point() {
-		this.x = 0;
-		this.y = 0;
-	}
+	/**the collection that saves all of the instances*/
+	private static HashMap<String, Point> pointsInstances = new HashMap<String, Point>();
 	
 	/**
 	 * Instantiates a new point.
@@ -28,19 +28,32 @@ public class Point {
 	 * @param x the value of X
 	 * @param y the value of Y
 	 */
-	public Point(int x,int y) {
+	private Point(int x,int y) {
 		this.x = x;
 		this.y = y;
+		pointsInstances.put(this.toString(), this);
 	}
 	
 	/**
-	 * Instantiates a new point.
-	 *
-	 * @param other Other Point to copy from it's values
+	 * Instantiates a new point with default values x=0 , y=0.
 	 */
-	public Point(Point other) {
-		this.x = other.getX();
-		this.y = other.getY();
+	private Point() {
+		this(0,0);
+	}
+	
+	/**
+	 * Gets a point instance.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return an instance of the point.
+	 */
+	public Point getPointInstance(int x,int y) {
+		synchronized (pointsInstances) {
+			if (!(pointsInstances.containsKey("("+x+","+y+")")))
+				pointsInstances.put("("+x+","+y+")", new Point(x,y));	
+		}
+		return pointsInstances.get("("+x+","+y+")");
 	}
 	
 	/**
@@ -49,8 +62,11 @@ public class Point {
 	 * @param other Other Point to compare
 	 * @return true, if the x and y values of both points are equals
 	 */
-	public boolean equals(Point other) {
-		return (this.x == other.getX() && this.y == other.getY());
+	public boolean equals(Object other) {
+		if (!(other instanceof Point))
+			return false;
+		else
+			return other == this;
 	}
 	
 	/**
@@ -96,7 +112,7 @@ public class Point {
 	 * @param other other point
 	 * @return the the "Manhattan Distance" between this point and the other point
 	 */
-	public int distanceManhattan(Point other) {
+	public int manhattanDistance(Point other) {
 		return Math.abs(this.x - other.getX())+Math.abs(this.y - other.getY());
 	}
 }
