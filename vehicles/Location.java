@@ -3,12 +3,14 @@ package vehicles;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import graphics.IClonable;
+
 /**
  * The Class Location.
  * 
  * @author Stav Lobel ID 308549898
  */
-public class Location{
+public class Location implements IClonable{
 	
 	/** The point. */
 	private Point point;
@@ -53,14 +55,14 @@ public class Location{
 	 *
 	 * @param p the point to set the new location
 	 */
-	private Location(Point p) {
+	public Location(Point p) {
 		this.point = p;
 	}
 	
 	/**
 	 * Instantiates a new location with point (0,0) and east orientation
 	 */
-	private Location() {
+	public Location() {
 		this(Point.getPointInstance(0,0));
 	}
 	
@@ -69,7 +71,7 @@ public class Location{
 	 *
 	 * @param other other location to copy from
 	 */
-	private Location(Location other) {
+	public Location(Location other) {
 		this.point = other.getLocationPoint();
 		this.orientation = other.getOrientation();
 	}
@@ -127,11 +129,9 @@ public class Location{
 		return setLocation(other.getLocationPoint());
 	}
 	
-	/**
-	 * Equals.
-	 *
-	 * @param other the other location
-	 * @return true, if has same point location
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object other) {
 		if (!(other instanceof Location))
@@ -206,5 +206,9 @@ public class Location{
 	 */
 	public String getOppositeOrientation() {
 		return OPPOSITES.get(this.orientation);
+	}
+	
+	public Object clone() {
+		return new Location(this);
 	}
 }

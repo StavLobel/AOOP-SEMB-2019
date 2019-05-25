@@ -56,11 +56,8 @@ public class Point {
 		return pointsInstances.get("("+x+","+y+")");
 	}
 	
-	/**
-	 * Equals.
-	 *
-	 * @param other Other Point to compare
-	 * @return true, if the two points have same x and y values.
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object other) {
 		if (!(other instanceof Point))
