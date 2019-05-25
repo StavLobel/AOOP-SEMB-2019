@@ -9,7 +9,7 @@ import graphics.IMoveable;
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IVehicle,IMoveable,IClonable {
+public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	
 	/** The license plate of the vehicle. */
 	private final int licensePlate;
