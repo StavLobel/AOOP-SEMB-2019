@@ -1,5 +1,6 @@
 package vehicles;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class BenzineEngine.
  * 
@@ -19,10 +20,26 @@ public class BenzineEngine extends Engine {
 		super(FUEL_CONSUMPTION,fuelCapacity);
 	}
 	
+	/**
+	 * Instantiates a new benzine engine.
+	 *
+	 * @param other the other
+	 */
+	private BenzineEngine(BenzineEngine other) {
+		super(other);
+	}
+	
 	/* (non-Javadoc)
 	 * @see vehicles.Engine#toString()
 	 */
 	public String toString() {
 		return "Benzine " + super.toString();
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Engine#clone()
+	 */
+	public Object clone() {
+		return new BenzineEngine(this);
 	}
 }

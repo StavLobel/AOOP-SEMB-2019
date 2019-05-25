@@ -1,11 +1,13 @@
 package vehicles;
 
+import graphics.IClonable;
+
 /**
  * The Class Engine.
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Engine {
+public abstract class Engine implements IClonable{
 	
 	/** The fuel consumption of the engine. */
 	private final int fuelConsumption;
@@ -23,6 +25,16 @@ public abstract class Engine {
 	public Engine(int fuelConsumption,int fuelCapacity) {
 		this.fuelConsumption = fuelConsumption;
 		this.fuelCapacity = fuelCapacity;
+	}
+	
+	/**
+	 * Instantiates a new engine.
+	 *
+	 * @param other the other
+	 */
+	protected Engine(Engine other) {
+		this.fuelConsumption = other.getFuelConsumption();
+		this.fuelCapacity = other.getFuelCapacity();
 	}
 
 	/**
@@ -44,11 +56,16 @@ public abstract class Engine {
 	}
 	
 	/**
-	 * Return the Engine as String
-	 * 
+	 * Return the Engine as String.
+	 *
 	 * @return "Fuel Consumption : Fuel Capacity :"
 	 */
 	public String toString() {
 		return "Engine";
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public abstract Object clone();
 }

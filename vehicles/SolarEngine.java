@@ -1,5 +1,6 @@
 package vehicles;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class SolarEngine.
  * 
@@ -19,10 +20,26 @@ public class SolarEngine extends Engine {
 		super(FUEL_CONSUMPTION,fuelCapacity);
 	}
 	
+	/**
+	 * Instantiates a new solar engine.
+	 *
+	 * @param other the other
+	 */
+	private SolarEngine(SolarEngine other) {
+		super(other);
+	}
+	
 	/* (non-Javadoc)
 	 * @see vehicles.Engine#toString()
 	 */
 	public String toString() {
 		return "Solar "+super.toString();
+	}
+	
+	/* (non-Javadoc)
+	 * @see vehicles.Engine#clone()
+	 */
+	public Object clone() {
+		return new SolarEngine(this);
 	}
 }

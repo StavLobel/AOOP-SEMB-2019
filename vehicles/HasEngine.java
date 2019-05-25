@@ -1,11 +1,5 @@
 package vehicles;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class HasEngine.
  * 
@@ -28,12 +22,9 @@ public abstract class HasEngine extends Vehicle {
 	 * @param engineType the engine type
 	 * @param fuelCapacity the fuel capacity
 	 */
-	public HasEngine(String color,int wheels,int numberOfSeats,String engineType,int fuelCapacity) {
-		super(color,wheels,numberOfSeats);
-		if (engineType.equals("SolarEngine"))
-			this.engine = new SolarEngine(fuelCapacity);
-		else if(engineType.equals("BenzineEngine"))
-			this.engine = new BenzineEngine(fuelCapacity);
+	public HasEngine(int wheels,int numberOfSeats,Engine engine) {
+		super(wheels,numberOfSeats);
+		this.engine = engine;
 		this.currentFuel = this.engine.getFuelCapacity();
 	}
 
