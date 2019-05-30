@@ -1,7 +1,8 @@
-package refuelers;
+package vehicles;
 
 import graphics.IMoveable;
-import vehicles.Point;
+import refuelers.FuelTypeException;
+import refuelers.IRefueler;
 
 /**
  * The Interface IUsingFuel.

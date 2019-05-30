@@ -1,5 +1,7 @@
 package refuelers;
 
+import vehicles.IUsingFuel;
+
 /**
  * The Interface IRefueler.
  * 

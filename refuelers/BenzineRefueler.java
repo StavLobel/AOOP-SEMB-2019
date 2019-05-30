@@ -1,6 +1,7 @@
 package refuelers;
 
 import vehicles.BenzineEngine;
+import vehicles.IUsingFuel;
 
 public class BenzineRefueler extends Refueler {
 	public boolean refuel(IUsingFuel vehicleToRefuel) throws FuelTypeException {

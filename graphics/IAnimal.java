@@ -1,6 +1,6 @@
 package graphics;
 
-import refuelers.IUsingFuel;
+import vehicles.IUsingFuel;
 
 /**
  * The Interface IAnimal.

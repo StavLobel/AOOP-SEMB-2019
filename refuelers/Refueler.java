@@ -1,5 +1,7 @@
 package refuelers;
 
+import vehicles.IUsingFuel;
+
 public abstract class Refueler {
 	public boolean refuel(IUsingFuel vehicleToRefuel) throws FuelTypeException{
 		

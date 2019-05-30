@@ -1,6 +1,5 @@
 package vehicles;
 
-import refuelers.IUsingFuel;
 import vehicleMovingBridge.VehicleMover;
 
 /**

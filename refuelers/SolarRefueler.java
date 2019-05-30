@@ -1,5 +1,6 @@
 package refuelers;
 
+import vehicles.IUsingFuel;
 import vehicles.SolarEngine;
 
 public class SolarRefueler extends Refueler {

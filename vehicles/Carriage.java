@@ -2,7 +2,6 @@ package vehicles;
 
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
-import refuelers.IUsingFuel;
 import vehicleMovingBridge.VehicleMover;
 
 /**

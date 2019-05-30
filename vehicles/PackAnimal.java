@@ -4,7 +4,6 @@ import graphics.IAnimal;
 import graphics.IClonable;
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
-import refuelers.IUsingFuel;
 
 
 /**
