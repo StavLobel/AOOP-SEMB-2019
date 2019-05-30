@@ -85,8 +85,12 @@ public class CityPanelMover extends VehicleMover {
 	private Point nextLocation(Vehicle vehicle) {
 		Location current = (Location) vehicle.getLocation().clone();
 		Point nextPoint = makeNextPoint(current,vehicle.getSpeed());
-		Point intersection = intersects(vehicle.getLocation().getLocationPoint(), nextPoint); 
-		while (intersection != null && intersection.equals(current.getLocationPoint()) == false) {
+		Point intersection = intersects(vehicle.getLocation().getLocationPoint(), nextPoint);
+		if (nextPoint.equals(intersection)) {
+			current = getCurrent(current, intersection);
+			return makeNextPoint(current, vehicle.getSpeed());
+		}
+		while (intersection != null && nextPoint.equals(intersection) == false) {
 			int gap = intersection.manhattanDistance(nextPoint);
 			current = getCurrent(current, intersection);
 			nextPoint = makeNextPoint(current, gap);
@@ -115,34 +119,36 @@ public class CityPanelMover extends VehicleMover {
 	}
 	
 	private Location getCurrent(Location current,Point intersection) {
+		if (current.getLocationPoint().equals(intersection))
+			return current;
 		//Up Left
-		if (intersection.equals(upLeftCorner) && current.getOrientation().equals("North"))
-			return new Location(intersection,"East");
-		else if (intersection.equals(upLeftCorner) && current.getOrientation().equals("West"))
-			return new Location(intersection,"South");
+		if (intersection.equals(upLeftCorner) && current.getOrientation().equals(Location.NORTH))
+			return new Location(intersection,Location.EAST);
+		else if (intersection.equals(upLeftCorner) && current.getOrientation().equals(Location.WEST))
+			return new Location(intersection,Location.SOUTH);
 		//Up Right
-		else if (intersection.equals(upRightCorner) && current.getOrientation().equals("East"))
-			return new Location(intersection,"South");
-		else if (intersection.equals(upRightCorner) && current.getOrientation().equals("North"))
-			return new Location(intersection,"West");
+		else if (intersection.equals(upRightCorner) && current.getOrientation().equals(Location.EAST))
+			return new Location(intersection,Location.SOUTH);
+		else if (intersection.equals(upRightCorner) && current.getOrientation().equals(Location.NORTH))
+			return new Location(intersection,Location.WEST);
 		//Down Left
-		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals("South"))
-			return new Location(intersection,"East");
-		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals("West"))
-			return new Location(intersection,"North");
+		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals(Location.SOUTH))
+			return new Location(intersection,Location.EAST);
+		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals(Location.WEST))
+			return new Location(intersection,Location.NORTH);
 		//Down Right
-		else if (intersection.equals(downRightCorner) && current.getOrientation().equals("South"))
-			return new Location(intersection,"West");
-		else if (intersection.equals(downRightCorner) && current.getOrientation().equals("East"))
-			return new Location(intersection,"North");
+		else if (intersection.equals(downRightCorner) && current.getOrientation().equals(Location.SOUTH))
+			return new Location(intersection,Location.WEST);
+		else if (intersection.equals(downRightCorner) && current.getOrientation().equals(Location.EAST))
+			return new Location(intersection,Location.NORTH);
 		//Middles
 		else if (intersection.equals(middleLeftCorner) || intersection.equals(middleRightCorner)) {
 			Random rand = new Random();
-			String[] orientations = {"North","South","East","West"};
+			String[] orientations = {Location.NORTH,Location.SOUTH,Location.EAST,Location.WEST};
 			String nextOrientation = orientations[rand.nextInt(4)];
 			while (nextOrientation.equals(current.getOrientation()) || nextOrientation.equals(current.getOppositeOrientation())) {
 				nextOrientation = orientations[rand.nextInt(4)];
-				if ((intersection.equals(middleLeftCorner) && nextOrientation.equals("West") || (intersection.equals(middleRightCorner) && nextOrientation.equals("East"))))
+				if ((intersection.equals(middleLeftCorner) && nextOrientation.equals(Location.WEST) || (intersection.equals(middleRightCorner) && nextOrientation.equals(Location.EAST))))
 						nextOrientation = current.getOrientation();
 			}
 			return new Location(intersection,nextOrientation);

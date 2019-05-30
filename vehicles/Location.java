@@ -17,19 +17,19 @@ public class Location implements IClonable{
 	private Point point;
 	
 	/** The Constant NORTH. */
-	private static final String NORTH = "North";
+	public static final String NORTH = "North";
 	
 	/** The Constant SOUTH. */
-	private static final String SOUTH = "South";
+	public static final String SOUTH = "South";
 	
 	/** The Constant EAST. */
-	private static final String EAST = "East";
+	public static final String EAST = "East";
 	
 	/** The Constant WEST. */
-	private static final String WEST = "West";
+	public static final String WEST = "West";
 	
 	/** The Constant ORIENTATIONS. */
-	private static String[] ORIENTATIONS = {NORTH,SOUTH,EAST,EAST}; 
+	private static String[] ORIENTATIONS = {NORTH,SOUTH,EAST,WEST}; 
 	
 	/** The opposites orientations. */
 	@SuppressWarnings("serial")

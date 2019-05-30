@@ -11,13 +11,13 @@ public abstract class VehicleMover implements IVehicleMover {
 	}
 	
 	public Point makeNextPoint(Location location,int distance) {
-		if (location.getOrientation().equals("North")) 
+		if (location.getOrientation().equals(Location.NORTH)) 
 			return Point.getPointInstance(location.getLocationPoint().getX(),location.getLocationPoint().getY() - distance);
-		else if (location.getOrientation().equals("South")) 
+		else if (location.getOrientation().equals(Location.SOUTH)) 
 			return Point.getPointInstance(location.getLocationPoint().getX(),location.getLocationPoint().getY() + distance);
-		else if (location.getOrientation().equals("East")) 
+		else if (location.getOrientation().equals(Location.EAST)) 
 			return Point.getPointInstance(location.getLocationPoint().getX() + distance,location.getLocationPoint().getY());
-		else if (location.getOrientation().equals("West")) 
+		else if (location.getOrientation().equals(Location.WEST)) 
 			return Point.getPointInstance(location.getLocationPoint().getX() - distance,location.getLocationPoint().getY());
 		else
 			return null;

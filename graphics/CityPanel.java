@@ -141,7 +141,7 @@ public class CityPanel extends JPanel {
 			}
 		});
 		
-		pool.addVehicle(BikeFactory.getBike(5, "green", new CityPanelMover(this)));
+		pool.addVehicle(BikeFactory.getBike(5, "green", new Location(Point.getPointInstance(0, 272), "South"),new CityPanelMover(this)));
 	}
 	
 	/* (non-Javadoc)
