@@ -28,4 +28,16 @@ public class LightsDecorator extends VehicleDecorator {
 	public boolean isLights() {
 		return lights;
 	}
+	
+	public void run() {
+		vehicle.run();
+	}
+	
+	public void kill() {
+		vehicle.kill();
+	}
+	
+	public boolean getFlag() {
+		return vehicle.getFlag();
+	}
 }

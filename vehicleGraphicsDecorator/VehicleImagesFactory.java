@@ -17,7 +17,7 @@ public class VehicleImagesFactory {
 	 * @param vehicle the vehicle
 	 * @return the images decorator
 	 */
-	public VehicleImagesDecorator getImagesDecorator(String vehicleType,String color, IVehicle vehicle) {
+	public static VehicleImagesDecorator getImagesDecorator(String vehicleType,String color, IVehicle vehicle) {
 		vehicleType = vehicleType.toLowerCase();
 		if (vehicleType.equals("car"))
 			return new CarImagesDecoratorFacory().getImagesDecorator(color, vehicle);

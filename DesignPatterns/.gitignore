@@ -16,3 +16,8 @@
 /GreenColorDecorator.class
 /SilverColorDecorator.class
 /WhiteColorDecorator.class
+/VehicleFactory.class
+/IVehicleFactory.class
+/CarFactory.class
+/BikeFactory.class
+/CarriageFactory.class

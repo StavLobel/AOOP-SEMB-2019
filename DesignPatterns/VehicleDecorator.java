@@ -26,4 +26,12 @@ public abstract class VehicleDecorator implements IVehicle {
 	public void run() {
 		vehicle.run();
 	}
+	
+	public void kill() {
+		vehicle.kill();
+	}
+	
+	public boolean getFlag() {
+		return vehicle.getFlag();
+	}
 }

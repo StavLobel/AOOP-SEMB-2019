@@ -1,6 +1,7 @@
 package vehicles;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import graphics.IClonable;
@@ -29,14 +30,7 @@ public class Location implements IClonable{
 	
 	/** The Constant ORIENTATIONS. */
 	@SuppressWarnings("serial")
-	private static ArrayList<String> ORIENTATIONS = new ArrayList<String>() {
-		{
-			add(NORTH);
-			add(SOUTH);
-			add(EAST);
-			add(WEST);
-		}
-	};
+	private static String[] ORIENTATIONS = {NORTH,SOUTH,EAST,EAST}; 
 	
 	/** The opposites orientations. */
 	@SuppressWarnings("serial")
@@ -184,7 +178,7 @@ public class Location implements IClonable{
 	 * @return all of the orientations in an array
 	 */
 	public static String[] getAllOrientations() {
-		return (String[]) ORIENTATIONS.toArray();
+		return ORIENTATIONS;
 	}
 	
 	/**
@@ -195,7 +189,7 @@ public class Location implements IClonable{
 	 */
 	public boolean setOrientation(String orientation) {
 		orientation = orientation.toLowerCase();
-		if (ORIENTATIONS.contains(orientation) == false || orientation.equals(this.orientation))
+		if (Arrays.asList(ORIENTATIONS).contains(orientation) == false || orientation.equals(this.orientation))
 			return false;
 		this.orientation = orientation;
 		return true;

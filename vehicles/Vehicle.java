@@ -38,6 +38,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	/** The minimum age. */
 	private static int minAge = 18;
 	
+	private boolean flag = true;
+	
 	private VehicleMover mover;
 	
 	/**
@@ -261,8 +263,18 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	}
 	
 	public void run() {
-		Point toGo = mover.makeNextPoint(this.location,getSpeed());
-		move(toGo);
+		while(flag) {
+			Point toGo = mover.makeNextPoint(this.location,getSpeed());
+			move(toGo);
+			}
+	}
+	
+	public void kill() {
+		this.flag = false;
+	}
+	
+	public boolean getFlag() {
+		return this.flag;
 	}
 	
 }

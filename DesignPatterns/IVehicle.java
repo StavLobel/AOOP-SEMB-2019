@@ -13,5 +13,9 @@ public interface IVehicle extends Runnable{
 	
 	public void run();
 	
+	public void kill();
+	
+	public boolean getFlag();
+	
 	public Location getLocation();
 }

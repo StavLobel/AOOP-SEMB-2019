@@ -109,4 +109,16 @@ public abstract class VehicleImagesDecorator extends VehicleDecorator {
 	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, panel);
 	}
 	
+	public void run() {
+		vehicle.run();
+	}
+	
+	public void kill() {
+		vehicle.kill();
+	}
+	
+	public boolean getFlag() {
+		return vehicle.getFlag();
+	}
+	
 }

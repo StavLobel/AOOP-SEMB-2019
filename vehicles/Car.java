@@ -77,6 +77,10 @@ public class Car extends HasEngine {
 		return super.setCurrentFuel(amount);
 	}
 	
+	public static int getFuelCapacity() {
+		return FUEL_CAPACITY;
+	}
+	
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */

@@ -9,37 +9,35 @@ import vehicles.Vehicle;
 
 public class CityPanelMover extends VehicleMover {
 	/** The panel.*/
-	private CityPanel panel;
+	private static CityPanel panel;
 	
-	private int size = 65;
+	private static int size = 65;
 	
 	/** The Constant vehicleWidthHorizon. */
-	private final int vehicleWidthHorizon = size*2;
+	private static final int vehicleWidthHorizon = size*2;
 	
 	/** The Constant vehicleHeightHorizon. */
-	private final int vehicleHeightHorizon = size;
+	private static final int vehicleHeightHorizon = size;
 	
 	/** The Constant vehicleWidthVertical. */
-	private final int vehicleWidthVertical = size;
+	private static final int vehicleWidthVertical = size;
 	
 	/** The Constant vehicleHeightVertical. */
-	private final int vehicleHeightVertical = size*2;
+	private static final int vehicleHeightVertical = size*2;
 	
 	/** The panel width. */
-	private int panelWidth;
+	private static int panelWidth;
 	
 	/** The panel height. */
-	private int panelHeight;
+	private static int panelHeight;
 	
 	/** The panel middle. */
-	private int panelMiddle;
+	private static int panelMiddle;
 	
-	public CityPanelMover(CityPanel panel) {
-		this.panel = panel;
-		setPanel();
-	}
+	public CityPanelMover(CityPanel panel) {}
 	
-	public boolean setPanel() {
+	public static boolean setPanel(CityPanel panel) {
+		CityPanelMover.panel = panel;
 		panelWidth = panel.getWidth()-vehicleWidthVertical*5/4;
 		panelHeight = panel.getHeight()-vehicleHeightHorizon*5/3;
 		panelMiddle = panelHeight/2;
@@ -52,6 +50,7 @@ public class CityPanelMover extends VehicleMover {
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	    	toGo = nextLocation(vehicle, toGo);
 	        vehicle.drive(toGo);
+	        panel.repaint();
 		    return true;
 	    }
 	    return false;
@@ -68,7 +67,7 @@ public class CityPanelMover extends VehicleMover {
 		while (intersection != null) {
 			gap = current.getLocationPoint().manhattanDistance(intersection);
 			current.setLocation(intersection);
-			String nextDirection = directionInIntersection(current,gap);
+			String nextDirection = directionInIntersection(current);
 			current.setOrientation(nextDirection);
 			next = makeNextPoint(current, gap);
 			intersection = getIntersection(current.getLocationPoint(),next);
@@ -100,7 +99,7 @@ public class CityPanelMover extends VehicleMover {
 		return null;
 	}
 	
-	private String directionInIntersection(Location current,int gap) {
+	private String directionInIntersection(Location current) {
 		String nextOrientation = current.getOppositeOrientation();
 		Random randomInt = new Random();
 		Location next = (Location) current.clone();
