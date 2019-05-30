@@ -7,7 +7,7 @@ import DesignPatterns.IVehicle;
  * 
  * @author Stav Lobel
  */
-public interface VehicleImagesDecoratorFactory {
+public interface VehicleGraphicDecoratorFactory {
 	
 	/**
 	 * Gets the images decorator.
@@ -16,5 +16,5 @@ public interface VehicleImagesDecoratorFactory {
 	 * @param vehicle the vehicle
 	 * @return the images decorator
 	 */
-	public VehicleImagesDecorator getImagesDecorator(String color,IVehicle vehicle); 
+	public VehicleGraphicDecorator getImagesDecorator(String color,IVehicle vehicle); 
 }

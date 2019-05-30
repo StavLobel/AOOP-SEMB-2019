@@ -25,3 +25,9 @@
 /CarImagesDecoratorFactory.class
 /CarImagesDecoratorFacory.class
 /VehicleImagesFactory.class
+/VehicleGraphicDecorator.class
+/BikeGraphicDecoratorFacory.class
+/CarGraphicDecoratorFacory.class
+/CarriageGraphicDecoratorFacory.class
+/VehicleGraphicDecoratorFactory.class
+/VehicleGraphicFactory.class

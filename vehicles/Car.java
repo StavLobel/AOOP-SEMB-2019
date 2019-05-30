@@ -31,6 +31,10 @@ public class Car extends HasEngine {
 		super(WHEELS,NUM_OF_SEATS,engine,mover);
 	}
 	
+	public Car(Engine engine,Location location,VehicleMover mover) {
+		super(WHEELS,NUM_OF_SEATS,engine,location,mover);
+	}
+	
 	/**
 	 * Instantiates a new car.
 	 *

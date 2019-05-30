@@ -122,4 +122,12 @@ public class Point {
 	public int manhattanDistance(Point other) {
 		return Math.abs(this.x - other.getX())+Math.abs(this.y - other.getY());
 	}
+	
+	public boolean inBetween(Point middle,Point end) {
+		if (Math.min(this.getX(), end.getX()) <= middle.getX() && middle.getX() <= Math.max(this.getX(), end.getX()))
+			if (Math.min(this.getY(), end.getY()) <= middle.getY() && middle.getY() <= Math.max(this.getY(), end.getY()))
+				return true;
+		return false;
+				
+	}
 }

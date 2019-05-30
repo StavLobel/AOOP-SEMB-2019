@@ -7,7 +7,7 @@ import DesignPatterns.IVehicle;
  * 
  * @author Stav Lobel
  */
-public class VehicleImagesFactory {
+public class VehicleGraphicFactory {
 
 	/**
 	 * Gets the images decorator.
@@ -17,14 +17,14 @@ public class VehicleImagesFactory {
 	 * @param vehicle the vehicle
 	 * @return the images decorator
 	 */
-	public static VehicleImagesDecorator getImagesDecorator(String vehicleType,String color, IVehicle vehicle) {
+	public static VehicleGraphicDecorator getImagesDecorator(String vehicleType,String color, IVehicle vehicle) {
 		vehicleType = vehicleType.toLowerCase();
 		if (vehicleType.equals("car"))
-			return new CarImagesDecoratorFacory().getImagesDecorator(color, vehicle);
+			return new CarGraphicDecoratorFacory().getImagesDecorator(color, vehicle);
 		if (vehicleType.equals("carriage"))
-			return new CarriageImagesDecoratorFacory().getImagesDecorator(color, vehicle);
+			return new CarriageGraphicDecoratorFacory().getImagesDecorator(color, vehicle);
 		if (vehicleType.equals("bike"))
-			return new BikeImagesDecoratorFacory().getImagesDecorator(color, vehicle);
+			return new BikeGraphicDecoratorFacory().getImagesDecorator(color, vehicle);
 		else
 			return null;
 	}

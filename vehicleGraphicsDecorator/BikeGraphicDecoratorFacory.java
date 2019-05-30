@@ -3,25 +3,25 @@ package vehicleGraphicsDecorator;
 import DesignPatterns.IVehicle;
 
 /**
- * The Class CarriageImagesDecoratorFacory.
+ * The Class BikeImagesDecoratorFacory.
  * 
  * @author Stav Lobel
  */
-public class CarriageImagesDecoratorFacory implements VehicleImagesDecoratorFactory {
+public class BikeGraphicDecoratorFacory implements VehicleGraphicDecoratorFactory {
 	
 	/* (non-Javadoc)
 	 * @see vehicleGraphicsDecorator.VehicleImagesDecoratorFactory#getImagesDecorator(java.lang.String, DesignPatterns.IVehicle)
 	 */
-	public VehicleImagesDecorator getImagesDecorator(String color,IVehicle vehicle) {
+	public VehicleGraphicDecorator getImagesDecorator(String color,IVehicle vehicle) {
 		color = color.toLowerCase();
 		if (color.equals("red"))
-			return new RedCarriageDecorator(vehicle);
+			return new RedBikeDecorator(vehicle);
 		else if (color.equals("green"))
-			return new GreenCarriageDecorator(vehicle);
+			return new GreenBikeDecorator(vehicle);
 		else if (color.equals("silver"))
-			return new SilverCarriageDecorator(vehicle);
+			return new SilverBikeDecorator(vehicle);
 		else if (color.equals("white"))
-			return new WhiteCarriageDecorator(vehicle);
+			return new WhiteBikeDecorator(vehicle);
 		else
 			return null;
 	}

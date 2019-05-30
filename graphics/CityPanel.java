@@ -17,7 +17,7 @@ import DesignPatterns.BikeFactory;
 import DesignPatterns.CarFactory;
 import DesignPatterns.IVehicle;
 import cityPannelConcurrent.CityPanelThreadPool;
-import vehicleGraphicsDecorator.VehicleImagesDecorator;
+import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleMovingBridge.CityPanelMover;
 import vehicleMovingBridge.VehicleMover;
 import vehicles.*;
@@ -95,7 +95,6 @@ public class CityPanel extends JPanel {
 	public CityPanel(){
 		super(new BorderLayout());
 		this.setSize(800, 600);
-		CityPanelMover.setPanel(this);
 		this.add(bottom,BorderLayout.SOUTH);
 		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
 		for (int i=0 ; i < buttons.length ; ++i ) {
@@ -152,7 +151,7 @@ public class CityPanel extends JPanel {
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    ((VehicleImagesDecorator) pool.getActiveVehicle(0)).drawObject(g);
+	    ((VehicleGraphicDecorator) pool.getActiveVehicle(0)).drawObject(g);
 	}
 	
 	/**

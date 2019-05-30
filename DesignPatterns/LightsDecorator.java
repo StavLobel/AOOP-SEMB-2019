@@ -6,38 +6,33 @@ package DesignPatterns;
  * @author Stav Lobel
  */
 public class LightsDecorator extends VehicleDecorator {
-	protected boolean lights;
+	protected boolean lights = false;
 	
 	/**
 	 * Instantiates a new lights decorator.
 	 *
-	 * @param vehicle the vehicle
+	 * @param vehicleLayer the vehicle layer
 	 */
-	public LightsDecorator(IVehicle vehicle) {
-		super(vehicle);
+	public LightsDecorator(IVehicle vehicleLayer) {
+		super(vehicleLayer);
 	}
 	
+	/**
+	 * Switch lights.
+	 *
+	 * @return true, if successful
+	 */
 	public boolean switchLights() {
 		lights = !lights;
 		return true;
 	}
 	
-	/* (non-Javadoc)
-	 * @see DesignPatterns.IVehicle#isLights()
+	/**
+	 * Checks if the lights turned on.
+	 *
+	 * @return true, if the lights on
 	 */
 	public boolean isLights() {
 		return lights;
-	}
-	
-	public void run() {
-		vehicle.run();
-	}
-	
-	public void kill() {
-		vehicle.kill();
-	}
-	
-	public boolean getFlag() {
-		return vehicle.getFlag();
 	}
 }

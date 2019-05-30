@@ -7,7 +7,7 @@ import DesignPatterns.IVehicle;
  * 
  * @author Stav Lobel
  */
-public abstract class BikeDecorator extends VehicleImagesDecorator {
+public abstract class BikeDecorator extends VehicleGraphicDecorator {
 	
 	/**
 	 * Instantiates a new bike graphics.

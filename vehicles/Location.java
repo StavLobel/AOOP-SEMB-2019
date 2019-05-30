@@ -17,19 +17,18 @@ public class Location implements IClonable{
 	private Point point;
 	
 	/** The Constant NORTH. */
-	private static final String NORTH = "north";
+	private static final String NORTH = "North";
 	
 	/** The Constant SOUTH. */
-	private static final String SOUTH = "south";
+	private static final String SOUTH = "South";
 	
 	/** The Constant EAST. */
-	private static final String EAST = "east";
+	private static final String EAST = "East";
 	
 	/** The Constant WEST. */
-	private static final String WEST = "west";
+	private static final String WEST = "West";
 	
 	/** The Constant ORIENTATIONS. */
-	@SuppressWarnings("serial")
 	private static String[] ORIENTATIONS = {NORTH,SOUTH,EAST,EAST}; 
 	
 	/** The opposites orientations. */
@@ -53,6 +52,17 @@ public class Location implements IClonable{
 	 */
 	public Location(Point p) {
 		this.point = p;
+	}
+	
+	/**
+	 * Instantiates a new location.
+	 *
+	 * @param p the point
+	 * @param orientation the orientation("North","South","East","West")
+	 */
+	public Location(Point p,String orientation) {
+		this.point = p;
+		this.orientation = orientation;
 	}
 	
 	/**
@@ -151,7 +161,7 @@ public class Location implements IClonable{
 	 * @return the orientation
 	 */
 	public String getOrientation() {
-		return this.orientation.substring(0, 1).toUpperCase() + this.orientation.substring(1);
+		return this.orientation;
 	}
 	
 	/**
@@ -188,7 +198,6 @@ public class Location implements IClonable{
 	 * @return true, if successful
 	 */
 	public boolean setOrientation(String orientation) {
-		orientation = orientation.toLowerCase();
 		if (Arrays.asList(ORIENTATIONS).contains(orientation) == false || orientation.equals(this.orientation))
 			return false;
 		this.orientation = orientation;

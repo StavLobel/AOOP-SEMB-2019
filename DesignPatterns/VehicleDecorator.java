@@ -1,6 +1,6 @@
 package DesignPatterns;
 
-import vehicles.Location;
+import vehicles.Vehicle;
 
 /**
  * The Class VehicleDecorator.
@@ -8,30 +8,37 @@ import vehicles.Location;
 public abstract class VehicleDecorator implements IVehicle {
 	
 	/** The vehicle. */
-	protected IVehicle vehicle;
+	protected IVehicle vehicleLayer;
 	
 	/**
 	 * Instantiates a new vehicle decorator.
 	 *
-	 * @param vehicle the vehicle
+	 * @param vehicleLayer the vehicle layer
 	 */
-	public VehicleDecorator (IVehicle vehicle) {
-		this.vehicle = vehicle;
+	public VehicleDecorator (IVehicle vehicleLayer) {
+		this.vehicleLayer = vehicleLayer;
 	}
 	
-	public Location getLocation() {
-		return vehicle.getLocation();
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IVehicle#getLowerLayer()
+	 */
+	public IVehicle getLowerLayer() {
+		return this.vehicleLayer;
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IVehicle#getCore()
+	 */
+	public Vehicle getCore() {
+		IVehicle temp = this;
+		while (temp instanceof Vehicle == false) {
+			temp = temp.getLowerLayer();
+		}
+		return (Vehicle) temp;
 	}
 	
 	public void run() {
-		vehicle.run();
+		vehicleLayer.run();
 	}
 	
-	public void kill() {
-		vehicle.kill();
-	}
-	
-	public boolean getFlag() {
-		return vehicle.getFlag();
-	}
 }

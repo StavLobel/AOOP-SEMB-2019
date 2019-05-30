@@ -29,6 +29,12 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 		this.currentFuel = this.engine.getFuelCapacity();
 	}
 	
+	public HasEngine(int wheels,int numberOfSeats,Engine engine,Location location,VehicleMover mover) {
+		super(wheels,numberOfSeats,location,mover);
+		this.engine = engine;
+		this.currentFuel = this.engine.getFuelCapacity();
+	}
+	
 	/**
 	 * Instantiates a new checks for engine.
 	 *

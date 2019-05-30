@@ -79,7 +79,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * @param numberOfSeats the number of seats
 	 * @param location the location of the vehicle
 	 */
-	public Vehicle(int id,int wheels,int numberOfSeats,Location location,VehicleMover mover) {
+	public Vehicle(int wheels,int numberOfSeats,Location location,VehicleMover mover) {
 		this(wheels,numberOfSeats,mover);
 		this.location = new Location(location);
 	}
@@ -260,6 +260,20 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	
 	public boolean move(Point toGo) {
 		return mover.move(this, toGo);
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IVehicle#getLowerLayer()
+	 */
+	public IVehicle getLowerLayer() {
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see DesignPatterns.IVehicle#getCore()
+	 */
+	public Vehicle getCore() {
+		return this;
 	}
 	
 	public void run() {

@@ -31,6 +31,11 @@ public class Carriage extends Vehicle implements IUsingFuel {
 		this.animal = new PackAnimal("Pack Animal");
 	}
 	
+	public Carriage(Location location,VehicleMover mover) {
+		super(WHEELS,NUM_OF_SEATS,location,mover);
+		this.animal = new PackAnimal("Pack Animal");
+	}
+	
 	/**
 	 * Instantiates a new carriage.
 	 *

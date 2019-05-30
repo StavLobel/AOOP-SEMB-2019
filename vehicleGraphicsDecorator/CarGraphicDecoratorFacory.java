@@ -7,12 +7,12 @@ import DesignPatterns.IVehicle;
  * 
  * @author Stav Lobel
  */
-public class CarImagesDecoratorFacory implements VehicleImagesDecoratorFactory {
+public class CarGraphicDecoratorFacory implements VehicleGraphicDecoratorFactory {
 	
 	/* (non-Javadoc)
 	 * @see vehicleGraphicsDecorator.VehicleImagesDecoratorFactory#getImagesDecorator(java.lang.String, DesignPatterns.IVehicle)
 	 */
-	public VehicleImagesDecorator getImagesDecorator(String color,IVehicle vehicle) {
+	public VehicleGraphicDecorator getImagesDecorator(String color,IVehicle vehicle) {
 		color = color.toLowerCase();
 		if (color.equals("red"))
 			return new RedCarDecorator(vehicle);

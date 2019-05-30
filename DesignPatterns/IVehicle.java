@@ -1,8 +1,6 @@
 package DesignPatterns;
 
-import java.awt.Graphics;
-
-import vehicles.Location;
+import vehicles.Vehicle;
 
 /**
  * The Interface IVehicle.
@@ -11,11 +9,18 @@ import vehicles.Location;
  */
 public interface IVehicle extends Runnable{
 	
-	public void run();
+	/**
+	 * Gets the lower layer.
+	 *
+	 * @return the lower layer
+	 */
+	public IVehicle getLowerLayer();
 	
-	public void kill();
+	/**
+	 * Gets the vehicle that inside the decorators layers.
+	 *
+	 * @return the core vehicle
+	 */
+	public Vehicle getCore();
 	
-	public boolean getFlag();
-	
-	public Location getLocation();
 }

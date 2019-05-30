@@ -7,7 +7,7 @@ import DesignPatterns.IVehicle;
  * 
  * @author Stav Lobel
  */
-public abstract class CarriageDecorator extends VehicleImagesDecorator {
+public abstract class CarriageDecorator extends VehicleGraphicDecorator {
 
 	/**
 	 * Instantiates a new carriage decorator.

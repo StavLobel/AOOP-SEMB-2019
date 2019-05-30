@@ -32,6 +32,11 @@ public class Bike extends Vehicle {
 		this.gears = gears;
 	}
 	
+	public Bike(int gears,Location location,VehicleMover mover) {
+		super(NUM_OF_WHEELS,NUM_OF_SEATS,location,mover);
+		this.gears = gears;
+	}
+	
 	private Bike(Bike other) {
 		super(other);
 		this.gears = other.getGears();

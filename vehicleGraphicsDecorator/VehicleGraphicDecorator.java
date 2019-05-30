@@ -4,21 +4,19 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import DesignPatterns.IVehicle;
 import DesignPatterns.VehicleDecorator;
 import graphics.CityPanel;
-import graphics.IDrawable;
 import vehicles.Location;
+import vehicles.Vehicle;
 
 /**
  * The Class VehicleImagesDecorator.
  * 
  * @author Stav Lobel
  */
-public abstract class VehicleImagesDecorator extends VehicleDecorator {
+public abstract class VehicleGraphicDecorator extends VehicleDecorator {
 	
 	/** The size of the vehicle.*/
 	protected static final int size= 65;
@@ -42,16 +40,16 @@ public abstract class VehicleImagesDecorator extends VehicleDecorator {
 	
 	
 	/**
-	 * Instantiates a new vehicle graphics.
+	 * Instantiates a new vehicle graphics decorator.
 	 *
-	 * @param vehicle the vehicle
+	 * @param vehicleLayer the vehicle layer
 	 */
-	public VehicleImagesDecorator(IVehicle vehicle) {
-		super(vehicle);
+	public VehicleGraphicDecorator(IVehicle vehicleLayer) {
+		super(vehicleLayer);
 	}
 	
 	public boolean setPanel(CityPanel panel) {
-		VehicleImagesDecorator.panel = panel;
+		VehicleGraphicDecorator.panel = panel;
 		return true;
 	}
 	
@@ -98,7 +96,8 @@ public abstract class VehicleImagesDecorator extends VehicleDecorator {
 	}
 	
 	public void drawObject(Graphics g) {
-		Location loc = getLocation();
+		Vehicle core = this.getCore();
+		Location loc = core.getLocation();
 	    if(loc.getOrientation().equals("North")) //drives to north side
 	        g.drawImage(img1, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthVertical, vehicleHeightVertical, panel);
 	    else if (loc.getOrientation().equals("South"))//drives to the south side
@@ -107,18 +106,6 @@ public abstract class VehicleImagesDecorator extends VehicleDecorator {
 	        g.drawImage(img3, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, panel);
 	    else if(loc.getOrientation().equals("West")) //drives to the west side
 	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, panel);
-	}
-	
-	public void run() {
-		vehicle.run();
-	}
-	
-	public void kill() {
-		vehicle.kill();
-	}
-	
-	public boolean getFlag() {
-		return vehicle.getFlag();
 	}
 	
 }

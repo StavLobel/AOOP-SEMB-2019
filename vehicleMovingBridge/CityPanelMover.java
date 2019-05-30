@@ -9,7 +9,7 @@ import vehicles.Vehicle;
 
 public class CityPanelMover extends VehicleMover {
 	/** The panel.*/
-	private static CityPanel panel;
+	private CityPanel panel;
 	
 	private static int size = 65;
 	
@@ -26,29 +26,55 @@ public class CityPanelMover extends VehicleMover {
 	private static final int vehicleHeightVertical = size*2;
 	
 	/** The panel width. */
-	private static int panelWidth;
+	private int panelWidth;
 	
 	/** The panel height. */
-	private static int panelHeight;
+	private int panelHeight;
 	
 	/** The panel middle. */
-	private static int panelMiddle;
+	private int panelMiddle;
 	
-	public CityPanelMover(CityPanel panel) {}
+	private Point upLeftCorner;
 	
-	public static boolean setPanel(CityPanel panel) {
-		CityPanelMover.panel = panel;
-		panelWidth = panel.getWidth()-vehicleWidthVertical*5/4;
-		panelHeight = panel.getHeight()-vehicleHeightHorizon*5/3;
-		panelMiddle = panelHeight/2;
+	private Point upRightCorner;
+	
+	private Point downLeftCorner;
+	
+	private Point downRightCorner;
+	
+	private Point middleLeftCorner;
+	
+	private Point middleRightCorner;
+	
+	public CityPanelMover(CityPanel panel) {
+		setPanel(panel);
+	}
+	
+	private boolean setPanel(CityPanel panel) {
+		this.panel = panel;
+		this.panelWidth = panel.getWidth()-vehicleWidthVertical*5/4;
+		this.panelHeight = panel.getHeight()-vehicleHeightHorizon*5/3;
+		this.panelMiddle = panelHeight/2;
+		setIntersections();
 		return true;
 	}
 	
+	public boolean setIntersections() {
+		upLeftCorner = Point.getPointInstance(0, 0);
+		upRightCorner = Point.getPointInstance(panelWidth, 0);
+		downLeftCorner = Point.getPointInstance(0, panelHeight);
+		downRightCorner = Point.getPointInstance(panelWidth, panelHeight);
+		middleLeftCorner = Point.getPointInstance(0, panelMiddle);
+		middleRightCorner = Point.getPointInstance(panelWidth, panelMiddle);
+		return true;
+		
+	}
+	
 	public boolean move(Vehicle vehicle,Point toGo) {
+		toGo = nextLocation(vehicle);
 		if (vehicle.canMove() && vehicle.getLocation().getLocationPoint().equals(toGo) == false) {    
 	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
-	    	toGo = nextLocation(vehicle, toGo);
 	        vehicle.drive(toGo);
 	        panel.repaint();
 		    return true;
@@ -56,65 +82,74 @@ public class CityPanelMover extends VehicleMover {
 	    return false;
 	}
 	
-	public Point nextLocation(Vehicle vehicle,Point toGo) {
+	private Point nextLocation(Vehicle vehicle) {
 		Location current = (Location) vehicle.getLocation().clone();
-		Point next = makeNextPoint(vehicle.getLocation(),vehicle.getSpeed());
-		return nextLocationMaker(current,next,vehicle.getSpeed());
-	}
-	
-	private Point nextLocationMaker(Location current,Point next,int gap) {
-		Point intersection = getIntersection(current.getLocationPoint(),next);
-		while (intersection != null) {
-			gap = current.getLocationPoint().manhattanDistance(intersection);
-			current.setLocation(intersection);
-			String nextDirection = directionInIntersection(current);
-			current.setOrientation(nextDirection);
-			next = makeNextPoint(current, gap);
-			intersection = getIntersection(current.getLocationPoint(),next);
+		Point nextPoint = makeNextPoint(current,vehicle.getSpeed());
+		Point intersection = intersects(vehicle.getLocation().getLocationPoint(), nextPoint); 
+		while (intersection != null && intersection.equals(current.getLocationPoint()) == false) {
+			int gap = intersection.manhattanDistance(nextPoint);
+			current = getCurrent(current, intersection);
+			nextPoint = makeNextPoint(current, gap);
+			intersection = intersects(current.getLocationPoint(), nextPoint);
 		}
-		return next;
+		return nextPoint;
+		
 	}
 	
-	private Point getIntersection(Point current,Point next) {
-		if (current.equals(next))
+	private Point intersects(Point current ,Point end) {
+		if (current.inBetween(upLeftCorner, end))
+			return upLeftCorner;
+		else if (current.inBetween(upRightCorner, end))
+			return upRightCorner;
+		else if (current.inBetween(downLeftCorner, end))
+			return downLeftCorner;
+		else if (current.inBetween(downRightCorner, end))
+			return downRightCorner;
+		else if (current.inBetween(middleLeftCorner, end))
+			return middleLeftCorner;
+		else if (current.inBetween(middleRightCorner, end))
+			return middleRightCorner;
+		else
 			return null;
-		if (current.getY() == next.getY()) {
-			if (next.getX() <= 0)
-				return Point.getPointInstance(0,current.getY());
-			else if (next.getX() >= panelWidth)
-				return Point.getPointInstance(panelWidth,current.getY());
-		}
-		else if (current.getX() == next.getX()) {
-			if (next.getY() >= panelHeight || next.getY() <= 0) {
-				if (next.getY() <= 0)
-					return Point.getPointInstance(current.getX(),0);
-				else if (next.getY() >= panelHeight)
-					return Point.getPointInstance(current.getX(),panelHeight);
+		
+	}
+	
+	private Location getCurrent(Location current,Point intersection) {
+		//Up Left
+		if (intersection.equals(upLeftCorner) && current.getOrientation().equals("North"))
+			return new Location(intersection,"East");
+		else if (intersection.equals(upLeftCorner) && current.getOrientation().equals("West"))
+			return new Location(intersection,"South");
+		//Up Right
+		else if (intersection.equals(upRightCorner) && current.getOrientation().equals("East"))
+			return new Location(intersection,"South");
+		else if (intersection.equals(upRightCorner) && current.getOrientation().equals("North"))
+			return new Location(intersection,"West");
+		//Down Left
+		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals("South"))
+			return new Location(intersection,"East");
+		else if (intersection.equals(downLeftCorner) && current.getOrientation().equals("West"))
+			return new Location(intersection,"North");
+		//Down Right
+		else if (intersection.equals(downRightCorner) && current.getOrientation().equals("South"))
+			return new Location(intersection,"West");
+		else if (intersection.equals(downRightCorner) && current.getOrientation().equals("East"))
+			return new Location(intersection,"North");
+		//Middles
+		else if (intersection.equals(middleLeftCorner) || intersection.equals(middleRightCorner)) {
+			Random rand = new Random();
+			String[] orientations = {"North","South","East","West"};
+			String nextOrientation = orientations[rand.nextInt(4)];
+			while (nextOrientation.equals(current.getOrientation()) || nextOrientation.equals(current.getOppositeOrientation())) {
+				nextOrientation = orientations[rand.nextInt(4)];
+				if ((intersection.equals(middleLeftCorner) && nextOrientation.equals("West") || (intersection.equals(middleRightCorner) && nextOrientation.equals("East"))))
+						nextOrientation = current.getOrientation();
 			}
-			if (current.getY() == panelHeight/2)
-				return null;
-			else if ((current.getY() < panelMiddle && next.getY() > panelMiddle) || (current.getY() > panelMiddle && next.getY() < panelMiddle))
-				return Point.getPointInstance(current.getX(),panelMiddle);
+			return new Location(intersection,nextOrientation);
 		}
-		return null;
+		else
+			return null;
 	}
+			
 	
-	private String directionInIntersection(Location current) {
-		String nextOrientation = current.getOppositeOrientation();
-		Random randomInt = new Random();
-		Location next = (Location) current.clone();
-		int index = 0;
-		while (nextOrientation.equals(current.getOppositeOrientation()) || !inBounds(next.getLocationPoint())) {
-			next = (Location) current.clone();
-			index = randomInt.nextInt(4);
-			nextOrientation = Location.getAllOrientations()[index];
-			next.setOrientation(nextOrientation);
-			next = new Location(makeNextPoint(next,1));
-		}
-		return nextOrientation;
-	}
-	
-	private boolean inBounds(Point p) {
-		return !(p.getX() < 0 || p.getX() > panelWidth || p.getY() < 0 || p.getY() > panelHeight);
-	}
 }

@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import DesignPatterns.*;
+import vehicles.Vehicle;
 
 public class CityPanelThreadPool {
 	
@@ -32,7 +33,7 @@ public class CityPanelThreadPool {
 	public boolean killAllVehicles() {
 		int toRemove = getNumberOfActiveVehicles();
 		while (toRemove > 0) {
-			activeVehicles.remove().kill();
+			activeVehicles.remove().getCore().kill();
 			toRemove -= 1;
 		}
 		return true;
@@ -41,7 +42,7 @@ public class CityPanelThreadPool {
 	public int getNumberOfActiveVehicles() {
 		int count = 0;
 		for (int i = 0 ; i < activeVehicles.size() && i < pool.getMaximumPoolSize() ; ++i)
-			if (activeVehicles.get(i).getFlag() == true)
+			if (activeVehicles.get(i).getCore().getFlag() == true)
 				count += 1;
 		return count;
 	}

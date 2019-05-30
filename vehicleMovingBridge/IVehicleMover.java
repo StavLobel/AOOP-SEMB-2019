@@ -19,5 +19,5 @@ public interface IVehicleMover {
 	 */
 	public boolean move(Vehicle vehicle,Point toGo);
 	
-	public Point makeNextPoint(Location locaiton,int Speed);
+	public Point makeNextPoint(Location location,int distance);
 }
