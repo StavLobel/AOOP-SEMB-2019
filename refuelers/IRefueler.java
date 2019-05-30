@@ -1,4 +1,4 @@
-package DesignPatterns;
+package refuelers;
 
 /**
  * The Interface IRefueler.
@@ -15,5 +15,5 @@ public interface IRefueler {
 	 * @param vehicleToRefuel the vehicle to refuel
 	 * @return true, if successful
 	 */
-	public boolean refuel(IBeenRefueled vehicleToRefuel);
+	public boolean refuel(IUsingFuel vehicleToRefuel) throws FuelTypeException;
 }

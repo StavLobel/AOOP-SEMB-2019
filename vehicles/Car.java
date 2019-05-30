@@ -1,6 +1,7 @@
 package vehicles;
 
-import DesignPatterns.IRefueler;
+import refuelers.FuelTypeException;
+import refuelers.IRefueler;
 import vehicleMovingBridge.VehicleMover;
 
 /**
@@ -88,7 +89,7 @@ public class Car extends HasEngine {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) {
+	public void letRefuel(IRefueler refueler) throws FuelTypeException {
 		refueler.refuel(this);
 	}
 }

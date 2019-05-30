@@ -1,12 +1,12 @@
 package vehicles;
 
-import DesignPatterns.IRefueler;
 import graphics.IAnimal;
 import graphics.IClonable;
-import graphics.IUsingFuel;
+import refuelers.FuelTypeException;
+import refuelers.IRefueler;
+import refuelers.IUsingFuel;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PackAnimal.
  * 
@@ -140,7 +140,7 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) {
+	public void letRefuel(IRefueler refueler) throws FuelTypeException{
 		refueler.refuel(this);
 	}
 	
@@ -181,6 +181,10 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	
 	public boolean canMove() {
 		return !(currentEnergy == 0);
+	}
+	
+	public int getMaxCapacity() {
+		return MAX_ENERGY;
 	}
 	
 	public boolean drive(Point toGo) {

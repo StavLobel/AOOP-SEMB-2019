@@ -1,6 +1,6 @@
 package vehicles;
 
-import graphics.IUsingFuel;
+import refuelers.IUsingFuel;
 import vehicleMovingBridge.VehicleMover;
 
 /**
@@ -113,5 +113,9 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	public boolean drive(Point toGo) {
 		this.useFuel(this.getLocation().getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
 		return super.drive(toGo);
+	}
+	
+	public int getMaxCapacity() {
+		return this.engine.getFuelCapacity();
 	}
 }

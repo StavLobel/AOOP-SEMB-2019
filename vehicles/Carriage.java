@@ -1,7 +1,8 @@
 package vehicles;
 
-import DesignPatterns.IRefueler;
-import graphics.IUsingFuel;
+import refuelers.FuelTypeException;
+import refuelers.IRefueler;
+import refuelers.IUsingFuel;
 import vehicleMovingBridge.VehicleMover;
 
 /**
@@ -131,8 +132,12 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) {
+	public void letRefuel(IRefueler refueler) throws FuelTypeException{
 		refueler.refuel(this);
+	}
+	
+	public int getMaxCapacity() {
+		return this.animal.getMaxCapacity();
 	}
 	
 	public boolean drive(Point toGo) {

@@ -1,7 +1,6 @@
-package graphics;
+package refuelers;
 
-import DesignPatterns.IBeenRefueled;
-import DesignPatterns.IRefueler;
+import graphics.IMoveable;
 import vehicles.Point;
 
 /**
@@ -9,7 +8,7 @@ import vehicles.Point;
  * 
  * @author Stav Lobel
  */
-public interface IUsingFuel extends IMoveable,IBeenRefueled {
+public interface IUsingFuel extends IMoveable {
 	
 	/**
 	 * Gets the fuel consumption.
@@ -49,4 +48,10 @@ public interface IUsingFuel extends IMoveable,IBeenRefueled {
 	public boolean canMove(Point toGo);
 	
 	public boolean drive(Point toGo);
+	
+	public int getMaxCapacity();
+	
+	public void letRefuel(IRefueler refueler) throws FuelTypeException;
+	
+	public boolean setCurrentFuel(int amount);
 }

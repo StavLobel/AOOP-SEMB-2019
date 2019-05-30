@@ -17,6 +17,7 @@ import DesignPatterns.BikeFactory;
 import DesignPatterns.CarFactory;
 import DesignPatterns.IVehicle;
 import cityPannelConcurrent.CityPanelThreadPool;
+import refuelers.FuelTypeException;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleMovingBridge.CityPanelMover;
 import vehicleMovingBridge.VehicleMover;
