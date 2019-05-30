@@ -86,15 +86,13 @@ public class CityPanelMover extends VehicleMover {
 		Location current = (Location) vehicle.getLocation().clone();
 		Point nextPoint = makeNextPoint(current,vehicle.getSpeed());
 		Point intersection = intersects(vehicle.getLocation().getLocationPoint(), nextPoint);
-		if (nextPoint.equals(intersection)) {
-			current = getCurrent(current, intersection);
-			return makeNextPoint(current, vehicle.getSpeed());
-		}
-		while (intersection != null && nextPoint.equals(intersection) == false) {
+		while (intersection != null) {
 			int gap = intersection.manhattanDistance(nextPoint);
 			current = getCurrent(current, intersection);
 			nextPoint = makeNextPoint(current, gap);
 			intersection = intersects(current.getLocationPoint(), nextPoint);
+			if (current.getLocationPoint().equals(intersection) == true)
+				break;
 		}
 		return nextPoint;
 		
@@ -119,8 +117,6 @@ public class CityPanelMover extends VehicleMover {
 	}
 	
 	private Location getCurrent(Location current,Point intersection) {
-		if (current.getLocationPoint().equals(intersection))
-			return current;
 		//Up Left
 		if (intersection.equals(upLeftCorner) && current.getOrientation().equals(Location.NORTH))
 			return new Location(intersection,Location.EAST);
@@ -142,16 +138,23 @@ public class CityPanelMover extends VehicleMover {
 		else if (intersection.equals(downRightCorner) && current.getOrientation().equals(Location.EAST))
 			return new Location(intersection,Location.NORTH);
 		//Middles
-		else if (intersection.equals(middleLeftCorner) || intersection.equals(middleRightCorner)) {
+		else if (intersection.equals(middleLeftCorner)) {
 			Random rand = new Random();
-			String[] orientations = {Location.NORTH,Location.SOUTH,Location.EAST,Location.WEST};
-			String nextOrientation = orientations[rand.nextInt(4)];
-			while (nextOrientation.equals(current.getOrientation()) || nextOrientation.equals(current.getOppositeOrientation())) {
-				nextOrientation = orientations[rand.nextInt(4)];
-				if ((intersection.equals(middleLeftCorner) && nextOrientation.equals(Location.WEST) || (intersection.equals(middleRightCorner) && nextOrientation.equals(Location.EAST))))
-						nextOrientation = current.getOrientation();
+			String[] orientations = {Location.NORTH,Location.SOUTH,Location.EAST};
+			String nextOrientation = orientations[rand.nextInt(3)];
+			while (nextOrientation.equals(current.getOppositeOrientation())) {
+					nextOrientation = orientations[rand.nextInt(3)];
 			}
-			return new Location(intersection,nextOrientation);
+			return new Location(intersection, nextOrientation);
+		}
+		else if(intersection.equals(middleRightCorner)) {
+			Random rand = new Random();
+			String[] orientations = {Location.NORTH,Location.SOUTH,Location.WEST};
+			String nextOrientation = orientations[rand.nextInt(3)];
+			while (nextOrientation.equals(current.getOppositeOrientation())) {
+				nextOrientation = orientations[rand.nextInt(3)];
+			}
+			return new Location(intersection, nextOrientation);
 		}
 		else
 			return null;
