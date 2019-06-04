@@ -27,7 +27,7 @@ public class CityFrame extends JFrame{
 	public static final String EXIT_LABEL = "Exit";
 	
 	/** The panel. */
-	public CityPanel panel = new CityPanel();
+	public CityPanel panel = CityPanel.getPanel();
 	
 	
 	/**

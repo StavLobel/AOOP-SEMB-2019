@@ -15,6 +15,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
+import DesignPatterns.*;
+import vehicleMovingService.CityPanelMover;
 import vehicles.*;
 
 public class AddVehicleDialog extends JDialog {
@@ -36,9 +38,9 @@ public class AddVehicleDialog extends JDialog {
 	JPanel bottomPanel = new JPanel();
 	JButton ok = new JButton("OK");
 	JButton cancel = new JButton("Cancel");
-	JPanel panel;
+	public static CityPanel panel;
 	
-	public AddVehicleDialog(JPanel panel) {
+	public AddVehicleDialog(CityPanel panel) {
 		setTitle(TITLE);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -48,7 +50,7 @@ public class AddVehicleDialog extends JDialog {
 		setOKButton();
 		this.add(qPanel);
 		this.pack();
-		this.panel = panel;
+		AddVehicleDialog.panel = panel;
 	}
 	
 	public void setRadioButtons() {
@@ -126,8 +128,6 @@ public class AddVehicleDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (qType.getSelection() == null || qColor.getSelection() == null)
 					JOptionPane.showMessageDialog(panel,"Error !\n" + "Please choose the type of the vehicle and the color","Error !",JOptionPane.ERROR_MESSAGE);
-				else if (CityPanel.v != null)
-					JOptionPane.showMessageDialog(panel,"Error !\n" + "You have exceeded the amount of vehicles you can create !","Error !",JOptionPane.ERROR_MESSAGE);
 				else {
 					String type = qType.getSelection().getActionCommand();
 					String color = qColor.getSelection().getActionCommand();
@@ -140,16 +140,23 @@ public class AddVehicleDialog extends JDialog {
 	}
 	
 	private static boolean createVehicle(String type,String color,int numberOfGears) {
+		IVehicle v = null;
+		try {
 		if (type.equals(CAR_BENZINE)) 
-			CityPanel.v = new Car(color,"BenzineEngine");
+			v = CarFactory.getCar("Benzine", color, new CityPanelMover(AddVehicleDialog.panel));
 		else if (type.equals(CAR_SOLAR))
-			CityPanel.v = new Car(color,"SolarEngine");
+			v = CarFactory.getCar("Solar", color, new CityPanelMover(AddVehicleDialog.panel));
 		else if (type.equals(BIKE_LABEL))
-			CityPanel.v = new Bike(color,numberOfGears);
+			v = BikeFactory.getBike(numberOfGears, color, new CityPanelMover(AddVehicleDialog.panel));
 		else if (type.equals(CARRIAGE_LABEL))
-			CityPanel.v = new Carriage(color);
+			v = CarriageFactory.getCarriage(color, new CityPanelMover(AddVehicleDialog.panel));
+		CityPanel.pool.addVehicle(v);
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(panel,"Error !\n" + e.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 		CityPanel.numOfVehicles += 1;
-		CityPanel.v.move(CityPanel.v.nextLocation());
 		return true;
 	}
 	

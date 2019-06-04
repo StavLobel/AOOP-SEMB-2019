@@ -7,21 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-
-import DesignPatterns.BikeFactory;
-import DesignPatterns.CarFactory;
-import DesignPatterns.IVehicle;
 import cityPannelConcurrent.CityPanelThreadPool;
 import refuelers.FuelTypeException;
-import vehicleGraphicsDecorator.VehicleGraphicDecorator;
-import vehicleMovingService.CityPanelMover;
-import vehicleMovingService.VehicleMover;
-import vehicles.*;
 
 
 /**
@@ -30,6 +19,8 @@ import vehicles.*;
  * @author Stav Lobel
  */
 public class CityPanel extends JPanel {
+	
+	private static volatile CityPanel panel = null;
 	
 	private static final int MAX_RUNNING = 5;
 	
@@ -93,7 +84,7 @@ public class CityPanel extends JPanel {
 	/**
 	 * Instantiates a new city panel.
 	 */
-	public CityPanel(){
+	private CityPanel(){
 		super(new BorderLayout());
 		this.setSize(800, 600);
 		this.add(bottom,BorderLayout.SOUTH);
@@ -117,7 +108,7 @@ public class CityPanel extends JPanel {
 		buttons[1].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//CLEAR
+				pool.killAllActiveVehicles();
 				repaint();
 			}
 		});
@@ -138,12 +129,24 @@ public class CityPanel extends JPanel {
 		buttons[5].addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				pool.shutdown();
 				System.exit(0);
 			}
 		});
-		
-		//TO DELETE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		pool.addVehicle(BikeFactory.getBike(5, "green", new Location(Point.getPointInstance(524, 0), "East"),new CityPanelMover(this)));
+	}
+	
+	/**
+	 * Gets city panel instance.
+	 *
+	 * @return the panel
+	 */
+	public static CityPanel getPanel() {
+		if (panel == null)
+			synchronized (CityPanel.class) {
+				if (panel == null)
+					panel = new CityPanel();
+			}
+		return panel;
 	}
 	
 	/* (non-Javadoc)
@@ -153,7 +156,6 @@ public class CityPanel extends JPanel {
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    ((VehicleGraphicDecorator) pool.getActiveVehicle(0)).drawObject(g);
 	}
 	
 	/**
@@ -168,7 +170,7 @@ public class CityPanel extends JPanel {
 				String[] options = {"Benzine","Solar","Food"};
 				int n = JOptionPane.showOptionDialog(CityFrame.frame,"Please choose type of refueling","The question",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
 				try{
-					fuel(n);
+					fuel(options[n]);
 				}
 				catch (FuelTypeException error) {
 					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
@@ -188,8 +190,7 @@ public class CityPanel extends JPanel {
 	 * @return true, if successful
 	 * @throws Exception the exception
 	 */
-	private static boolean fuel(int n) throws Exception {
-		String[] engineTypes = {"Benzine Engine","Solar Engine","Pack Animal"};
+	private static boolean fuel(String type) throws Exception {
 		//FUEL THE VEHICLE
 		return true;
 	}
