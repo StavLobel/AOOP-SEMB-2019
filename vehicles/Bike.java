@@ -1,6 +1,6 @@
 package vehicles;
 
-import vehicleMovingBridge.VehicleMover;
+import vehicleMovingService.VehicleMover;
 
 /**
  * The Class Bike.

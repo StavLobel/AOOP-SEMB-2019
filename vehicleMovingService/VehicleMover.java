@@ -1,4 +1,4 @@
-package vehicleMovingBridge;
+package vehicleMovingService;
 
 import vehicles.*;
 

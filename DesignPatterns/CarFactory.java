@@ -2,7 +2,7 @@ package DesignPatterns;
 
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicFactory;
-import vehicleMovingBridge.VehicleMover;
+import vehicleMovingService.VehicleMover;
 import vehicles.BenzineEngine;
 import vehicles.Car;
 import vehicles.Engine;

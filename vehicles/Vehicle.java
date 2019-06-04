@@ -1,11 +1,9 @@
 package vehicles;
 
-import java.awt.Graphics;
-
 import DesignPatterns.IVehicle;
 import graphics.IClonable;
 import graphics.IMoveable;
-import vehicleMovingBridge.VehicleMover;
+import vehicleMovingService.VehicleMover;
 
 /**
  * The Class Vehicle.
@@ -276,6 +274,9 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 		return this;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	public void run() {
 		while(flag) {
 			Point toGo = mover.makeNextPoint(this.location,getSpeed());
@@ -283,10 +284,21 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 			}
 	}
 	
+	/**
+	 * Kill.
+	 * 
+	 * kill the thread.
+	 */
 	public void kill() {
 		this.flag = false;
 	}
 	
+	
+	/**
+	 * Gets the flag.
+	 *
+	 * @return the flag
+	 */
 	public boolean getFlag() {
 		return this.flag;
 	}

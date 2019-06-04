@@ -1,6 +1,6 @@
 package vehicles;
 import java.lang.Math;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -11,7 +11,6 @@ import java.util.HashMap;
  * 
  * @author Stav Lobel ID 308549898
  * 
- * The class is immutable 
  */
 public class Point {
 	/** the X value*/
@@ -20,7 +19,7 @@ public class Point {
 	private int y;
 	
 	/**the collection that saves all of the instances*/
-	private static HashMap<String, Point> pointsInstances = new HashMap<String, Point>();
+	private static volatile ConcurrentHashMap<String, Point> pointsInstances = new ConcurrentHashMap<String, Point>();
 	
 	/**
 	 * Instantiates a new point.
@@ -49,10 +48,12 @@ public class Point {
 	 * @return an instance of the point.
 	 */
 	public static Point getPointInstance(int x,int y) {
-		synchronized (pointsInstances) {
-			if (!(pointsInstances.containsKey("("+x+","+y+")")))
-				pointsInstances.put("("+x+","+y+")", new Point(x,y));	
-		}
+		if (!(pointsInstances.containsKey("("+x+","+y+")")))
+			synchronized (pointsInstances) {
+				if (!(pointsInstances.containsKey("("+x+","+y+")"))) {
+					pointsInstances.put("("+x+","+y+")", new Point(x,y));
+				}
+			}	
 		return pointsInstances.get("("+x+","+y+")");
 	}
 	
@@ -123,6 +124,13 @@ public class Point {
 		return Math.abs(this.x - other.getX())+Math.abs(this.y - other.getY());
 	}
 	
+	/**
+	 * In between.
+	 *
+	 * @param middle the middle point
+	 * @param end the end point
+	 * @return true, the middle point is between this and the end point
+	 */
 	public boolean inBetween(Point middle,Point end) {
 		if (Math.min(this.getX(), end.getX()) <= middle.getX() && middle.getX() <= Math.max(this.getX(), end.getX()))
 			if (Math.min(this.getY(), end.getY()) <= middle.getY() && middle.getY() <= Math.max(this.getY(), end.getY()))

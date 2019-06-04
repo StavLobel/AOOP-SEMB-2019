@@ -1,6 +1,5 @@
 package vehicles;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -78,8 +77,10 @@ public class Location implements IClonable{
 	 * @param other other location to copy from
 	 */
 	public Location(Location other) {
-		this.point = other.getLocationPoint();
-		this.orientation = other.getOrientation();
+		synchronized (other) {
+			this.point = other.getLocationPoint();
+			this.orientation = other.getOrientation();
+		}
 	}
 	
 	/**
@@ -97,7 +98,7 @@ public class Location implements IClonable{
 	 * @param p new point to set
 	 * @return true, if successful ,false if it's the new point equals the current location's point
 	 */
-	public boolean setLocation(Point p) {
+	public synchronized boolean setLocation(Point p) {
 		if (this.point.equals(p))
 			return false;
 		else {
@@ -132,7 +133,9 @@ public class Location implements IClonable{
 	public boolean setLocation(Location other) {
 		if (this.equals(other))
 			return false;
-		return setLocation(other.getLocationPoint());
+		synchronized (other) {
+			return setLocation(other.getLocationPoint());
+		}
 	}
 	
 
@@ -200,7 +203,9 @@ public class Location implements IClonable{
 	public boolean setOrientation(String orientation) {
 		if (Arrays.asList(ORIENTATIONS).contains(orientation) == false || orientation.equals(this.orientation))
 			return false;
-		this.orientation = orientation;
+		synchronized (this) {
+			this.orientation = orientation;
+		}
 		return true;
 	}
 	
@@ -209,11 +214,16 @@ public class Location implements IClonable{
 	 *
 	 * @return the opposite orientation
 	 */
-	public String getOppositeOrientation() {
+	public synchronized String getOppositeOrientation() {
 		return OPPOSITES.get(this.orientation);
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	public Object clone() {
-		return new Location(this);
+		synchronized(this) {
+			return new Location(this);
+		}
 	}
 }

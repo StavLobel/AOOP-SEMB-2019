@@ -2,7 +2,7 @@ package vehicles;
 
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
-import vehicleMovingBridge.VehicleMover;
+import vehicleMovingService.VehicleMover;
 
 /**
  * The Class Carriage.
