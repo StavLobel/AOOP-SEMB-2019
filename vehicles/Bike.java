@@ -80,4 +80,8 @@ public class Bike extends Vehicle {
 	public Object clone() {
 		return new Bike(this);
 	}
+	
+	public int getDurability() {
+		return 1;
+	}
 }

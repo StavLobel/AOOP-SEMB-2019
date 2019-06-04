@@ -2,6 +2,7 @@ package vehicles;
 
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
+import refuelers.Refueler;
 import vehicleMovingService.VehicleMover;
 
 /**
@@ -89,7 +90,11 @@ public class Car extends HasEngine {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) throws FuelTypeException {
+	public void letRefuel(Refueler refueler) throws FuelTypeException {
 		refueler.refuel(this);
+	}
+	
+	public int getDurability() {
+		return 3;
 	}
 }

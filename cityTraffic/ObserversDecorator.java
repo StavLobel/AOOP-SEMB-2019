@@ -7,17 +7,17 @@ import DesignPatterns.VehicleDecorator;
 
 public class ObserversDecorator extends VehicleDecorator implements Observable {
 	
-	private LinkedList<Observer> observers;
+	private LinkedList<Observer> observers = new LinkedList<Observer>();
 	
 	public ObserversDecorator(IVehicle vehicle) {
 		super(vehicle);
 	}
 	
-	public boolean addObserver(Observer observer) {
+	public synchronized boolean addObserver(Observer observer) {
 		return observers.add(observer);
 	}
 	
-	public boolean removeObserver(Observer observer) {
+	public synchronized boolean removeObserver(Observer observer) {
 		return observers.remove(observer);
 	}
 	

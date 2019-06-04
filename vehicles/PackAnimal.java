@@ -4,6 +4,7 @@ import cityFrame.IAnimal;
 import cityFrame.IClonable;
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
+import refuelers.Refueler;
 
 
 /**
@@ -139,7 +140,7 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) throws FuelTypeException{
+	public void letRefuel(Refueler refueler) throws FuelTypeException{
 		refueler.refuel(this);
 	}
 	
@@ -188,5 +189,9 @@ public class PackAnimal implements IUsingFuel, IClonable,IAnimal {
 	
 	public boolean drive(Point toGo) {
 		return true;
+	}
+	
+	public int getDurability() {
+		return 0;
 	}
 }

@@ -67,7 +67,7 @@ public class CityPanelMover extends VehicleMover {
 	public boolean move(Vehicle vehicle,Point toGo) {
 		toGo = nextLocation(vehicle);
 		if (vehicle.canMove(toGo) && vehicle.getLocation().getLocationPoint().equals(toGo) == false) {    
-	    	try {Thread.sleep(100);}
+	    	try {Thread.sleep(1000/vehicle.getSpeed());}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        vehicle.drive(toGo);
 	        panel.repaint();

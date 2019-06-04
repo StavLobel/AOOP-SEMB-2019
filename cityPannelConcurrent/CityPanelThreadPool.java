@@ -63,7 +63,7 @@ public class CityPanelThreadPool {
 		synchronized (activeVehicles) {
 			int toRemove = getNumberOfActiveVehicles();
 			while (toRemove > 0) {
-				activeVehicles.remove().getCore().kill();
+				activeVehicles.remove().getCore().kill("User");
 				toRemove -= 1;
 			}
 			return true;
@@ -117,7 +117,7 @@ public class CityPanelThreadPool {
 		synchronized (activeVehicles) {
 			LinkedList<IVehicle> toDraw = getActiveVehicles();
 			for (int i = 0 ; i < toDraw.size() ; ++i) {
-				((VehicleGraphicDecorator) toDraw.get(i)).drawObject(g); 
+				((VehicleGraphicDecorator) toDraw.get(i).getLowerLayer()).drawObject(g); 
 			}
 		}
 		return true;
@@ -140,7 +140,7 @@ public class CityPanelThreadPool {
 	public boolean killAllVehicles() {
 		synchronized (activeVehicles) {
 			for (int i = 0 ; i < activeVehicles.size() ; ++i)
-				activeVehicles.get(i).getCore().kill();
+				activeVehicles.get(i).getCore().kill("User");
 			activeVehicles.clear();
 		}
 		return true;

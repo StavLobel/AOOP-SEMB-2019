@@ -1,6 +1,7 @@
 package refuelers;
 
 import vehicles.IUsingFuel;
+import vehicles.Vehicle;
 
 /**
  * The Class Refueler.
@@ -21,6 +22,9 @@ public abstract class Refueler {
 			return false;
 		
 		vehicleToRefuel.setCurrentFuel(vehicleToRefuel.getMaxCapacity()-vehicleToRefuel.getCurrentFuel());
+		synchronized (vehicleToRefuel) {
+			vehicleToRefuel.notify();
+		}
 		return true;
 	}
 }

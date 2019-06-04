@@ -30,6 +30,19 @@ public interface IMoveable {
 	 */
 	public boolean move(Point p);
 	
+	/**
+	 * Can move.
+	 *
+	 * @param toGo the togo point
+	 * @return true, if the vehicle can move
+	 */
 	public boolean canMove(Point toGo);
+	
+	/**
+	 * Gets the durability.
+	 *
+	 * @return the durability of the vehicle
+	 */
+	public int getDurability();
 
 }

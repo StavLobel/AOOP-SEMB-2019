@@ -12,7 +12,7 @@ public class PackAnimalRefueler extends Refueler {
 	 */
 	public boolean refuel(IUsingFuel vehicleToRefuel) throws FuelTypeException {
 		if (!(vehicleToRefuel.getEngineType().equals("Pack Animal")))
-				throw new FuelTypeException("Pack Animal",vehicleToRefuel.getEngineType());
+				throw new FuelTypeException(vehicleToRefuel.getEngineType(),"Pack Animal");
 		else
 			return super.refuel(vehicleToRefuel);
 	}

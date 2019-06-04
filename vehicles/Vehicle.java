@@ -40,6 +40,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	
 	private VehicleMover mover;
 	
+	private String takenDownBy;
+	
 	/**
 	 * Instantiates a new vehicle.
 	 *
@@ -281,6 +283,14 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 		flag = true;
 		while(flag) {
 			Point toGo = mover.makeNextPoint(this.location,getSpeed());
+			while (canMove(toGo) == false) {
+				synchronized (this) {
+					try {
+						wait();	
+					}
+					catch (InterruptedException e) {}
+				}
+			}
 			move(toGo);
 			}
 	}
@@ -290,7 +300,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * 
 	 * kill the thread.
 	 */
-	public void kill() {
+	public void kill(String byWho) {
+		takenDownBy = byWho;
 		this.flag = false;
 	}
 	

@@ -3,6 +3,7 @@ package vehicles;
 import cityFrame.IMoveable;
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
+import refuelers.Refueler;
 
 /**
  * The Interface IUsingFuel.
@@ -52,7 +53,7 @@ public interface IUsingFuel extends IMoveable {
 	
 	public int getMaxCapacity();
 	
-	public void letRefuel(IRefueler refueler) throws FuelTypeException;
+	public void letRefuel(Refueler refueler) throws FuelTypeException;
 	
 	public boolean setCurrentFuel(int amount);
 }

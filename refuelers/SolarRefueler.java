@@ -13,7 +13,7 @@ public class SolarRefueler extends Refueler {
 	 */
 	public boolean refuel(IUsingFuel vehicleToRefuel) throws FuelTypeException {
 		if (!(vehicleToRefuel.getEngineType().equals(new SolarEngine(1).toString())))
-				throw new FuelTypeException(new SolarEngine(1).toString(),vehicleToRefuel.getEngineType());
+				throw new FuelTypeException(vehicleToRefuel.getEngineType(),new SolarEngine(1).toString());
 		else
 			return super.refuel(vehicleToRefuel);
 	}

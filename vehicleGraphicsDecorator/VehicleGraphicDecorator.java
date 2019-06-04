@@ -1,5 +1,6 @@
 package vehicleGraphicsDecorator;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -106,6 +107,13 @@ public abstract class VehicleGraphicDecorator extends VehicleDecorator {
 	        g.drawImage(img3, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, panel);
 	    else if(loc.getOrientation().equals("West")) //drives to the west side
 	        g.drawImage(img4, loc.getLocationPoint().getX(), loc.getLocationPoint().getY(), vehicleWidthHorizon, vehicleHeightHorizon, panel);
+	}
+	
+	public Dimension getDimensions() {
+		if (this.getCore().getLocation().getOrientation().equals(Location.NORTH) || this.getCore().getLocation().getOrientation().equals(Location.SOUTH))
+			return new Dimension(vehicleWidthVertical, vehicleHeightVertical);
+		else
+			return new Dimension(vehicleWidthHorizon, vehicleHeightHorizon);
 	}
 	
 }

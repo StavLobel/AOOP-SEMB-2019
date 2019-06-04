@@ -11,9 +11,17 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import DesignPatterns.IVehicle;
 import cityPannelConcurrent.CityPanelThreadPool;
+import cityTraffic.CityTrafficManager;
+import refuelers.BenzineRefueler;
 import refuelers.FuelTypeException;
+import refuelers.PackAnimalRefueler;
+import refuelers.Refueler;
+import refuelers.SolarRefueler;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
+import vehicles.IUsingFuel;
 
 
 /**
@@ -66,6 +74,8 @@ public class CityPanel extends JPanel {
 	static int numOfVehicles = 0;
 	
 	static CityPanelThreadPool pool = new CityPanelThreadPool(MAX_RUNNING, MAX_WAITING);
+	
+	static CityTrafficManager trafficManager = new CityTrafficManager();
 	
 	//CityPanelInfoMenu infoMenu;
 	
@@ -195,7 +205,31 @@ public class CityPanel extends JPanel {
 	 * @throws Exception the exception
 	 */
 	private static boolean fuel(String type) throws Exception {
-		//FUEL THE VEHICLE
+		String msg = "\n";
+		Refueler refueler;
+		if (type.equals("Benzine"))
+			refueler = new BenzineRefueler();
+		else if (type.equals("Solar"))
+			refueler = new SolarRefueler();
+		else
+			refueler = new PackAnimalRefueler();
+		LinkedList<IVehicle> toRefuel = pool.getActiveVehicles();
+		for (int i = 0 ; i < toRefuel.size() ; ++i) {
+			synchronized (toRefuel.get(i)) {
+				if (!(toRefuel.get(i).getCore() instanceof IUsingFuel))
+					msg = msg + "The Vehicle : " + toRefuel.get(i).getCore().getLicensePlate() + " don't using fuel .\n";
+				else {
+					try {
+						((IUsingFuel) toRefuel.get(i).getCore()).letRefuel(refueler);
+					}
+					catch (Exception e) {
+						msg = msg + e.getMessage()+"\n";
+					}
+				}
+			}
+		}
+		if (msg.equals("\n") == false) 
+			throw new Exception(msg);
 		return true;
 	}
 }

@@ -2,6 +2,7 @@ package vehicles;
 
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
+import refuelers.Refueler;
 import vehicleMovingService.VehicleMover;
 
 /**
@@ -133,7 +134,7 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public synchronized void letRefuel(IRefueler refueler) throws FuelTypeException{
+	public synchronized void letRefuel(Refueler refueler) throws FuelTypeException{
 		refueler.refuel(this);
 	}
 	
@@ -144,5 +145,9 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	public boolean drive(Point toGo) {
 		this.useFuel(this.getLocation().getLocationPoint().manhattanDistance(toGo)*this.getFuelConsumption());
 		return super.drive(toGo);
+	}
+	
+	public int getDurability() {
+		return 2;
 	}
 }
