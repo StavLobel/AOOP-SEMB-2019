@@ -76,7 +76,9 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	 * @see vehicles.Vehicle#clone()
 	 */
 	public Object clone() {
-		return new Carriage(this);
+		synchronized (this) {
+			return new Carriage(this);
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -89,14 +91,14 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see vehicles.Vehicle#getCurrentFuel()
 	 */
-	public int getCurrentFuel() {
+	public synchronized int getCurrentFuel() {
 		return this.animal.getCurrentEnergy();
 	}
 	
 	/* (non-Javadoc)
 	 * @see vehicles.Vehicle#useFuel(int)
 	 */
-	public boolean useFuel(int amount) {
+	public synchronized boolean useFuel(int amount) {
 		return this.animal.useFuel(amount);
 	}
 	
@@ -124,14 +126,14 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#setCurrentFuel(int)
 	 */
-	public boolean setCurrentFuel(int amount) {
+	public synchronized boolean setCurrentFuel(int amount) {
 		return animal.setCurrentFuel(amount);
 	}
 	
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#letRefuel(DesignPatterns.IRefueler)
 	 */
-	public void letRefuel(IRefueler refueler) throws FuelTypeException{
+	public synchronized void letRefuel(IRefueler refueler) throws FuelTypeException{
 		refueler.refuel(this);
 	}
 	

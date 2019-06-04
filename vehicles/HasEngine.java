@@ -82,7 +82,7 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see vehicles.Vehicle#useFuel(int)
 	 */
-	public boolean useFuel(int amount) {
+	public synchronized boolean useFuel(int amount) {
 		this.currentFuel -= amount;
 		return true;
 	}
@@ -104,7 +104,7 @@ public abstract class HasEngine extends Vehicle implements IUsingFuel {
 	/* (non-Javadoc)
 	 * @see DesignPatterns.IBeenRefueled#setCurrentFuel(int)
 	 */
-	public boolean setCurrentFuel(int amount) {
+	public synchronized boolean setCurrentFuel(int amount) {
 		this.currentFuel += amount;
 		return true;
 	}

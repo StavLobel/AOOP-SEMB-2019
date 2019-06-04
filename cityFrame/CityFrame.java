@@ -1,4 +1,4 @@
-package graphics;
+package cityFrame;
 
 import javax.swing.*;
 import java.awt.event.*;

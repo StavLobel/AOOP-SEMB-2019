@@ -1,8 +1,8 @@
 package vehicles;
 
 import DesignPatterns.IVehicle;
-import graphics.IClonable;
-import graphics.IMoveable;
+import cityFrame.IClonable;
+import cityFrame.IMoveable;
 import vehicleMovingService.VehicleMover;
 
 /**

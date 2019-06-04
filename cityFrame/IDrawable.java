@@ -1,4 +1,4 @@
-package graphics;
+package cityFrame;
 import java.awt.Graphics;
 
 /**

@@ -2,7 +2,7 @@ package vehicleMovingService;
 
 import java.util.Random;
 
-import graphics.CityPanel;
+import cityFrame.CityPanel;
 import vehicles.Location;
 import vehicles.Point;
 import vehicles.Vehicle;

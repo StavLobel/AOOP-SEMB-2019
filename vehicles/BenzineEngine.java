@@ -1,6 +1,5 @@
 package vehicles;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class BenzineEngine.
  * 

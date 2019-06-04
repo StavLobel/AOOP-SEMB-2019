@@ -1,6 +1,6 @@
 package vehicles;
 
-import graphics.IMoveable;
+import cityFrame.IMoveable;
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
 

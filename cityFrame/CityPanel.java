@@ -1,4 +1,4 @@
-package graphics;
+package cityFrame;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -142,6 +142,7 @@ public class CityPanel extends JPanel {
 			}
 		});
 		
+		//TO DELETE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		pool.addVehicle(BikeFactory.getBike(5, "green", new Location(Point.getPointInstance(524, 0), "East"),new CityPanelMover(this)));
 	}
 	

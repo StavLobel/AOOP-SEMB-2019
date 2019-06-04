@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import DesignPatterns.IVehicle;
 import DesignPatterns.VehicleDecorator;
-import graphics.CityPanel;
+import cityFrame.CityPanel;
 import vehicles.Location;
 import vehicles.Vehicle;
 

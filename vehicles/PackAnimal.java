@@ -1,7 +1,7 @@
 package vehicles;
 
-import graphics.IAnimal;
-import graphics.IClonable;
+import cityFrame.IAnimal;
+import cityFrame.IClonable;
 import refuelers.FuelTypeException;
 import refuelers.IRefueler;
 

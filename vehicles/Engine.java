@@ -1,6 +1,6 @@
 package vehicles;
 
-import graphics.IClonable;
+import cityFrame.IClonable;
 
 /**
  * The Class Engine.
