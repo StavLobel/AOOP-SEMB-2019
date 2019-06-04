@@ -13,17 +13,11 @@ public class CityPanelMover extends VehicleMover {
 	
 	private static int size = 65;
 	
-	/** The Constant vehicleWidthHorizon. */
-	private static final int vehicleWidthHorizon = size*2;
-	
 	/** The Constant vehicleHeightHorizon. */
 	private static final int vehicleHeightHorizon = size;
 	
 	/** The Constant vehicleWidthVertical. */
-	private static final int vehicleWidthVertical = size;
-	
-	/** The Constant vehicleHeightVertical. */
-	private static final int vehicleHeightVertical = size*2;
+	private static final int vehicleWidthVertical = size;	
 	
 	/** The panel width. */
 	private int panelWidth;
@@ -72,7 +66,7 @@ public class CityPanelMover extends VehicleMover {
 	
 	public boolean move(Vehicle vehicle,Point toGo) {
 		toGo = nextLocation(vehicle);
-		if (vehicle.canMove() && vehicle.getLocation().getLocationPoint().equals(toGo) == false) {    
+		if (vehicle.canMove(toGo) && vehicle.getLocation().getLocationPoint().equals(toGo) == false) {    
 	    	try {Thread.sleep(100);}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        vehicle.drive(toGo);
@@ -157,7 +151,7 @@ public class CityPanelMover extends VehicleMover {
 			return new Location(intersection, nextOrientation);
 		}
 		else
-			return null;
+			return current;
 	}
 			
 	

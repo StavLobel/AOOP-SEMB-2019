@@ -1,5 +1,6 @@
 package DesignPatterns;
 
+import cityTraffic.ObserversDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicFactory;
 import vehicleMovingService.VehicleMover;
@@ -23,8 +24,8 @@ public class CarFactory {
 		
 		Vehicle car = new Car(engine, mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(car);
-		VehicleGraphicDecorator iVehicle = VehicleGraphicFactory.getImagesDecorator("car", color, lightsDecorator);
-		return iVehicle;
+		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("car", color, lightsDecorator);
+		return new ObserversDecorator(graphic);
 	}
 	
 	public static IVehicle getCar(String engineType,String color,Location location,VehicleMover mover) throws Exception{
@@ -38,7 +39,7 @@ public class CarFactory {
 		
 		Vehicle car = new Car(engine, location, mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(car);
-		VehicleGraphicDecorator iVehicle = VehicleGraphicFactory.getImagesDecorator("car", color, lightsDecorator);
-		return iVehicle;
+		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("car", color, lightsDecorator);
+		return new ObserversDecorator(graphic);
 	}
 }

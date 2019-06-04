@@ -252,7 +252,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 */
 	public abstract int getSpeed();
 	
-	public boolean canMove() {
+	public boolean canMove(Point toGo) {
 		return true;
 	}
 	

@@ -1,5 +1,6 @@
 package DesignPatterns;
 
+import cityTraffic.ObserversDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicFactory;
 import vehicleMovingService.VehicleMover;
@@ -10,14 +11,14 @@ public class CarriageFactory {
 	public static IVehicle getCarriage(String color,VehicleMover mover) {
 		Carriage carriage = new Carriage(mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(carriage);
-		VehicleGraphicDecorator iVehicle = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
-		return iVehicle;
+		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
+		return new ObserversDecorator(graphic);
 	}
 	
 	public static IVehicle getCarriage(String color,Location location,VehicleMover mover) {
 		Carriage carriage = new Carriage(location,mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(carriage);
-		VehicleGraphicDecorator iVehicle = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
-		return iVehicle;
+		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
+		return new ObserversDecorator(graphic);
 	}
 }

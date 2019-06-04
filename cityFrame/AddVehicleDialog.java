@@ -157,6 +157,7 @@ public class AddVehicleDialog extends JDialog {
 			return false;
 		}
 		CityPanel.numOfVehicles += 1;
+		panel.repaint();
 		return true;
 	}
 	

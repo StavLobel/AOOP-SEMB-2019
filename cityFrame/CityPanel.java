@@ -5,12 +5,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.LinkedList;
+
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import cityPannelConcurrent.CityPanelThreadPool;
 import refuelers.FuelTypeException;
+import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 
 
 /**
@@ -156,6 +159,7 @@ public class CityPanel extends JPanel {
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
+	    pool.paintVehicles(g);
 	}
 	
 	/**

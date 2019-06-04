@@ -120,7 +120,7 @@ public class Carriage extends Vehicle implements IUsingFuel {
 	 * @see graphics.IUsingFuel#canMove(vehicles.Point)
 	 */
 	public boolean canMove(Point toGo) {
-		return getLocation().getLocationPoint().manhattanDistance(toGo)*getFuelConsumption() > this.getCurrentFuel();
+		return getLocation().getLocationPoint().manhattanDistance(toGo)*getFuelConsumption() <= this.getCurrentFuel();
 	}
 	
 	/* (non-Javadoc)

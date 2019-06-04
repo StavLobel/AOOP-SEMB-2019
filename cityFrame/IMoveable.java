@@ -30,6 +30,6 @@ public interface IMoveable {
 	 */
 	public boolean move(Point p);
 	
-	public boolean canMove();
+	public boolean canMove(Point toGo);
 
 }

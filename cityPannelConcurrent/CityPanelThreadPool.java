@@ -1,5 +1,6 @@
 package cityPannelConcurrent;
 
+import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -7,6 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import DesignPatterns.*;
+import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 
 /**
  * The Class CityPanelThreadPool.
@@ -109,6 +111,16 @@ public class CityPanelThreadPool {
 				temp.add(activeVehicles.get(i));
 			return temp;
 		}
+	}
+	
+	public boolean paintVehicles(Graphics g) {
+		synchronized (activeVehicles) {
+			LinkedList<IVehicle> toDraw = getActiveVehicles();
+			for (int i = 0 ; i < toDraw.size() ; ++i) {
+				((VehicleGraphicDecorator) toDraw.get(i)).drawObject(g); 
+			}
+		}
+		return true;
 	}
 	
 	/**
