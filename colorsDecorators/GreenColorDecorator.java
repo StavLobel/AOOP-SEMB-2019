@@ -2,7 +2,7 @@ package colorsDecorators;
 
 import java.awt.Color;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class GreenColorDecorator.
@@ -19,6 +19,10 @@ public class GreenColorDecorator extends ColorDecorator {
 	public GreenColorDecorator(IVehicle vehicle) {
 		super(vehicle);
 		this.color = new Color(0,128,0);
+	}
+	
+	public Object clone() {
+		return new GreenColorDecorator((IVehicle) vehicleLayer.clone());
 	}
 	
 }

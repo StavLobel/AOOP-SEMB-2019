@@ -1,26 +1,19 @@
 package graphics;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import DesignPatterns.IVehicle;
 import cityPannelConcurrent.CityPanelThreadPool;
-import cityTraffic.CityTrafficManager;
-import refuelers.BenzineRefueler;
-import refuelers.FuelTypeException;
-import refuelers.PackAnimalRefueler;
-import refuelers.Refueler;
-import refuelers.SolarRefueler;
-import vehicles.IUsingFuel;
+import cityPannelConcurrent.CityTrafficManager;
+import designPatterns.Observable;
+import designPatterns.Observer;
+import panelButtons.*;
+import vehicles.Vehicle;
 
 
 /**
@@ -28,7 +21,7 @@ import vehicles.IUsingFuel;
  * 
  * @author Stav Lobel
  */
-public class CityPanel extends JPanel {
+public class CityPanel extends JPanel implements Observer{
 	
 	private static volatile CityPanel panel = null;
 	
@@ -36,29 +29,16 @@ public class CityPanel extends JPanel {
 	
 	private static final int MAX_WAITING = 5;
 	
-	/** The Constant ADD_VEHICLE_LABEL. */
-	private static final String ADD_VEHICLE_LABEL = "Add Vehicle";
-	
-	/** The Constant CLEAR_LABEL. */
-	private static final String CLEAR_LABEL = "Clear";
-	
-	/** The Constant FUEL_OR_FOOD_LABEL. */
-	private static final String FUEL_OR_FOOD_LABEL = "Fuel/Food";
-	
-	/** The Constant LIGHTS_LABEL. */
-	private static final String LIGHTS_LABEL = "Lights";
-	
-	/** The Constant INFO_LABEL. */
-	private static final String INFO_LABEL = "Info";
-	
-	/** The Constant EXIT_LABEL. */
-	private static final String EXIT_LABEL = "Exit";
-	
-	/** The Constant BOTTTOM_PANEL_LABELS. */
-	private static final String[] BOTTTOM_PANEL_LABELS = {ADD_VEHICLE_LABEL,CLEAR_LABEL,FUEL_OR_FOOD_LABEL,LIGHTS_LABEL,INFO_LABEL,EXIT_LABEL};
+	AddVehicleButton addVehicleButton = new AddVehicleButton(this);
+	ClearButton clearButton = new ClearButton(this);
+	public FuelButton fuelFoodButton = new FuelButton(this);
+	public LightsButton lightsButton = new LightsButton(this);
+	public InfoButton infoButton = new InfoButton(this);
+	ExitButton exitButton = new ExitButton(this);
+	MementoButton mementoButton = new MementoButton(this);
 	
 	/** The buttons. */
-	static JButton[] buttons;
+	JButton[] buttons = {addVehicleButton,clearButton,fuelFoodButton,lightsButton,infoButton,exitButton,new JButton("Add Border"),mementoButton};
 	
 	/** The bottom. */
 	JPanel bottom = new JPanel();
@@ -66,17 +46,9 @@ public class CityPanel extends JPanel {
 	/** The background image. */
 	static BufferedImage backgroundImage = null;
 	
-	/** The dialog. */
-	AddVehicleDialog dialog = new AddVehicleDialog(this);
+	public CityPanelThreadPool pool = new CityPanelThreadPool(MAX_RUNNING, MAX_WAITING,this);
 	
-	/** The num of vehicles. */
-	static int numOfVehicles = 0;
-	
-	public static CityPanelThreadPool pool = new CityPanelThreadPool(MAX_RUNNING, MAX_WAITING);
-	
-	static CityTrafficManager trafficManager = new CityTrafficManager();
-	
-	//CityPanelInfoMenu infoMenu;
+	public static CityTrafficManager trafficManager = new CityTrafficManager();
 	
 	/**
 	 * Sets the background.
@@ -100,56 +72,13 @@ public class CityPanel extends JPanel {
 		super(new BorderLayout());
 		this.setSize(800, 600);
 		this.add(bottom,BorderLayout.SOUTH);
-		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
-		for (int i=0 ; i < buttons.length ; ++i ) {
-			if ( i != 2)
-				buttons[i] = new JButton(BOTTTOM_PANEL_LABELS[i]);
-			else
-				buttons[2] = new FuelButton(FUEL_OR_FOOD_LABEL);
+		for (int i=0 ; i < buttons.length ; ++i)
 			bottom.add(buttons[i]);
-				
-		}
 		
-		//infoMenu = new CityPanelInfoMenu(this);
 		setBackground();
-		buttons[0].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(true);
-				dialog.setLocationRelativeTo(null);
-			}
-		});
 		
-		setRefuelButton();
-		
-		buttons[1].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pool.killAllActiveVehicles();
-				repaint();
-			}
-		});
-		
-		buttons[3].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//LIGHTS
-			}
-		});
-		buttons[4].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//INFOTABLE
-			}
-		});
-		
-		buttons[5].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pool.shutdown();
-				System.exit(0);
-			}
-		});
+		(new Thread(pool)).start();
+		(new Thread(infoButton)).start();
 	}
 	
 	/**
@@ -166,6 +95,12 @@ public class CityPanel extends JPanel {
 		return panel;
 	}
 	
+	public boolean getNotified(Observable observable,String msg) {
+		if (msg.equals(Vehicle.KILLED) || msg.equals(Vehicle.MOVED) || msg.equals(Vehicle.CREATED))
+			this.repaint();
+		return true;
+	}
+	
 	/* (non-Javadoc)
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
@@ -173,67 +108,18 @@ public class CityPanel extends JPanel {
 	{
 	    super.paintComponent(g);
 	    g.drawImage(backgroundImage,0, 0, getWidth(), getHeight(), this);
-	    pool.paintVehicles(g);
-	}
-	
-	/**
-	 * Sets the refuel button.
-	 *
-	 * @return true, if successful
-	 */
-	private static boolean setRefuelButton() {
-		buttons[2].addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] options = {"Benzine","Solar","Food"};
-				int n = JOptionPane.showOptionDialog(CityFrame.frame,"Please choose type of refueling","The question",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,options,options[2]);
-				try{
-					fuel(options[n]);
-				}
-				catch (FuelTypeException error) {
-					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
-				}
-				catch (Exception error) {
-					JOptionPane.showMessageDialog(CityFrame.frame, error.toString(),"Error !",JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
-		return true;
-	}
-	
-	/**
-	 * Fuel.
-	 *
-	 * @param n the fueling choice
-	 * @return true, if successful
-	 * @throws Exception the exception
-	 */
-	private static boolean fuel(String type) throws Exception {
-		String msg = "\n";
-		Refueler refueler;
-		if (type.equals("Benzine"))
-			refueler = new BenzineRefueler();
-		else if (type.equals("Solar"))
-			refueler = new SolarRefueler();
-		else
-			refueler = new PackAnimalRefueler();
-		LinkedList<IVehicle> toRefuel = pool.GetPool();
-		for (int i = 0 ; i < toRefuel.size() ; ++i) {
-			synchronized (toRefuel.get(i)) {
-				if (!(toRefuel.get(i).getCore() instanceof IUsingFuel))
-					msg = msg + "The Vehicle : " + toRefuel.get(i).getCore().getLicensePlate() + " don't using fuel .\n";
-				else {
-					try {
-						((IUsingFuel) toRefuel.get(i).getCore()).letRefuel(refueler);
-					}
-					catch (Exception e) {
-						msg = msg + e.getMessage()+"\n";
-					}
-				}
-			}
+	    synchronized (pool) {
+	    	pool.paintVehicles(g);	
 		}
-		if (msg.equals("\n") == false) 
-			throw new Exception(msg);
+	}
+	
+	public boolean resetPanel() {
+		this.pool.ClearPool();
+		this.infoButton = new InfoButton(this);
+		
+		(new Thread(pool)).start();
+		(new Thread(infoButton)).start();
+		
 		return true;
 	}
 }

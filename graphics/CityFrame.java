@@ -8,6 +8,7 @@ import java.awt.event.*;
  * The Class CityFrame.
  * 
  * @author Stav Lobel, ID 308549898 , Campus Ashdod
+ * @author Liz Dahan , ID 209636794 , Campus Ashdod
  */
 public class CityFrame extends JFrame{
 	

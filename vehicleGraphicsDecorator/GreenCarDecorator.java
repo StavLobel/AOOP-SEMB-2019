@@ -1,6 +1,6 @@
 package vehicleGraphicsDecorator;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class GreenCarDecorator.
@@ -17,5 +17,9 @@ public class GreenCarDecorator extends CarDecorator {
 	public GreenCarDecorator(IVehicle vehicle) {
 		super(vehicle);
 		loadImages("greenCar");
+	}
+	
+	public Object clone() {
+		return new GreenCarDecorator((IVehicle) vehicleLayer.clone());
 	}
 }

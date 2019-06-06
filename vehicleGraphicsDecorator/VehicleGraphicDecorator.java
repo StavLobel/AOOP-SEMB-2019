@@ -6,8 +6,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import DesignPatterns.IVehicle;
-import DesignPatterns.VehicleDecorator;
+
+import designPatterns.IVehicle;
+import designPatterns.VehicleDecorator;
 import graphics.CityPanel;
 import vehicles.Location;
 import vehicles.Vehicle;
@@ -53,6 +54,7 @@ public abstract class VehicleGraphicDecorator extends VehicleDecorator {
 		VehicleGraphicDecorator.panel = panel;
 		return true;
 	}
+	
 	
 	/**
 	 * Load images.

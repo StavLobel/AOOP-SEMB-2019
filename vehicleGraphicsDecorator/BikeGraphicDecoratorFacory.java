@@ -1,6 +1,6 @@
 package vehicleGraphicsDecorator;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class BikeImagesDecoratorFacory.

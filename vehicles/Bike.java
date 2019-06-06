@@ -13,7 +13,7 @@ public class Bike extends Vehicle {
 	private final int gears;
 	
 	/** The speed of the bike. */
-	private static final int SPEED = 20;  //NEED TO SET 2
+	private static final int SPEED = 2;
 	
 	/** The bike's number of wheels. */
 	private static final int NUM_OF_WHEELS = 2;

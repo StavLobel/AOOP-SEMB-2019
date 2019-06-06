@@ -70,7 +70,6 @@ public class CityPanelMover extends VehicleMover {
 	    	try {Thread.sleep(1000/vehicle.getSpeed());}
 	        catch (InterruptedException e) { e.printStackTrace(); }
 	        vehicle.drive(toGo);
-	        panel.repaint();
 		    return true;
 	    }
 	    return false;

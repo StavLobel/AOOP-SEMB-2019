@@ -1,6 +1,6 @@
 package vehicleGraphicsDecorator;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class WhiteBikeDecorator.
@@ -17,5 +17,9 @@ public class WhiteBikeDecorator extends BikeDecorator {
 	public WhiteBikeDecorator(IVehicle vehicle) {
 		super(vehicle);
 		loadImages("whiteBike");
+	}
+	
+	public Object clone() {
+		return new WhiteBikeDecorator((IVehicle) vehicleLayer.clone());
 	}
 }

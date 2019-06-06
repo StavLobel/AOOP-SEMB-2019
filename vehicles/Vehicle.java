@@ -3,9 +3,9 @@ package vehicles;
 import java.awt.Dimension;
 import java.util.LinkedList;
 
-import DesignPatterns.IVehicle;
-import cityTraffic.Observable;
-import cityTraffic.Observer;
+import designPatterns.IVehicle;
+import designPatterns.Observable;
+import designPatterns.Observer;
 import graphics.IClonable;
 import graphics.IMoveable;
 import vehicleMovingService.VehicleMover;
@@ -45,9 +45,19 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 	
 	private VehicleMover mover;
 	
-	private String takenDownBy;
+	private String takenDownBy = "None";
 	
 	private LinkedList<Observer> observers = new LinkedList<Observer>();
+	
+	public static final String KILLED = "Killed";
+	
+	public static final String MOVED = "Moved";
+	
+	public static final String CANNOT_MOVE = "Cannot Move";
+	
+	public static final String CAN_MOVE = "Can Move";
+	
+	public static final String CREATED = "Created";
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -104,6 +114,7 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 		this.numberOfSeats = other.getNumberOfSeats();
 		this.numberOfWheels = other.getNumberOfWheels();
 		this.mover = other.getMover();
+		this.takenDownBy = other.takenDownBy;
 	}
 	
 	/**
@@ -280,29 +291,34 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 	 * @see DesignPatterns.IVehicle#getCore()
 	 */
 	public Vehicle getCore() {
-		return this;
+		return null;
 	}
 	
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
+		this.notifyObservers(CREATED);
 		flag = true;
 		while(flag) {
 			Point toGo = mover.makeNextPoint(this.location,getSpeed());
 			while (canMove(toGo) == false && flag) {
 				synchronized (this) {
 					try {
-						notifyObservers("RunOutOfFuel");
+						notifyObservers(CANNOT_MOVE);
 						wait();	
 					}
 					catch (InterruptedException e) {}
-					notifyObservers("Fueled");
 				}
 			}
-			move(toGo);
-			notifyObservers("moved");
+			if (flag) {
+				synchronized (this) {
+					notifyObservers(CAN_MOVE);
+					move(toGo);
+					notifyObservers(MOVED);	
+				}
 			}
+		}
 	}
 	
 	/**
@@ -311,9 +327,9 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 	 * kill the thread.
 	 */
 	public synchronized void kill(String byWho) {
-		takenDownBy = byWho;
-		notifyObservers("killed");
 		this.flag = false;
+		takenDownBy = byWho;
+		notifyObservers(KILLED);
 		this.notify();
 	}
 	
@@ -327,6 +343,10 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 		return this.flag;
 	}
 	
+	public String getTakenDownBy() {
+		return takenDownBy;
+	}
+	
 	public synchronized boolean addObserver(Observer observer) {
 		return observers.add(observer);
 	}
@@ -335,14 +355,14 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,O
 		return observers.remove(observer);
 	}
 	
-	public boolean notifyObservers(String msg) {
+	public synchronized boolean notifyObservers(String msg) {
 		observers.forEach(n -> n.getNotified(this,msg));
 		return true;
 	}
 	
 	public Dimension getDimensions() {
 		int size = 65;
-		if (this.getLocation().getOrientation().equals(Location.NORTH) || this.getCore().getLocation().getOrientation().equals(Location.SOUTH))
+		if (this.getLocation().getOrientation().equals(Location.NORTH) || this.getLocation().getOrientation().equals(Location.SOUTH))
 			return new Dimension(size, size*2);
 		else
 			return new Dimension(size*2, size);

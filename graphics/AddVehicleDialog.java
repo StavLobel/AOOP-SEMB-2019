@@ -15,12 +15,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
-import DesignPatterns.*;
-import cityTraffic.Observer;
+import designPatterns.*;
 import vehicleMovingService.CityPanelMover;
 import vehicles.*;
 
-public class AddVehicleDialog extends JDialog {
+public class AddVehicleDialog extends JDialog{
 	static final String TITLE = "Add a vehicle to the city";
 	static final String CARRIAGE_LABEL = "Carriage";
 	static final String BIKE_LABEL = "Bike";
@@ -39,7 +38,7 @@ public class AddVehicleDialog extends JDialog {
 	JPanel bottomPanel = new JPanel();
 	JButton ok = new JButton("OK");
 	JButton cancel = new JButton("Cancel");
-	public static CityPanel panel;
+	CityPanel panel; 
 	
 	public AddVehicleDialog(CityPanel panel) {
 		setTitle(TITLE);
@@ -51,7 +50,7 @@ public class AddVehicleDialog extends JDialog {
 		setOKButton();
 		this.add(qPanel);
 		this.pack();
-		AddVehicleDialog.panel = panel;
+		this.panel = panel;
 	}
 	
 	public void setRadioButtons() {
@@ -140,27 +139,26 @@ public class AddVehicleDialog extends JDialog {
 		});
 	}
 	
-	private static boolean createVehicle(String type,String color,int numberOfGears) {
+	private boolean createVehicle(String type,String color,int numberOfGears) {
 		IVehicle v = null;
 		try {
 		if (type.equals(CAR_BENZINE)) 
-			v = CarFactory.getCar("Benzine", color, new CityPanelMover(AddVehicleDialog.panel));
+			v = CarFactory.getCar("Benzine", color, new CityPanelMover(panel));
 		else if (type.equals(CAR_SOLAR))
-			v = CarFactory.getCar("Solar", color, new CityPanelMover(AddVehicleDialog.panel));
+			v = CarFactory.getCar("Solar", color, new CityPanelMover(panel));
 		else if (type.equals(BIKE_LABEL))
-			v = BikeFactory.getBike(numberOfGears, color, new CityPanelMover(AddVehicleDialog.panel));
+			v = BikeFactory.getBike(numberOfGears, color, new CityPanelMover(panel));
 		else if (type.equals(CARRIAGE_LABEL))
-			v = CarriageFactory.getCarriage(color, new CityPanelMover(AddVehicleDialog.panel));
-		CityPanel.pool.addVehicle(v);
+			v = CarriageFactory.getCarriage(color, new CityPanelMover(panel));
+		panel.pool.addVehicle(v);
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(panel,"Error !\n" + e.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		v.getCore().addObserver(CityPanel.trafficManager);
-		v.getCore().addObserver((Observer) CityPanel.buttons[2]);
-		CityPanel.numOfVehicles += 1;
-		panel.repaint();
+		v.getCore().addObserver((Observer) panel.fuelFoodButton);
+		v.getCore().addObserver(panel);
 		return true;
 	}
 	

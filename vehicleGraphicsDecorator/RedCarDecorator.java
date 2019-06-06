@@ -1,6 +1,6 @@
 package vehicleGraphicsDecorator;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class RedCarDecorator.
@@ -17,5 +17,9 @@ public class RedCarDecorator extends CarDecorator {
 	public RedCarDecorator(IVehicle vehicle) {
 		super(vehicle);
 		loadImages("redCar");
+	}
+	
+	public Object clone() {
+		return new RedCarDecorator((IVehicle) vehicleLayer.clone());
 	}
 }

@@ -2,8 +2,8 @@ package colorsDecorators;
 
 import java.awt.Color;
 
-import DesignPatterns.IVehicle;
-import DesignPatterns.VehicleDecorator;
+import designPatterns.IVehicle;
+import designPatterns.VehicleDecorator;
 
 /**
  * The Class ColorDecorator.
@@ -41,4 +41,5 @@ public abstract class ColorDecorator extends VehicleDecorator {
 	public Color getColor() {
 		return color;
 	}
+	
 }

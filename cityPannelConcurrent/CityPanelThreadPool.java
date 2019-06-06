@@ -4,12 +4,9 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import DesignPatterns.*;
-import cityTraffic.Observable;
-import cityTraffic.Observer;
+import designPatterns.*;
+import graphics.CityPanel;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicles.Vehicle;
 
@@ -18,17 +15,21 @@ import vehicles.Vehicle;
  * 
  * @author Stav Lobel
  */
-public class CityPanelThreadPool implements Runnable{
+public class CityPanelThreadPool implements Runnable,Observer{
 	
 	private boolean active = true;
 	
 	private final int MAX_RUNNING;
 	
+	private final String USER_TAG = "User";
+	
 	/** The pool. */
-	private LinkedList<IVehicle> pool;
+	LinkedList<IVehicle> pool = new LinkedList<IVehicle>();
 	
 	/** The queue. */
 	private BlockingQueue<IVehicle> queue;
+	
+	private CityPanel panel;
 	
 	/**
 	 * Instantiates a new city panel thread pool.
@@ -36,7 +37,8 @@ public class CityPanelThreadPool implements Runnable{
 	 * @param maxRunning the max running
 	 * @param maxWaiting the max waiting
 	 */
-	public CityPanelThreadPool(int maxRunning,int maxWaiting) {
+	public CityPanelThreadPool(int maxRunning,int maxWaiting,CityPanel panel) {
+		this.panel = panel;
 		queue = new LinkedBlockingDeque<IVehicle>(maxWaiting);
 		MAX_RUNNING = maxRunning;
 	}
@@ -55,13 +57,30 @@ public class CityPanelThreadPool implements Runnable{
 		}
 	}
 	
+	public boolean getNotified(Observable observable,String msg) {
+		if (msg.equals(Vehicle.KILLED)) {
+			synchronized (pool) {
+				pool.remove(getIndex((Vehicle) observable));
+			}
+			synchronized (this) {
+				this.notify();
+			}
+			return true;
+		}
+		else if (msg.equals("Exit"))
+			this.shutdown();
+		return false;	
+	}
+	
 	private boolean dequeue() {
 		IVehicle toRun = null;
 		synchronized (pool) {
 			if (pool.size() < MAX_RUNNING) {
 				toRun = queue.remove();
 				pool.add(toRun);
-				(new Thread(toRun)).start();
+				(new Thread(toRun.getCore())).start();
+				panel.infoButton.addVehicle(toRun);
+				toRun.getCore().addObserver(panel.infoButton);
 			}
 		}
 		return true;
@@ -75,13 +94,17 @@ public class CityPanelThreadPool implements Runnable{
 	 * @throws Exception the exception
 	 */
 	public boolean addVehicle(IVehicle v) throws Exception{
-		if (!(queue.remainingCapacity() > 0))
-			throw new Exception("Cannot create more vehicles.");
 		synchronized (queue) {
-			if (!(queue.remainingCapacity() > 0))
-				throw new Exception("Cannot create more vehicles.");
-			queue.add(v);
-			this.notify();
+			try {
+				queue.add(v);
+				v.getCore().addObserver(this);
+			}
+			catch (Exception e) {
+				throw new Exception("Cannot create more vehicles.");	
+			}
+			synchronized (this) {
+				this.notify();
+			}
 		}
 		return true;
 	}
@@ -140,13 +163,11 @@ public class CityPanelThreadPool implements Runnable{
 	 *
 	 * @return true, if successful
 	 */
-	public boolean killAllActiveVehicles() {
+	public boolean ClearActivePool() {
 		if (pool.isEmpty())
 			return false;
 		synchronized (pool) {
-			while (pool.isEmpty() == false) {
-				((IVehicle) pool.removeFirst()).getCore().kill("User");
-			}
+			pool.forEach(v -> v.getCore().kill(USER_TAG));
 		}
 		synchronized (this) {
 			notify();	
@@ -159,28 +180,29 @@ public class CityPanelThreadPool implements Runnable{
 	 *
 	 * @return true, if successful
 	 */
-	public boolean killAllVehicles() {
+	public boolean ClearPool() {
 		synchronized (queue) {
 			while (queue.isEmpty() == false) {
-				queue.remove().getCore().kill("User");
+				queue.forEach(v -> v.getCore().kill(USER_TAG));
 			}
 		}
 		synchronized (pool) {
 			while (pool.isEmpty() == false) {
-				pool.remove().getCore().kill("User");
+				pool.forEach(v -> v.getCore().kill(USER_TAG));
 			}
 		}
 		return true;
 	}
 	
-	public boolean killVehicle(Vehicle toKill,String byWho) {
-		for (int i = 0 ; i < pool.size() ; ++i) {
-			if (pool.get(i).getCore().equals(toKill)) {
-				activeVehicles.remove(i).getCore().kill(byWho);
-				return true;
+	private int getIndex(Vehicle v) {
+		if (!pool.isEmpty()) {
+			synchronized (pool) {
+				for (int i = 0 ; i < pool.size() ; ++i)
+					if (pool.get(i).getCore().equals(v))
+						return i;
 			}
 		}
-		return false;
+		return -1;
 	}
 	
 	/**
@@ -189,8 +211,19 @@ public class CityPanelThreadPool implements Runnable{
 	 * @return true, if successful
 	 */
 	public synchronized boolean shutdown() {
-		killAllVehicles();
-		pool.shutdown();
+		ClearPool();
+		active = false;
 		return true;
+	}
+	
+	public LinkedList<IVehicle> getAllVehicles(){
+		LinkedList<IVehicle> temp = new LinkedList<IVehicle>();
+		synchronized (pool) {
+			pool.forEach(v -> temp.add((IVehicle) v.clone()));
+		}
+		synchronized (queue) {
+			queue.forEach(v -> temp.add((IVehicle) v));
+		}
+		return temp;
 	}
 }

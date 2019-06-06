@@ -1,6 +1,6 @@
 package vehicleGraphicsDecorator;
 
-import DesignPatterns.IVehicle;
+import designPatterns.IVehicle;
 
 /**
  * The Class SilverCarriageDecorator.
@@ -17,5 +17,9 @@ public class SilverCarriageDecorator extends CarriageDecorator {
 	public SilverCarriageDecorator(IVehicle vehicle) {
 		super(vehicle);
 		loadImages("silverCarriage");
+	}
+	
+	public Object clone() {
+		return new SilverCarriageDecorator((IVehicle) vehicleLayer.clone());
 	}
 }
