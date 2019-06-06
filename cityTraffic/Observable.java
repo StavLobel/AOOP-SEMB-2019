@@ -6,6 +6,6 @@ public interface Observable {
 	
 	public boolean removeObserver(Observer observer);
 	
-	public boolean notifyObservers();
+	public boolean notifyObservers(String msg);
 	
 }

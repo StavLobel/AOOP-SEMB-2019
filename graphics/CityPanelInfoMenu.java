@@ -1,4 +1,4 @@
-package cityFrame;
+package graphics;
 
 import javax.swing.JDialog;
 import javax.swing.JScrollPane;

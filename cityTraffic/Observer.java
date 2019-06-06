@@ -2,6 +2,6 @@ package cityTraffic;
 
 public interface Observer {
 	
-	public boolean getNotified(Observable observable);
+	public boolean getNotified(Observable observable,String msg);
 	
 }

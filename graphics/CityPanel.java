@@ -1,4 +1,4 @@
-package cityFrame;
+package graphics;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -20,7 +20,6 @@ import refuelers.FuelTypeException;
 import refuelers.PackAnimalRefueler;
 import refuelers.Refueler;
 import refuelers.SolarRefueler;
-import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicles.IUsingFuel;
 
 
@@ -59,7 +58,7 @@ public class CityPanel extends JPanel {
 	private static final String[] BOTTTOM_PANEL_LABELS = {ADD_VEHICLE_LABEL,CLEAR_LABEL,FUEL_OR_FOOD_LABEL,LIGHTS_LABEL,INFO_LABEL,EXIT_LABEL};
 	
 	/** The buttons. */
-	private static JButton[] buttons;
+	static JButton[] buttons;
 	
 	/** The bottom. */
 	JPanel bottom = new JPanel();
@@ -73,7 +72,7 @@ public class CityPanel extends JPanel {
 	/** The num of vehicles. */
 	static int numOfVehicles = 0;
 	
-	static CityPanelThreadPool pool = new CityPanelThreadPool(MAX_RUNNING, MAX_WAITING);
+	public static CityPanelThreadPool pool = new CityPanelThreadPool(MAX_RUNNING, MAX_WAITING);
 	
 	static CityTrafficManager trafficManager = new CityTrafficManager();
 	
@@ -103,9 +102,14 @@ public class CityPanel extends JPanel {
 		this.add(bottom,BorderLayout.SOUTH);
 		buttons = new JButton[BOTTTOM_PANEL_LABELS.length];
 		for (int i=0 ; i < buttons.length ; ++i ) {
-			buttons[i] = new JButton(BOTTTOM_PANEL_LABELS[i]);
+			if ( i != 2)
+				buttons[i] = new JButton(BOTTTOM_PANEL_LABELS[i]);
+			else
+				buttons[2] = new FuelButton(FUEL_OR_FOOD_LABEL);
 			bottom.add(buttons[i]);
+				
 		}
+		
 		//infoMenu = new CityPanelInfoMenu(this);
 		setBackground();
 		buttons[0].addActionListener(new ActionListener(){
@@ -213,7 +217,7 @@ public class CityPanel extends JPanel {
 			refueler = new SolarRefueler();
 		else
 			refueler = new PackAnimalRefueler();
-		LinkedList<IVehicle> toRefuel = pool.getActiveVehicles();
+		LinkedList<IVehicle> toRefuel = pool.GetPool();
 		for (int i = 0 ; i < toRefuel.size() ; ++i) {
 			synchronized (toRefuel.get(i)) {
 				if (!(toRefuel.get(i).getCore() instanceof IUsingFuel))

@@ -1,4 +1,4 @@
-package cityFrame;
+package graphics;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,7 +16,7 @@ import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
 import DesignPatterns.*;
-import cityTraffic.ObserversDecorator;
+import cityTraffic.Observer;
 import vehicleMovingService.CityPanelMover;
 import vehicles.*;
 
@@ -157,7 +157,8 @@ public class AddVehicleDialog extends JDialog {
 			JOptionPane.showMessageDialog(panel,"Error !\n" + e.getMessage(),"Error !",JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		((ObserversDecorator) v).addObserver(CityPanel.trafficManager);
+		v.getCore().addObserver(CityPanel.trafficManager);
+		v.getCore().addObserver((Observer) CityPanel.buttons[2]);
 		CityPanel.numOfVehicles += 1;
 		panel.repaint();
 		return true;

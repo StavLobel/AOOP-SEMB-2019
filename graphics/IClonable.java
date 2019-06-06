@@ -1,4 +1,4 @@
-package cityFrame;
+package graphics;
 
 /**
  * The Interface IClonable.

@@ -8,23 +8,27 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import DesignPatterns.*;
+import cityTraffic.Observable;
+import cityTraffic.Observer;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
+import vehicles.Vehicle;
 
 /**
  * The Class CityPanelThreadPool.
  * 
  * @author Stav Lobel
  */
-public class CityPanelThreadPool {
+public class CityPanelThreadPool implements Runnable{
+	
+	private boolean active = true;
+	
+	private final int MAX_RUNNING;
 	
 	/** The pool. */
-	private ThreadPoolExecutor pool;
+	private LinkedList<IVehicle> pool;
 	
 	/** The queue. */
-	private BlockingQueue<Runnable> queue;
-	
-	/** The active vehicles. */
-	private LinkedList<IVehicle> activeVehicles = new LinkedList<IVehicle>();
+	private BlockingQueue<IVehicle> queue;
 	
 	/**
 	 * Instantiates a new city panel thread pool.
@@ -33,8 +37,34 @@ public class CityPanelThreadPool {
 	 * @param maxWaiting the max waiting
 	 */
 	public CityPanelThreadPool(int maxRunning,int maxWaiting) {
-		queue = new LinkedBlockingDeque<Runnable>(maxWaiting);
-		pool = new ThreadPoolExecutor(maxRunning, maxRunning, 1 , TimeUnit.SECONDS, queue);
+		queue = new LinkedBlockingDeque<IVehicle>(maxWaiting);
+		MAX_RUNNING = maxRunning;
+	}
+	
+	public void run() {
+		while (active) {
+			while ((queue.isEmpty() || pool.size() >= MAX_RUNNING) && active) {
+				synchronized (this) {
+					try {
+						wait();
+					}
+					catch (InterruptedException e) {}
+				}
+			}
+			dequeue();
+		}
+	}
+	
+	private boolean dequeue() {
+		IVehicle toRun = null;
+		synchronized (pool) {
+			if (pool.size() < MAX_RUNNING) {
+				toRun = queue.remove();
+				pool.add(toRun);
+				(new Thread(toRun)).start();
+			}
+		}
+		return true;
 	}
 	
 	/**
@@ -45,29 +75,15 @@ public class CityPanelThreadPool {
 	 * @throws Exception the exception
 	 */
 	public boolean addVehicle(IVehicle v) throws Exception{
+		if (!(queue.remainingCapacity() > 0))
+			throw new Exception("Cannot create more vehicles.");
 		synchronized (queue) {
 			if (!(queue.remainingCapacity() > 0))
 				throw new Exception("Cannot create more vehicles.");
-			activeVehicles.add(v);
-			pool.execute(v);
-			return true;
+			queue.add(v);
+			this.notify();
 		}
-	}
-	
-	/**
-	 * Kill all active vehicles.
-	 *
-	 * @return true, if successful
-	 */
-	public boolean killAllActiveVehicles() {
-		synchronized (activeVehicles) {
-			int toRemove = getNumberOfActiveVehicles();
-			while (toRemove > 0) {
-				activeVehicles.remove().getCore().kill("User");
-				toRemove -= 1;
-			}
-			return true;
-		}	
+		return true;
 	}
 	
 	/**
@@ -76,60 +92,66 @@ public class CityPanelThreadPool {
 	 * @return the number of active vehicles
 	 */
 	public int getNumberOfActiveVehicles() {
-		synchronized (activeVehicles) {
-			int count = 0;
-			for (int i = 0 ; i < activeVehicles.size() && i < pool.getMaximumPoolSize() ; ++i)
-				if (activeVehicles.get(i).getCore().getFlag() == true)
-					count += 1;
-			return count;
-		}
+		return pool.size();
 	}
 	
-	/**
-	 * Gets the active vehicle.
-	 *
-	 * @param index the index
-	 * @return the active vehicle
-	 */
-	public IVehicle getActiveVehicle(int index) {
-		if (index >= getNumberOfActiveVehicles())
-			return null;
-		synchronized (activeVehicles) {
-			return activeVehicles.get(index);
-		}
+	public boolean hasActiveVehicles() {
+		return !pool.isEmpty();
 	}
+	
+	public boolean queueIsEmpty() {
+		return queue.isEmpty();
+	}
+	
 	
 	/**
 	 * Gets the active vehicles.
 	 *
 	 * @return the active vehicles
 	 */
-	public LinkedList<IVehicle> getActiveVehicles() {
-		synchronized (activeVehicles) {
-			LinkedList<IVehicle> temp = new LinkedList<IVehicle>();
-			for (int i = 0 ; i < getNumberOfActiveVehicles() ; ++i)
-				temp.add(activeVehicles.get(i));
-			return temp;
+	public IVehicle[] GetPool() {
+		IVehicle[] temp = null;
+		if (pool.isEmpty() == false) {
+			synchronized (pool) {
+				temp = new IVehicle[pool.size()];
+				for (int i = 0 ; i < pool.size() ; ++i)
+					temp[i] = pool.get(i);
+			}	
 		}
+		return temp;
 	}
 	
 	public boolean paintVehicles(Graphics g) {
-		synchronized (activeVehicles) {
-			LinkedList<IVehicle> toDraw = getActiveVehicles();
-			for (int i = 0 ; i < toDraw.size() ; ++i) {
-				((VehicleGraphicDecorator) toDraw.get(i).getLowerLayer()).drawObject(g); 
+		if (pool.isEmpty())
+			return false;
+		synchronized (pool) {
+			if (pool.isEmpty())
+				return false;
+			IVehicle[] toDraw = GetPool();
+			for (int i = 0 ; i < toDraw.length ; ++i) {
+				((VehicleGraphicDecorator) toDraw[i]).drawObject(g); 
 			}
 		}
 		return true;
 	}
 	
 	/**
-	 * Checks if is empty.
+	 * Kill all active vehicles.
 	 *
-	 * @return true, if is empty
+	 * @return true, if successful
 	 */
-	public boolean isEmpty() {
-		return getNumberOfActiveVehicles() == 0;
+	public boolean killAllActiveVehicles() {
+		if (pool.isEmpty())
+			return false;
+		synchronized (pool) {
+			while (pool.isEmpty() == false) {
+				((IVehicle) pool.removeFirst()).getCore().kill("User");
+			}
+		}
+		synchronized (this) {
+			notify();	
+		}
+		return true;
 	}
 	
 	/**
@@ -138,12 +160,27 @@ public class CityPanelThreadPool {
 	 * @return true, if successful
 	 */
 	public boolean killAllVehicles() {
-		synchronized (activeVehicles) {
-			for (int i = 0 ; i < activeVehicles.size() ; ++i)
-				activeVehicles.get(i).getCore().kill("User");
-			activeVehicles.clear();
+		synchronized (queue) {
+			while (queue.isEmpty() == false) {
+				queue.remove().getCore().kill("User");
+			}
+		}
+		synchronized (pool) {
+			while (pool.isEmpty() == false) {
+				pool.remove().getCore().kill("User");
+			}
 		}
 		return true;
+	}
+	
+	public boolean killVehicle(Vehicle toKill,String byWho) {
+		for (int i = 0 ; i < pool.size() ; ++i) {
+			if (pool.get(i).getCore().equals(toKill)) {
+				activeVehicles.remove(i).getCore().kill(byWho);
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**

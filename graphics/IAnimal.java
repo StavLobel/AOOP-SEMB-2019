@@ -1,4 +1,4 @@
-package cityFrame;
+package graphics;
 
 import vehicles.IUsingFuel;
 

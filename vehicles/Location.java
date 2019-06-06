@@ -3,7 +3,7 @@ package vehicles;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import cityFrame.IClonable;
+import graphics.IClonable;
 
 /**
  * The Class Location.

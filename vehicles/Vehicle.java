@@ -1,8 +1,13 @@
 package vehicles;
 
+import java.awt.Dimension;
+import java.util.LinkedList;
+
 import DesignPatterns.IVehicle;
-import cityFrame.IClonable;
-import cityFrame.IMoveable;
+import cityTraffic.Observable;
+import cityTraffic.Observer;
+import graphics.IClonable;
+import graphics.IMoveable;
 import vehicleMovingService.VehicleMover;
 
 /**
@@ -10,7 +15,7 @@ import vehicleMovingService.VehicleMover;
  * 
  * @author Stav Lobel ID 308549898
  */
-public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
+public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable,Observable {
 	
 	/** The license plate of the vehicle. */
 	private final int licensePlate;
@@ -41,6 +46,8 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	private VehicleMover mover;
 	
 	private String takenDownBy;
+	
+	private LinkedList<Observer> observers = new LinkedList<Observer>();
 	
 	/**
 	 * Instantiates a new vehicle.
@@ -283,15 +290,18 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 		flag = true;
 		while(flag) {
 			Point toGo = mover.makeNextPoint(this.location,getSpeed());
-			while (canMove(toGo) == false) {
+			while (canMove(toGo) == false && flag) {
 				synchronized (this) {
 					try {
+						notifyObservers("RunOutOfFuel");
 						wait();	
 					}
 					catch (InterruptedException e) {}
+					notifyObservers("Fueled");
 				}
 			}
 			move(toGo);
+			notifyObservers("moved");
 			}
 	}
 	
@@ -300,9 +310,11 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 * 
 	 * kill the thread.
 	 */
-	public void kill(String byWho) {
+	public synchronized void kill(String byWho) {
 		takenDownBy = byWho;
+		notifyObservers("killed");
 		this.flag = false;
+		this.notify();
 	}
 	
 	
@@ -313,6 +325,27 @@ public abstract class Vehicle implements IVehicle,IMoveable,IClonable,Runnable {
 	 */
 	public boolean getFlag() {
 		return this.flag;
+	}
+	
+	public synchronized boolean addObserver(Observer observer) {
+		return observers.add(observer);
+	}
+	
+	public synchronized boolean removeObserver(Observer observer) {
+		return observers.remove(observer);
+	}
+	
+	public boolean notifyObservers(String msg) {
+		observers.forEach(n -> n.getNotified(this,msg));
+		return true;
+	}
+	
+	public Dimension getDimensions() {
+		int size = 65;
+		if (this.getLocation().getOrientation().equals(Location.NORTH) || this.getCore().getLocation().getOrientation().equals(Location.SOUTH))
+			return new Dimension(size, size*2);
+		else
+			return new Dimension(size*2, size);
 	}
 	
 }

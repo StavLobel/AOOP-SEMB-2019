@@ -1,6 +1,5 @@
 package DesignPatterns;
 
-import cityTraffic.ObserversDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicDecorator;
 import vehicleGraphicsDecorator.VehicleGraphicFactory;
 import vehicleMovingService.VehicleMover;
@@ -12,13 +11,13 @@ public class CarriageFactory {
 		Carriage carriage = new Carriage(mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(carriage);
 		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
-		return new ObserversDecorator(graphic);
+		return graphic;
 	}
 	
 	public static IVehicle getCarriage(String color,Location location,VehicleMover mover) {
 		Carriage carriage = new Carriage(location,mover);
 		LightsDecorator lightsDecorator = new LightsDecorator(carriage);
 		VehicleGraphicDecorator graphic = VehicleGraphicFactory.getImagesDecorator("carriage", color, lightsDecorator);
-		return new ObserversDecorator(graphic);
+		return graphic;
 	}
 }
